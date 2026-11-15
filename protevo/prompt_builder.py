@@ -59,14 +59,16 @@ def build_system_prompt(config, protein_name="目标蛋白", assay_description="
     """
     count = len(config.mutable_positions)
     positions = "/".join(str(position) for position in config.mutable_positions)
+    # 方向措辞：higher="提高"、lower="降低"，由配置决定（DSH note-005 已知项修复）
+    direction_word = "提高" if getattr(config, "fitness_higher_is_better", True) else "降低"
     if config.variant_format == "indel_notation":
         # indel 库的锚点位点可达数百个，开头段只给参考序列长度与锚点数，不逐一罗列
         opening = (f"你是 {protein_name} 蛋白定向进化研究中的自主科学家智能体。研究目标：在 "
                    f"{len(config.wt_full_sequence)} aa 参考序列上设计替换与插入/缺失突变（训练数据已覆盖 "
-                   f"{count} 个锚定位点），寻找提高{assay_description}的未测候选，并在本轮内主动调用 "
+                   f"{count} 个锚定位点），寻找{direction_word}{assay_description}的未测候选，并在本轮内主动调用 "
                    f"submit_recommendations 提交最终推荐。{_format_sentence(config)}")
     else:
         opening = (f"你是 {protein_name} 蛋白定向进化研究中的自主科学家智能体。研究目标：为 {count} 位点变体"
-                   f"（{positions}，参考 {config.reference_sequence}）寻找提高{assay_description}的未测候选，"
+                   f"（{positions}，参考 {config.reference_sequence}）寻找{direction_word}{assay_description}的未测候选，"
                    f"并在本轮内主动调用 submit_recommendations 提交最终推荐。{_format_sentence(config)}")
     return "\n\n".join([opening, _TOOL_PARAGRAPH, _LOOP_PARAGRAPH, _BUDGET_PARAGRAPH, _DISCIPLINE_PARAGRAPH])
