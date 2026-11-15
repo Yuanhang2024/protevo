@@ -464,6 +464,9 @@ class ProtevoShell(_cmd.Cmd):
             return
         self.last_summary, self.last_out_dir = summary, Path(summary["out_dir"])
         self._print_trajectory(summary)
+        research = self._research_predictor_text()
+        if research:
+            print(green(f"  本次研究预测器: {research}"))
         print(dim(f"输出目录：{self.last_out_dir}（per_round.csv / summary.json / agent_round*.jsonl）"))
 
     @staticmethod
@@ -477,6 +480,22 @@ class ProtevoShell(_cmd.Cmd):
             print(f"  {rs['round']:<3}{(rs['status'] or '')[:12]:<14}{rs['submitted']:<5}{mean:<10}"
                   f"{variant}({best['fitness']:.4g})".ljust(26)
                   + f"{rs['score_calls_used']}/{rs['max_score_budget']} · {rs['api_calls_used']} 次")
+
+    def _research_predictor_text(self):
+        """本次 run 实际使用的研究预测器（读 last_summary 的 config.predictor，与落盘 summary.json 同源；
+        run 会以初始训练子集重训选型，常与会话 open 时的 ρ 不同）；两者不同则并列展示。无运行记录返回 None。"""
+        if self.last_summary is None:
+            return None
+        run = (self.last_summary.get("config") or {}).get("predictor") or {}
+        if not run.get("selected"):
+            return None
+        run_rho = run.get("validation_spearman")
+        text = f"{run['selected']}（val ρ={run_rho}）"
+        session = self.config.predictor_info if self.config is not None else {}
+        if (session.get("selected") != run.get("selected")
+                or session.get("validation_spearman") != run_rho) and session.get("selected"):
+            text += f" | 会话 open 时 {session.get('selected')}（val ρ={session.get('validation_spearman')}）"
+        return text
 
     def do_model(self, arg):
         """model [名称] — 查看/设置本会话的 LLM 模型名（写入 os.environ，不改动 .env）"""
@@ -500,6 +519,9 @@ class ProtevoShell(_cmd.Cmd):
             print(f"  预测器: {info.get('selected')}（val ρ={info.get('validation_spearman')}，"
                   f"{len(self.config.mutable_positions)} 位点，方向 "
                   f"{'higher' if self.config.fitness_higher_is_better else 'lower'}）")
+            research = self._research_predictor_text()
+            if research:
+                print(f"  研究模型: {research}（最近一次 run 实际使用）")
         print(f"  凭据:   {'已配置' if credentials_complete(self.env_path) else '缺失（setup 可三步配置）'}"
               f"{' · 会话模型 ' + self.model_override if self.model_override else ''}")
         if self.last_summary is not None:
@@ -704,7 +726,8 @@ class ProtevoShell(_cmd.Cmd):
             for number in rounds:
                 per = [r for r in records if r.get("round") == number]
                 api = sum(1 for r in per if r.get("kind") == "api_call")
-                tokens = sum(int(r.get("tokens_used") or 0) for r in per)
+                # 只累计逐次 api_call 的用量：round_end 的 tokens_used 是轮末总量，一并求和会翻倍
+                tokens = sum(int(r.get("tokens_used") or 0) for r in per if r.get("kind") == "api_call")
                 tools = {}
                 for r in per:
                     if r.get("kind") == "tool_call":
@@ -769,6 +792,10 @@ class ProtevoShell(_cmd.Cmd):
             if source.is_file():
                 shutil.copy2(source, out / name)
                 written.append(out / name)
+        # agent 轮日志一并导出：缺少 jsonl 则导出目录无法回放（log 命令依赖这些文件）
+        for source in sorted(self.last_out_dir.glob("agent_round*.jsonl")):
+            shutil.copy2(source, out / source.name)
+            written.append(out / source.name)
         # 全部适用图：运行三图 + 当前数据集的格式适用图（heatmap / length）
         applicable = ["trajectory", "scatter", "budget"]
         if self.config is not None:

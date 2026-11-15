@@ -219,6 +219,27 @@ def _config_variant_error(sequence, protein_config):
     return None
 
 
+# protein_config 路径的已知数据摘要：位点列表与各位点残基分布完全由配置驱动，不含任何 GB1 字面量。
+# 残基按 config.variant_format 解析（与编码器同源）：mutation_notation 用记谱解析（未突变位点记
+# 野生型残基），mutation_string 按位取字符，full 取 mutable 位置字符；indel 无固定位点残基，不输出分布。
+def _config_known_summary(known, top_n, config):
+    top = known.sort_values(["fitness", "variant"], ascending=[False, True]).head(top_n)
+    summary = {"n_known": len(known), "fitness_mean": float(known.fitness.mean()),
+               "best_fitness": float(known.fitness.max()),
+               "top_variants": top[["variant", "fitness", "mutations"]].to_dict(orient="records"),
+               "interpretation": "Marginal residue statistics are observations in sampled backgrounds, not causal substitution effects."}
+    if config.variant_format == "indel_notation":
+        return summary
+    residues = [config._extract_residues(str(variant)) for variant in known.variant]
+    positions = []
+    for index, position in enumerate(config.mutable_positions):
+        grouped = (known.assign(residue=[row[index] for row in residues])
+                   .groupby("residue").fitness.agg(["count", "mean", "max"]))
+        positions.append({"position": position, "residue_statistics": grouped.reset_index().to_dict(orient="records")})
+    summary["positions"] = positions
+    return summary
+
+
 # 工具持有本轮全部可见状态；agent循环只负责消息编排，评分与预算的真实计数都发生在这里。
 class ToolBox:
     """Stateful executor exposing the five agent tools over shared experiment state."""
@@ -299,18 +320,9 @@ class ToolBox:
         room = self.budget.remaining_score_calls()
         to_score, deferred = fresh[:room], fresh[room:]
         if to_score:
-            values = self.predict_fn(to_score)
-            if not isinstance(values, (list, tuple)) or len(values) != len(to_score):
-                return {"error": "predictor must return exactly one score per requested sequence"}
-            try:
-                scores = [float(value) for value in values]
-            except (TypeError, ValueError):
-                return {"error": "predictor returned nonnumeric scores"}
-            if not all(np.isfinite(scores)):
-                return {"error": "predictor returned nonfinite scores"}
-            # 只有真实完成的批量预测才消耗预算；失败请求不计费。
-            self.budget.consume_scores(len(to_score))
-            self.score_cache.update(zip(to_score, scores))
+            error = self._bulk_score(to_score)
+            if error:
+                return {"error": error}
         ranked = sorted((sequence for sequence in requested if sequence in self.score_cache),
                         key=lambda v: (-self.score_cache[v], v))
         result = {"scored": [{"rank": index, "variant": variant, "predicted_fitness": self.score_cache[variant]}
@@ -323,6 +335,36 @@ class ToolBox:
             result["not_scored"] = [{"sequence": sequence, "reason": "per-round score budget exhausted"}
                                     for sequence in deferred]
         return result
+
+    def _bulk_score(self, sequences):
+        """批量调用 predict_fn：成功消耗评分预算并写入缓存返回 None，失败返回错误且不消耗。"""
+        values = self.predict_fn(sequences)
+        if not isinstance(values, (list, tuple)) or len(values) != len(sequences):
+            return "predictor must return exactly one score per requested sequence"
+        try:
+            scores = [float(value) for value in values]
+        except (TypeError, ValueError):
+            return "predictor returned nonnumeric scores"
+        if not all(np.isfinite(scores)):
+            return "predictor returned nonfinite scores"
+        # 只有真实完成的批量预测才消耗预算；失败请求不计费。
+        self.budget.consume_scores(len(sequences))
+        self.score_cache.update(zip(sequences, scores))
+        return None
+
+    # 提交层硬不变量（protein_config 路径）：提交序列中的每条候选必须已有预测分。
+    # 存在合格未测但未评分的变体时先批量补齐（正常消耗评分预算）；预算不足则返回拒绝原因，
+    # 由调用方拒绝该提交（LLM 可改用 predict_fitness 或换已评分候选重试）。
+    # GB1 旧路径（protein_config=None）不补分，行为与已发布复现完全一致。
+    def ensure_scored(self, sequences):
+        missing = [sequence for sequence in sequences if sequence not in self.score_cache]
+        if self.protein_config is None or not missing:
+            return None
+        room = self.budget.remaining_score_calls()
+        if len(missing) > room:
+            return (f"提交前必须完成评分，剩余评分额度不足（还需评 {len(missing)} 条，剩余 {room} 条），"
+                    "请缩减批次或先用 predict_fitness")
+        return self._bulk_score(missing)
 
     def _query_knowledge(self, query):
         if not isinstance(query, str) or not query.strip():
@@ -343,15 +385,28 @@ class ToolBox:
         return {"query": query, "matched_rules": matched}
 
     def _get_experiment_history(self):
-        # config路径的参考序列与位点来自ProteinConfig；旧路径保持GB1硬编码值不变。
+        # config路径的参考序列、位点、已知摘要与合法未测示例全部由ProteinConfig派生；旧路径保持GB1硬编码值不变。
         if self.protein_config is not None:
-            reference_variant, positions = self.protein_config.reference_sequence, list(self.protein_config.mutable_positions)
+            reference_variant = self.protein_config.reference_sequence
+            positions = list(self.protein_config.mutable_positions)
+            known_data = _config_known_summary(self.known, self.config.summary_top, self.protein_config)
+            # 让模型直接看到合法未测候选的原生形态（确定性字典序前30条），避免反复请求已测或库外变体
+            round_context = {"reference_variant": reference_variant, "positions": positions,
+                             "eligible_candidate_count": len(self.eligible),
+                             "eligible_total": len(self.eligible),
+                             "eligible_examples": sorted(self.eligible)[:30],
+                             "eligibility_note": ("Eligible candidates are unmeasured variants that appear in the "
+                                                  "dataset pool; write them in exactly the native variant format "
+                                                  "shown in eligible_examples."),
+                             "required_recommendations": self.required_count()}
         else:
             reference_variant, positions = "VDGV", list(POSITIONS)
-        return {"round_context": {"reference_variant": reference_variant, "positions": positions,
-                                  "eligible_candidate_count": len(self.eligible),
-                                  "required_recommendations": self.required_count()},
-                "known_data": summarize(self.known, self.config.summary_top),
+            known_data = summarize(self.known, self.config.summary_top)
+            round_context = {"reference_variant": reference_variant, "positions": positions,
+                             "eligible_candidate_count": len(self.eligible),
+                             "required_recommendations": self.required_count()}
+        return {"round_context": round_context,
+                "known_data": known_data,
                 "previous_recommendations": self.feedback_history,
                 "scored_variants_this_round": self.ranked_scored(),
                 "notes": ("Marginal residue statistics are observations in sampled backgrounds, not causal "
@@ -374,6 +429,10 @@ class ToolBox:
                 return {"status": "rejected", "error": f"reason for {sequence!r} must be a nonempty string"}
         if len(set(sequences)) != len(sequences):
             return {"status": "rejected", "error": "recommendations must be unique"}
+        # 硬不变量：提交前所有候选必须已有预测分——未评分变体在此自动补齐，预算不足则拒绝提交
+        error = self.ensure_scored(sequences)
+        if error is not None:
+            return {"status": "rejected", "error": error}
         return self._record_submission(sequences, reasons, budget_exhausted=False, stop_reason=None, auto=False)
 
     def _check_budget(self):
@@ -395,6 +454,10 @@ class ToolBox:
         """Record the automatic submission used when a budget is exhausted; inputs come from trusted internal state."""
         if self.submission is not None:
             return {"status": "rejected", "error": "recommendations were already submitted for this round"}
+        # 自动提交与 LLM 提交走同一层补分：保证提交记录每条都带 predicted_fitness
+        error = self.ensure_scored(sequences)
+        if error is not None:
+            return {"status": "rejected", "error": error}
         return self._record_submission(sequences, reasons, budget_exhausted=True, stop_reason=stop_reason, auto=True)
 
 

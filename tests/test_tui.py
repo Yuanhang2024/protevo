@@ -436,7 +436,7 @@ def test_export_bundles_artifacts(tmp_path, monkeypatch, capsys):
     shell.onecmd(f"export --out {out_dir}")
     out = capsys.readouterr().out
     assert "── 导出清单" in out
-    for name in ("per_round.csv", "summary.json", "trajectory.png", "scatter.png",
+    for name in ("per_round.csv", "summary.json", "agent_round1.jsonl", "trajectory.png", "scatter.png",
                  "budget.png", "heatmap.png"):
         assert (out_dir / name).is_file(), name
 

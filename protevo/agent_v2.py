@@ -175,9 +175,21 @@ class ToolCallingAgent:
                    f"({row['predicted_fitness']:.4g})." for row in ranked]
         if len(sequences) < required:
             fill = sorted(toolbox.eligible - set(sequences))[:required - len(sequences)]
-            sequences += fill
-            reasons += [f"Auto-submitted after {stop_reason}: unscored deterministic fallback from the eligible pool "
-                        "(no predictor evidence)." for _ in fill]
+            if toolbox.protein_config is not None:
+                # 蛋白无关路径：确定性回补候选先补评分再进提交（与提交层同一套 ensure_scored）；
+                # 剩余评分额度不足时截断到可负担数量，保证自动提交的每条推荐都带预测分。
+                fill = fill[:toolbox.budget.remaining_score_calls()]
+                toolbox.ensure_scored(fill)
+                sequences += fill
+                for variant in fill:
+                    score = toolbox.score_cache.get(variant)
+                    detail = f"predicted fitness {score:.4g}" if score is not None else "no predictor evidence"
+                    reasons.append(f"Auto-submitted after {stop_reason}: deterministic fallback from the eligible pool "
+                                   f"({detail}).")
+            else:
+                sequences += fill
+                reasons += [f"Auto-submitted after {stop_reason}: unscored deterministic fallback from the eligible pool "
+                            "(no predictor evidence)." for _ in fill]
         result = toolbox.force_submit(sequences, reasons, stop_reason)
         tool_sequence.append("submit_recommendations")
         self._log({"kind": "tool_call", "round": round_number, "call_id": self._next_call_id(round_number),
