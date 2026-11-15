@@ -37,11 +37,19 @@ def _format_sentence(config):
         anchor = config.mutable_positions[0] if config.mutable_positions else 1
         seq = config.wt_full_sequence or ""
         wt = seq[anchor - 1] if anchor <= len(seq) else "X"
-        # 相邻锚点示例：取参考序列内实际存在的相邻对（DSH note-008：不再硬编码 V39/G40）
-        next_pos = anchor + 1
-        wt_next = seq[next_pos - 1] if next_pos <= len(seq) else wt
-        return (f'变体以 HGVS 风格突变记谱表示：替换 "{wt}{anchor}D" 式、缺失 "{wt}{anchor}del"（范围 "{wt}{anchor}_{wt_next}{next_pos}del"）、'
-                f'插入 "{wt}{anchor}_{wt_next}{next_pos}insAA" 式（两锚点必须相邻）、重复 "{wt}{anchor}dup"；多点突变逗号分隔，野生型记作 "WT"。'
+        # 相邻锚点示例：优先 anchor/anchor+1；anchor 为末端时回退到 anchor-1/anchor（DSH note-009）
+        if anchor < len(seq):
+            pair_a, pair_b = anchor, anchor + 1
+        elif anchor > 1:
+            pair_a, pair_b = anchor - 1, anchor
+        else:
+            pair_a, pair_b = None, None  # 参考长度 1，无相邻对
+        wt_a = seq[pair_a - 1] if pair_a and pair_a <= len(seq) else wt
+        wt_b = seq[pair_b - 1] if pair_b and pair_b <= len(seq) else wt
+        pair_text = (f'（范围 "{wt_a}{pair_a}_{wt_b}{pair_b}del"）、'
+                     f'插入 "{wt_a}{pair_a}_{wt_b}{pair_b}insAA" 式（两锚点必须相邻）、') if pair_a else "、"
+        return (f'变体以 HGVS 风格突变记谱表示：替换 "{wt}{anchor}D" 式、缺失 "{wt}{anchor}del"{pair_text}'
+                f'重复 "{wt}{anchor}dup"；多点突变逗号分隔，野生型记作 "WT"。'
                 f"坐标为参考序列的 1-indexed 编号，多条突变不得触及重叠位点。")
     if config.variant_format == "mutation_notation":
         parts = []
