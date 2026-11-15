@@ -35,9 +35,13 @@ def _format_sentence(config):
     count = len(config.mutable_positions)
     if config.variant_format == "indel_notation":
         anchor = config.mutable_positions[0] if config.mutable_positions else 1
-        wt = config.wt_full_sequence[anchor - 1] if config.wt_full_sequence else "X"
-        return (f'变体以 HGVS 风格突变记谱表示：替换 "{wt}{anchor}D" 式、缺失 "{wt}{anchor}del"（范围 "{wt}{anchor}_G41del"）、'
-                f'插入 "V39_G40insAA" 式（两锚点必须相邻）、重复 "{wt}{anchor}dup"；多点突变逗号分隔，野生型记作 "WT"。'
+        seq = config.wt_full_sequence or ""
+        wt = seq[anchor - 1] if anchor <= len(seq) else "X"
+        # 相邻锚点示例：取参考序列内实际存在的相邻对（DSH note-008：不再硬编码 V39/G40）
+        next_pos = anchor + 1
+        wt_next = seq[next_pos - 1] if next_pos <= len(seq) else wt
+        return (f'变体以 HGVS 风格突变记谱表示：替换 "{wt}{anchor}D" 式、缺失 "{wt}{anchor}del"（范围 "{wt}{anchor}_{wt_next}{next_pos}del"）、'
+                f'插入 "{wt}{anchor}_{wt_next}{next_pos}insAA" 式（两锚点必须相邻）、重复 "{wt}{anchor}dup"；多点突变逗号分隔，野生型记作 "WT"。'
                 f"坐标为参考序列的 1-indexed 编号，多条突变不得触及重叠位点。")
     if config.variant_format == "mutation_notation":
         parts = []
