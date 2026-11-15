@@ -5,6 +5,19 @@ GB1（蛋白 G B1 结构域，IgG-Fc 结合）是本框架的第一个完整实�
 2×2 因子实验、双盲统计）；另在 ProteinGym 的 GFP / 泛素 / TEM-1（indel）三个真实数据集上
 以零代码改动完成跨蛋白复测。
 
+## 一键启动
+
+```bash
+# Windows：双击 run.bat，或命令行运行
+run.bat
+
+# Linux / macOS
+sh run.sh
+```
+
+脚本自动完成：检测 Python 3.10+ → 创建 .venv → 安装依赖（首次数分钟，后续跳过）→ 进入命令行交互台。
+环境变量 `PROTEVO_PY` 可指定解释器路径。TUI 为纯标准库实现，三平台同一入口；Windows 已实测，Linux/macOS 依赖全部跨平台、按同流程运行。
+
 ## 快速上手
 
 ```python
