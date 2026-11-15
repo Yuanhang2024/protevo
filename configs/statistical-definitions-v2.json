@@ -1,0 +1,82 @@
+{
+  "version": "gb1-statistical-definitions/2",
+  "frozen_on": "2026-11-14",
+  "fitness": {
+    "source": "Wu et al. 2016 measured/calibrated S1; S2 imputation excluded",
+    "higher_is_better": true,
+    "wild_type_variant": "VDGV",
+    "wild_type_fitness": 1,
+    "zero_is_valid": true,
+    "meaning": "WT-normalized binding-selection enrichment; not a direct Kd measurement"
+  },
+  "ranking": {
+    "position_order": "best first; smaller position is better",
+    "higher_score": "negative position",
+    "raw_position_correlation": "spearman(position, measured_fitness); negative indicates better best-first ordering",
+    "reported_high_score_correlation": "spearman(-position, measured_fitness); positive indicates better ordering",
+    "permutation_validation": "returned IDs equal the supplied IDs exactly once",
+    "new_true_top_k_ties": "measured fitness descending, variant ID ascending",
+    "historical_regression_ties": "fixed input order; keep the declared historical rule and version"
+  },
+  "top_k_overlap": {
+    "numerator": "size of intersection of predicted top k and measured top k in the same evaluation set",
+    "denominator": "min(k, evaluation_set_size)",
+    "not_equal_to": "fraction of all globally good variants discovered or fraction above WT"
+  },
+  "first_response_enrichment": {
+    "unit": "raw response candidate entry that maps to S1, before repair; may repeat across records",
+    "first_response_scope": "first response in every method-round, not only experiment round 1",
+    "historical_method_rounds": 36,
+    "historical_entries": 1408,
+    "uniform_reference": "actual S1 proportion at or above the stated quantile threshold, including threshold ties",
+    "interpretation": "descriptive enrichment; not identification of a pretraining-memory mechanism"
+  },
+  "anchor_success": {
+    "pair_weighted": "average of I(candidate_fitness >= cited_anchor_fitness) over candidate-anchor pairs",
+    "candidate_weighted": "average over distinct candidate records after averaging their cited-anchor outcomes",
+    "candidate_record_key": ["source", "method", "round", "variant"],
+    "measurement_history_eligibility": "initial known measurements and earlier fully completed rounds only",
+    "prompt_visibility": "ID is accompanied by its measured value in the actual supplied prompt; excluded IDs alone do not establish visibility",
+    "historical_pairs": 255,
+    "historical_candidate_records": 172,
+    "interpretation": "selected, anchor-citing subset; no independent effect of anchor citation"
+  },
+  "quality": {
+    "trajectory_mean": "mean measured fitness of the selected new variants within one completed trajectory",
+    "state_mean": "mean of independently generated replicate outcomes within the same condition and source state",
+    "overall_mean": "equal-weight mean of state-level means",
+    "state_new_maximum": "maximum newly selected measured fitness within one trajectory, before averaging over trajectories/states",
+    "cumulative_best": "includes initial known measurements and is nondecreasing by definition",
+    "sampling_units": "states and independently generated episodes/trajectories; proposals and repairs are not independent repetitions"
+  },
+  "completion": {
+    "reported_as": "completed episodes / all prespecified episodes",
+    "binary_boundary_bootstrap": "retain observed proportion, set probability-interval bounds null when the empirical binary distribution is degenerate",
+    "failed_episode_fitness": "unknown/not defined; never invent fitness=0",
+    "conditional_quality": "explicitly label quality conditional on completion and report failures alongside it"
+  },
+  "usage": {
+    "missing": "unknown; not free or zero",
+    "reported_known_sum": "sum reported token counts with missing-call count alongside",
+    "whole_episode_cost": "unknown if any included call has unknown usage",
+    "cached_input": "count once, according to provider top-level accounting",
+    "reasoning_output": "included where provider reports it; do not add nested details a second time",
+    "effective_speed": "sum output tokens / sum full generation seconds per trajectory, then group median; not pure decoding speed"
+  },
+  "feedback_estimands": {
+    "historical_detailed_display": "extra detailed fields plus their input-length effect, conditional on updated known data and predictor",
+    "historical_adaptive_frozen": "observed historical adaptive-workflow versus later frozen-workflow contrast; not an isolated component effect",
+    "new_context_factor": "availability of the common-prefix new measurements and corresponding context, with predictor/selection held fixed",
+    "new_predictor_factor": "predictor trained on initial data versus initial plus common-prefix measurements, on the same generated candidates",
+    "new_pilot_primary": "within-state mean C1-minus-C0 under selector P0; equal state weights",
+    "new_pilot_secondary": ["context effect under P1", "predictor effect within each C condition", "context-by-predictor interaction"],
+    "near_zero": "does not establish equivalence or no effect",
+    "pilot_inference": "descriptive feasibility/variance study; no confirmatory efficacy claim"
+  },
+  "record_completeness": {
+    "aggregate_recalculation": "selected values and summary arithmetic can be recalculated",
+    "process_audit": "requires actual input, public response, complete proposals/rejections/scores, pre-query selection and post-query labels",
+    "new_stochastic_reproduction": "fresh API output is a new run, not restoration of missing historical output",
+    "hidden_reasoning": "not required or collected as scientific process evidence"
+  }
+}

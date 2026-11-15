@@ -1,0 +1,101 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><title>Protevo科学智能体研究报告</title><style>body{font-family:"Microsoft YaHei",sans-serif;color:#193344;background:#f0f3f5;margin:0}main{max-width:1040px;margin:auto;padding:20px}section{background:white;padding:28px 36px;margin:0 0 20px}h1{font-size:24px}h2{font-size:20px}h3{font-size:15px;color:#245677}p{font-size:14px;line-height:1.6}table{width:100%;border-collapse:collapse;font-size:13px;margin:10px 0}th,td{border:1px solid #adbcc8;padding:7px;vertical-align:top}th{background:#e8f0f5}figure{margin:12px auto;text-align:center}img{max-width:100%}figcaption,.note{font-size:12px;color:#425969}.sequence{font-family:Consolas,monospace;overflow-wrap:anywhere}@page{size:A4;margin:13.5mm 16mm}@media print{body{background:white}main{padding:0}section{padding:0;break-after:page}section:last-child{break-after:auto}p{font-size:9.4pt;line-height:1.1}table{font-size:8pt}th,td{padding:4px}h2{font-size:14pt}h3{font-size:10.5pt}.note,figcaption{font-size:8pt}}</style></head><body><main>
+<section>
+<h1>面向蛋白质定向进化的科学智能体</h1><p>预测器、工具交互与反馈作用 | GB1及跨蛋白实验 | 2026-11-15</p>
+<h2>1 研究问题、数据与实验设计</h2>
+<p class="p">本研究将蛋白序列预测器与语言模型工具调用结合，用有限的候选评分和测量查询推进虚拟定向进化。重点回答三个问题：预训练蛋白特征如何与回归器匹配；工具交互能否改善候选选择；在预测器固定时，测量反馈上下文能否带来额外收益。</p>
+<h3>数据与测量定义</h3>
+<p class="p">主任务采用Wu等（2016）GB1实测变体库S1，共149,361条唯一变体，覆盖20⁴种四位点组合的93.35%，其中29,477条fitness为0。fitness是相对野生型归一化的结合筛选富集分数（WT=1，越大越好），未作对数变换；S2插补值不作为虚拟测量。参考域56 aa，可变位置39、40、41、54的野生型残基为VDGV。</p>
+<p class="sequence">MQYKLILNGKTLKGETTTEAVDAATAEKVFKQYANDNGVDGEWTYDDATKTFTVTE</p>
+<table><thead><tr><th>实验</th><th>数据与预算</th><th>分析单位</th></tr></thead><tbody>
+<tr><td>在线虚拟进化</td><td>种子11/22/33；初始已知2,000，验证1,000，保留测试5,000，候选141,361；每轮评分≤40、推荐10条、共3轮</td><td>每种子完整轨迹；每条件n=3</td></tr>
+<tr><td>预测器比较</td><td>9特征×3回归器×3训练量×3种子=243次拟合；训练量2,000/10,000/50,000；固定验证2,000</td><td>三次训练抽样与模型种子；验证集共用</td></tr>
+<tr><td>反馈分离预试</td><td>4个新状态；反馈展示/不展示各3次生成；每次最多40候选、取10条；两选择器回放同批候选</td><td>先状态内平均，再四状态等权</td></tr>
+</tbody></table>
+<h3>工具交互与比较条件</h3>
+<p class="p">语言模型采用gpt-6-luna，通过读取历史、知识查询、预测评分、预算查询和提交推荐五类工具组织实验。候选需通过格式、资格、去重和预算检查；固定所选变体后才读取其测量值。GB1各轮预测器仅用初始已知与本方法此前反馈拟合。</p>
+<table><thead><tr><th>组别</th><th>预测器</th><th>候选设计与选择</th></tr></thead><tbody>
+<tr><td>G1</td><td>one-hot＋RF</td><td>历史Prompt v1；程序按预测分选Top-10</td></tr>
+<tr><td>G2</td><td>ESM-2 L33四突变位点均值＋Ridge（α=1）</td><td>Prompt v1；程序按预测分选Top-10</td></tr>
+<tr><td>G3</td><td>与G1相同的RF规格</td><td>模型逐次选工具、评分和提交</td></tr>
+<tr><td>G4</td><td>与G2相同的ESM-2 Ridge规格</td><td>模型逐次选工具、评分和提交</td></tr>
+</tbody></table>
+<p class="p">G1复用9轮，G2–G4新增27轮。Prompt每轮最多2次生成，Tool-Calling最多15次模型调用并设token停止阈值；评分额度耗尽时可由程序提交。四组比较描述整套提示与交互流程的表现，反馈上下文的单独贡献另由第4节的固定预测器对照估计。</p>
+</section>
+<section>
+<h2>2 预测器：GB1系统比较与跨蛋白扩展</h2>
+<p class="p">ESM-2参数冻结；比较突变位点均值、拼接、全序列均值、多层拼接及成对点积等表示。离线RF为100棵树、max_features=sqrt；Ridge采用StandardScaler和α=10；MLP采用StandardScaler、256/64隐藏层、α=10⁻⁴与早停。</p>
+<figure><img src="figures-v3-data/predictor_selection.svg" alt="图1　50,000条训练时，各特征按三个种子的平均验证Spearman选择回归器。点为各次拟合，菱形及误差棒为均值±样本SD。"><figcaption>图1　50,000条训练时，各特征按三个种子的平均验证Spearman选择回归器。点为各次拟合，菱形及误差棒为均值±样本SD。</figcaption></figure>
+<p class="p">GB1最高验证Spearman为one-hot＋RF的0.6554，MSE=0.0385；L33突变位点均值＋MLP为0.6333，MSE=0.0086。加入六个点积特征后，逐位点拼接RF的Spearman均值变化为−0.0021。</p>
+<p class="p">训练规模会改变表示与回归器的相对表现：L33＋MLP由2,000条训练时的0.2869升至50,000条时的0.6333；对应8M＋MLP为0.3131和0.5932。MLP在大样本L33均值特征上表现较好，小样本条件下该特征仍由RF领先。在线G2/G4使用较小训练集的Ridge，独立于本节大样本MLP比较。</p>
+<h3>跨蛋白实测数据上的验证集选型</h3>
+<table><thead><tr><th>数据集</th><th>变体库</th><th>选中模型</th><th>选中ρ</th><th>ESM Ridge ρ</th><th>ESM MLP ρ</th></tr></thead><tbody>
+<tr><td>GFP（51,714条）</td><td>233位点替换</td><td>one-hot Ridge</td><td>0.8652</td><td>0.6275</td><td>0.7765</td></tr>
+<tr><td>RL40A（1,380条）</td><td>75位点单替换</td><td>one-hot RF</td><td>0.7849</td><td>0.4826</td><td>0.6357</td></tr>
+<tr><td>TEM-1（4,751条）</td><td>单残基插入/缺失/重复</td><td>ESM-2＋MLP</td><td>0.7552</td><td>0.6568</td><td>0.7552</td></tr>
+</tbody></table>
+<p class="p">三个扩展数据集按seed=42进行80/20训练/验证划分；ESM使用全序列末层均值。TEM-1的ESM＋MLP达到0.7552，高于组分＋长度Ridge的0.0323以及ESM＋Ridge的0.6568。GFP与RL40A仍由one-hot回归器取得更高验证分数。该比较表明：预训练表示的收益依赖变体库结构和回归头，选型应依据具体任务的验证表现。</p>
+<p class="note">扩展数据来自ProteinGym；RL40A完整输入参考为128 aa，突变位于2–76。新Spearman来自保存的跨蛋白运行摘要。该表与GB1的50,000训练、三种子协议分别报告。</p>
+</section>
+<section>
+<h2>3 三轮进化：推荐质量与评分资源</h2>
+<p class="p">每条轨迹先计算30条新增推荐的实测均值，再对三个种子等权汇总。下表±为种子间样本SD（ddof=1）；连续三轮属于同一条轨迹。累计最佳包含初始已知测量。</p>
+<table><thead><tr><th>组别</th><th>新增推荐均值±SD</th><th>累计最佳均值±SD</th></tr></thead><tbody>
+<tr><td>G1 RF＋Prompt v1</td><td>2.0840 ± 1.7949</td><td>5.1732 ± 0.7845</td></tr>
+<tr><td>G2 ESM-2 Ridge＋Prompt v1</td><td>0.6939 ± 0.4572</td><td>4.7274 ± 0.4692</td></tr>
+<tr><td>G3 RF＋Tool-Calling</td><td>3.8405 ± 0.3091</td><td>6.2475 ± 1.2206</td></tr>
+<tr><td>G4 ESM-2 Ridge＋Tool-Calling</td><td>3.5110 ± 0.4809</td><td>5.4850 ± 0.2451</td></tr>
+</tbody></table>
+<figure><img src="figures-v3-data/round_trajectories.svg" alt="图2　三种子的逐轮均值。左图为当轮新增推荐质量，右图为含初始数据的累计最佳；后者的单调性来自累计定义。"><figcaption>图2　三种子的逐轮均值。左图为当轮新增推荐质量，右图为含初始数据的累计最佳；后者的单调性来自累计定义。</figcaption></figure>
+<h3>同划分、同测量预算的全池模型比较</h3>
+<table><thead><tr><th>策略</th><th>推荐均值</th><th>新增最高值均值</th><th>三种子预测次数</th></tr></thead><tbody>
+<tr><td>均匀随机</td><td>0.1397</td><td>2.2219</td><td>0</td></tr>
+<tr><td>全池冻结RF</td><td>3.2492</td><td>6.3909</td><td>1,272,159</td></tr>
+<tr><td>全池更新RF</td><td>3.2022</td><td>6.6301</td><td>1,272,159</td></tr>
+</tbody></table>
+<p class="p">每策略均为三个种子、每轨迹30次测量。G3/G4分别使用326/315次候选评分，推荐均值高于两种全池RF；新增最高值均值分别为6.2475/5.4850，为更新RF的94.2%/82.7%。这一结果展示了少量评分下的平均推荐质量与发现极高分变体之间的取舍；评分次数与LLM调用开销分别计量。</p>
+<h3>四方法比较与候选来源</h3>
+<p class="p">历史v1的随机、模型排序、基础Agent和知识辅助Agent均值为0.1741、0.3861、2.0840、1.5146。前两者从随机候选库选择，后两者可设计候选。理化性质、突变限制和组合不确定性规则提供了先验，但该次知识辅助未提高均值。</p>
+<p class="p">G2接受候选中325/334、最终推荐中81/90匹配当次提示的无标签示例；G1对应200/358和48/90。生成候选与提示示例存在较高重合；G1→G3、G2→G4的差异同时涉及提示呈现与交互方式。</p>
+</section>
+<section>
+<h2>4 反馈的独立作用：固定预测器对照</h2>
+<p class="p">在4个独立初始状态中，以共同前缀取得的新测量构造C1反馈上下文，C0不展示该批测量。两条件各生成3次候选，每次最多40条、最终推荐10条。P0预测器保持固定，P1加入前缀测量后重拟合；同一生成批次分别由P0/P1选择，以区分上下文展示与预测器更新的作用。共24个生成条件、44次模型调用。</p>
+<h3>固定P0后，剔除受截断影响条件的反馈增量</h3>
+<p class="p">仅排除状态1202、重复1的C1生成条件后，C1−C0的四状态等权差为+0.1761（相对C0均值提高4.36%）；同时移除对应C0重复、保持配对结构后，差为+0.2309。两种处理均有3/4个状态为正；在预测器保持不变时，所保留样本中观察到正向反馈增量。</p>
+<table><thead><tr><th>分析范围</th><th>C0/C1生成次数</th><th>C0均值</th><th>C1均值</th><th>差值C1−C0</th></tr></thead><tbody>
+<tr><td>全部预设生成（主要分析）</td><td>12 / 12</td><td>4.0377</td><td>3.8318</td><td>-0.2060</td></tr>
+<tr><td>剔除受截断影响的C1（敏感性）</td><td>12 / 11</td><td>4.0377</td><td>4.2138</td><td>+0.1761</td></tr>
+<tr><td>对称剔除对应C0/C1（补充）</td><td>11 / 11</td><td>3.9830</td><td>4.2138</td><td>+0.2309</td></tr>
+</tbody></table>
+<figure><img src="figures-v3-data/feedback_effects.svg" alt="图3　各状态的反馈差值。每个条件先平均本次生成的10条推荐，再在状态内平均，最后四状态等权；状态1202的样本量随处理规则改变。"><figcaption>图3　各状态的反馈差值。每个条件先平均本次生成的10条推荐，再在状态内平均，最后四状态等权；状态1202的样本量随处理规则改变。</figcaption></figure>
+<h3>生成可靠性与反馈内容分别影响结果</h3>
+<p class="p">受影响条件首次响应因服务端输出额度达到上限而截断（finish_reason=length，128,000输出tokens），首答无可用候选；纠正阶段接受40条程序提供的无标签示例，最终推荐均值0.1690。该条件最终完成，因此保留在整体运行评价中。全部预设生成的反馈差为−0.2060，反映当前执行流程包含该事件时的表现。</p>
+<p class="p">正向增量来自事后明确列出的故障敏感性分析，且预测器、候选资格与选择预算保持一致；这里“独立”指与预测器更新分离的上下文作用。反馈内容与其增加的上下文长度共同构成C1输入。本结果支持在后续研究中同时保留反馈上下文并改进生成故障处理。</p>
+<p class="note">C1单臂剔除时，状态1202的C0保留3次、C1保留2次；对称剔除时两臂均2次。统计单位为4个状态。两种敏感性规则及全部逐次结果随报告数据文件提供，未将其作为预先指定的显著性检验。</p>
+</section>
+<section>
+<h2>5 Agent决策、成功与失败案例及复现</h2>
+<h3>观察结果后的行动序列</h3>
+<p class="p">G3/G4分别有5/9轮和6/9轮由模型主动提交，其余由评分额度耗尽触发程序选择。下例取G3、种子33、第2轮的真实工具日志，展示模型接收结果后继续选择工具和候选的过程。</p>
+<table><thead><tr><th>步骤</th><th>模型获得的信息／执行的操作</th><th>记录中的结果</th></tr></thead><tbody>
+<tr><td>读取反馈</td><td>get_experiment_history取得上一轮已测变体；查询cysteine at 41、alanine at 54等关键词</td><td>随后围绕N40/C41/A54等背景设计候选</td></tr>
+<tr><td>首批评分</td><td>predict_fitness评分INCA、FNCA、TNCA等候选</td><td>TNCA预测3.6669；FNCA等约3.6647</td></tr>
+<tr><td>追加候选</td><td>收到首批评分后追加ANCA、CNCA、IVCA、FVCA等</td><td>IVCA=3.7400，FVCA=3.7400；剩余评分额度6</td></tr>
+<tr><td>主动提交</td><td>模型调用submit_recommendations，选择IVCA、FVCA、TNCA等10条</td><td>理由引用预测排名和已测高分背景，未等待额度耗尽</td></tr>
+</tbody></table>
+<p class="p">这些可核查操作体现了轮内追加评估和自主停止。推荐理由作为模型陈述保存，实际效用由实测结果评价。</p>
+<h3>高实测变体与预测高估案例</h3>
+<table><thead><tr><th>G3／seed33／第3轮</th><th>预测fitness</th><th>实测fitness</th></tr></thead><tbody>
+<tr><td>ANCA</td><td>4.7190</td><td>7.5569</td></tr>
+<tr><td>CNCA</td><td>4.7190</td><td>0.6127</td></tr>
+</tbody></table>
+<p class="p">ANCA是G3/G4新增推荐中的最高实测变体；CNCA是预测高估最大的推荐。两者仅39位残基不同而获得相同预测，体现了该组合背景中模型区分能力不足。ANCA完整序列如下：</p>
+<p class="sequence">MQYKLILNGKTLKGETTTEAVDAATAEKVFKQYANDNGANCEWTYDDATKTFTATE</p>
+<h3>主要发现与下一步</h3>
+<p class="p">① 表示与回归头应按任务选型：GB1以one-hot RF最优，TEM-1 indel以ESM-2 MLP取得0.7552。② 工具交互支持读取反馈、追加评分和主动提交；本次三种子的平均推荐质量高于Prompt组。③ 固定预测器的反馈对照在排除截断影响后的两种分析中均呈正增量，整体运行评价同时揭示生成可靠性的影响。后续以更多预先固定状态和故障处理规则验证该反馈作用。</p>
+<h3>复现与资料</h3>
+<p class="p">protevo提供配置化预测器、工具调用、TUI和环境doctor；三轮语言模型实验以GB1为主。预测器比较运行evaluate_all_variants.py，跨蛋白运行run_cross_protein.py；通用循环调用run_evolution(..., retrain_each_round=True)采用每轮更新，默认False为固定预测器。报告图表、逐轮指标及反馈处理规则保存在figures-v3-data/。</p>
+<p class="p">GB1 G3/G4保存工具参数、工具结果和调用摘要；反馈预试另有完整公开输入与响应导出（results/supplement-20261114/public-records）。参考文献：[1] Wu et al., eLife 2016, doi:10.7554/eLife.16965；[2] Lin et al., Science 2023, doi:10.1126/science.ade2574；[3] Notin et al., ProteinGym, NeurIPS 2023；[4] Dallago et al., FLIP, NeurIPS Datasets and Benchmarks 2021。</p>
+<p class="note">AI使用：gpt-6-luna参与候选设计与工具调用；其他语言模型协助实现、材料整理和核查。预测分、公开理由与实测结果分别保存。数据与程序采用各原始来源声明的许可。</p>
+</section>
+</main></body></html>

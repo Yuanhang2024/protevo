@@ -1,0 +1,192 @@
+{
+  "format_version": 1,
+  "dataset_manifest": {
+    "format_version": 1,
+    "config": {
+      "seed": 101,
+      "rounds": 6,
+      "k": 5,
+      "train_size": 24,
+      "validation_size": 16,
+      "test_size": 16,
+      "pool_size": 160,
+      "score_budget": 8,
+      "proposal_count": 8,
+      "summary_top": 15,
+      "contrast_examples": 4,
+      "feedback_rounds": 1,
+      "top_k_metric": 10,
+      "high_fitness_quantile": 0.9,
+      "ridge_alphas": [
+        0.1,
+        1.0,
+        10.0
+      ],
+      "tree_estimators": 5,
+      "tree_min_samples_leaf": [
+        1
+      ],
+      "tree_max_depth": null,
+      "n_jobs": 1,
+      "model_families": [
+        "random_forest"
+      ],
+      "model_seed": null,
+      "design_seed": null,
+      "llm_max_calls_per_round": 2,
+      "llm_max_output_tokens": null,
+      "llm_timeout": null,
+      "llm_reasoning_effort": "high",
+      "llm_temperature": null,
+      "llm_format": "json_schema",
+      "knowledge_path": "C:\\Users\\lijin\\Desktop\\ZJU张强老师申请\\笔试试题\\test-workspace\\gb1-evolution\\results\\metric-correction-20261114\\audit-compat-test-b\\test_phase3_statistics_reprodu0\\confirmation\\snapshot\\configs\\knowledge.json",
+      "oversize_policy": "reject",
+      "repair_examples": true,
+      "require_full_batch": false,
+      "analysis_max_chars": 5000,
+      "proposal_text_max_chars": 2000,
+      "allowed_positions": [
+        39,
+        40,
+        41,
+        54
+      ],
+      "allowed_amino_acids": "ACDEFGHIKLMNPQRSTVWY",
+      "min_mutations": 0,
+      "max_mutations": 4,
+      "max_assays": null,
+      "max_model_calls": null,
+      "max_reported_tokens": null,
+      "target_fitness": null,
+      "patience": null,
+      "min_improvement": 0,
+      "early_stop_metric": "best",
+      "save_predictors": false
+    },
+    "source": "C:\\Users\\lijin\\Desktop\\ZJU张强老师申请\\笔试试题\\test-workspace\\gb1-evolution\\results\\metric-correction-20261114\\audit-compat-test-b\\test_phase3_statistics_reprodu0\\confirmation\\synthetic-source.csv",
+    "schema": {
+      "variant_column": "variant",
+      "fitness_column": "fitness",
+      "sheet_name": 0,
+      "header": 0
+    },
+    "audit": {
+      "input_rows": 256,
+      "invalid_sequence_rows": 0,
+      "missing_or_invalid_fitness_rows": 0,
+      "duplicate_rows_removed": 0,
+      "valid_rows": 256,
+      "zero_fitness_rows": 1,
+      "reference": "MQYKLILNGKTLKGETTTEAVDAATAEKVFKQYANDNGVDGEWTYDDATKTFTVTE",
+      "positions": [
+        39,
+        40,
+        41,
+        54
+      ],
+      "fitness_transform": "none",
+      "higher_is_better": true
+    },
+    "counts": {
+      "train": 24,
+      "validation": 16,
+      "pool": 160,
+      "test": 16
+    }
+  },
+  "config": {
+    "seed": 101,
+    "rounds": 6,
+    "k": 5,
+    "train_size": 24,
+    "validation_size": 16,
+    "test_size": 16,
+    "pool_size": 160,
+    "score_budget": 8,
+    "proposal_count": 8,
+    "summary_top": 15,
+    "contrast_examples": 4,
+    "feedback_rounds": 1,
+    "top_k_metric": 10,
+    "high_fitness_quantile": 0.9,
+    "ridge_alphas": [
+      0.1,
+      1.0,
+      10.0
+    ],
+    "tree_estimators": 5,
+    "tree_min_samples_leaf": [
+      1
+    ],
+    "tree_max_depth": null,
+    "n_jobs": 1,
+    "model_families": [
+      "random_forest"
+    ],
+    "model_seed": null,
+    "design_seed": null,
+    "llm_max_calls_per_round": 2,
+    "llm_max_output_tokens": null,
+    "llm_timeout": null,
+    "llm_reasoning_effort": "high",
+    "llm_temperature": null,
+    "llm_format": "json_schema",
+    "knowledge_path": "C:\\Users\\lijin\\Desktop\\ZJU张强老师申请\\笔试试题\\test-workspace\\gb1-evolution\\results\\metric-correction-20261114\\audit-compat-test-b\\test_phase3_statistics_reprodu0\\confirmation\\snapshot\\configs\\knowledge.json",
+    "oversize_policy": "reject",
+    "repair_examples": true,
+    "require_full_batch": false,
+    "analysis_max_chars": 5000,
+    "proposal_text_max_chars": 2000,
+    "allowed_positions": [
+      39,
+      40,
+      41,
+      54
+    ],
+    "allowed_amino_acids": "ACDEFGHIKLMNPQRSTVWY",
+    "min_mutations": 0,
+    "max_mutations": 4,
+    "max_assays": null,
+    "max_model_calls": null,
+    "max_reported_tokens": null,
+    "target_fitness": null,
+    "patience": null,
+    "min_improvement": 0,
+    "early_stop_metric": "best",
+    "save_predictors": false
+  },
+  "spec": {
+    "family": "random_forest",
+    "parameters": {
+      "n_estimators": 5,
+      "min_samples_leaf": 1,
+      "max_depth": null
+    }
+  },
+  "comparison": [
+    {
+      "index": 0,
+      "family": "random_forest",
+      "parameters": {
+        "n_estimators": 5,
+        "min_samples_leaf": 1,
+        "max_depth": null
+      },
+      "n": 16,
+      "spearman": 0.8262917811173324,
+      "pearson": 0.8312884604348239,
+      "mse": 11.969999999999999,
+      "top_k": 10,
+      "top_k_hit_rate": 0.9,
+      "fit_seconds": 0.005765800000517629,
+      "predict_seconds": 0.001436900000044261
+    }
+  ],
+  "selection_rule": "validation Spearman, top-k hit rate, lower MSE, declared candidate order",
+  "top_k_definition": "overlap of predicted top k and true top k divided by k; stable input-order ties",
+  "versions": {
+    "python": "3.12.14",
+    "sklearn": "1.9.1",
+    "numpy": "2.5.4"
+  }
+}

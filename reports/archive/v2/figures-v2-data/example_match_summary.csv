@@ -1,0 +1,5 @@
+group,population,matched,total,fraction
+G1,Accepted candidates,200,358,0.5586592178770949
+G1,Final recommendations,48,90,0.5333333333333333
+G2,Accepted candidates,325,334,0.9730538922155688
+G2,Final recommendations,81,90,0.9

@@ -1,0 +1,17 @@
+{
+  "status": "passed",
+  "definition_version": "gb1-statistical-definitions/2",
+  "python_tests": {
+    "command": "python -m pytest tests -q -p no:cacheprovider",
+    "passed": 332
+  },
+  "v1_recommendations": 360,
+  "v1_method_rounds": 36,
+  "v3_recommendations": 180,
+  "detailed_feedback_states": 3,
+  "documents": [
+    "reports\\GB1首轮实验报告.docx",
+    "reports\\validation-stage\\GB1科学Agent验证报告.docx"
+  ],
+  "new_experimental_model_requests": 0
+}

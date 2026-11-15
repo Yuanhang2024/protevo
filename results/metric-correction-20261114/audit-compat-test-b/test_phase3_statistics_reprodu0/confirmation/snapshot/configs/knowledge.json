@@ -1,0 +1,12 @@
+{
+  "rules": [
+    {
+      "id": "synthetic",
+      "scope": "test only",
+      "condition": "test",
+      "action": "test",
+      "source": "synthetic test data",
+      "explanation": "Synthetic offline rule"
+    }
+  ]
+}

@@ -1,0 +1,48 @@
+{
+  "status": "passed",
+  "definition_version": "gb1-statistical-definitions/2",
+  "scope": "statistical definitions, recomputed data, current report text and PDF outputs",
+  "completed_at": "2026-11-14T05:52:58.060728+00:00",
+  "python_tests": {
+    "command": "python -m pytest tests -q -p no:cacheprovider",
+    "passed": 332,
+    "warnings": 2
+  },
+  "statistical_component_tests": 24,
+  "legacy_audit_compatibility_tests": 18,
+  "historical_raw_experiments_preserved": true,
+  "report_originals_preserved": true,
+  "revised_pdf_pages": {
+    "main": 5,
+    "validation": 5
+  },
+  "critical_pages_visually_checked": [
+    "main page 5",
+    "validation pages 4 and 5"
+  ],
+  "new_experimental_model_requests": 0,
+  "recomputed_component": "recomputed/statistics-status.json",
+  "version_counts": "version-counts.json",
+  "authorization": {
+    "feedback_model": "gpt-6-luna",
+    "api_mode": "chat",
+    "reasoning_effort": "xhigh",
+    "maximum_generation_calls": 48,
+    "basis": "direct user selection of the 48-call pilot option",
+    "contexts": [
+      "C0",
+      "C1"
+    ],
+    "selectors": [
+      "P0",
+      "P1"
+    ],
+    "states": [
+      1201,
+      1202,
+      1203,
+      1204
+    ],
+    "generation_repeats": 3
+  }
+}

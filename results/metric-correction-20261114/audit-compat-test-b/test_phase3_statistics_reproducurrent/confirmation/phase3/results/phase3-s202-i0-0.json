@@ -1,0 +1,464 @@
+{
+  "summary": {
+    "rounds": [
+      {
+        "round": 1,
+        "status": "evaluated",
+        "top10": [
+          {
+            "variant": "ADCC",
+            "sequence": "MQYKLILNGKTLKGETTTEAVDAATAEKVFKQYANDNGADCEWTYDDATKTFTCTE",
+            "mutations": "V39A:G41C:V54C",
+            "mutation_count": 3,
+            "rationale": "Synthetic rationale",
+            "hypothesis": "Synthetic hypothesis",
+            "knowledge_rule_ids": [
+              "synthetic"
+            ],
+            "predicted_fitness": 16.6,
+            "rank": 1,
+            "actual_fitness": 11.0
+          },
+          {
+            "variant": "EADC",
+            "sequence": "MQYKLILNGKTLKGETTTEAVDAATAEKVFKQYANDNGEADEWTYDDATKTFTCTE",
+            "mutations": "V39E:D40A:G41D:V54C",
+            "mutation_count": 4,
+            "rationale": "Synthetic rationale",
+            "hypothesis": "Synthetic hypothesis",
+            "knowledge_rule_ids": [
+              "synthetic"
+            ],
+            "predicted_fitness": 16.2,
+            "rank": 2,
+            "actual_fitness": 13.0
+          },
+          {
+            "variant": "EEDD",
+            "sequence": "MQYKLILNGKTLKGETTTEAVDAATAEKVFKQYANDNGEEDEWTYDDATKTFTDTE",
+            "mutations": "V39E:D40E:G41D:V54D",
+            "mutation_count": 4,
+            "rationale": "Synthetic rationale",
+            "hypothesis": "Synthetic hypothesis",
+            "knowledge_rule_ids": [
+              "synthetic"
+            ],
+            "predicted_fitness": 16.0,
+            "rank": 3,
+            "actual_fitness": 23.0
+          },
+          {
+            "variant": "CEEE",
+            "sequence": "MQYKLILNGKTLKGETTTEAVDAATAEKVFKQYANDNGCEEEWTYDDATKTFTETE",
+            "mutations": "V39C:D40E:G41E:V54E",
+            "mutation_count": 4,
+            "rationale": "Synthetic rationale",
+            "hypothesis": "Synthetic hypothesis",
+            "knowledge_rule_ids": [
+              "synthetic"
+            ],
+            "predicted_fitness": 15.4,
+            "rank": 4,
+            "actual_fitness": 28.0
+          },
+          {
+            "variant": "DECC",
+            "sequence": "MQYKLILNGKTLKGETTTEAVDAATAEKVFKQYANDNGDECEWTYDDATKTFTCTE",
+            "mutations": "V39D:D40E:G41C:V54C",
+            "mutation_count": 4,
+            "rationale": "Synthetic rationale",
+            "hypothesis": "Synthetic hypothesis",
+            "knowledge_rule_ids": [
+              "synthetic"
+            ],
+            "predicted_fitness": 15.0,
+            "rank": 5,
+            "actual_fitness": 15.0
+          }
+        ]
+      },
+      {
+        "round": 2,
+        "status": "evaluated",
+        "top10": [
+          {
+            "variant": "CDCE",
+            "sequence": "MQYKLILNGKTLKGETTTEAVDAATAEKVFKQYANDNGCDCEWTYDDATKTFTETE",
+            "mutations": "V39C:G41C:V54E",
+            "mutation_count": 3,
+            "rationale": "Synthetic rationale",
+            "hypothesis": "Synthetic hypothesis",
+            "knowledge_rule_ids": [
+              "synthetic"
+            ],
+            "predicted_fitness": 24.0,
+            "rank": 1,
+            "actual_fitness": 20.0
+          },
+          {
+            "variant": "ECCE",
+            "sequence": "MQYKLILNGKTLKGETTTEAVDAATAEKVFKQYANDNGECCEWTYDDATKTFTETE",
+            "mutations": "V39E:D40C:G41C:V54E",
+            "mutation_count": 4,
+            "rationale": "Synthetic rationale",
+            "hypothesis": "Synthetic hypothesis",
+            "knowledge_rule_ids": [
+              "synthetic"
+            ],
+            "predicted_fitness": 22.6,
+            "rank": 2,
+            "actual_fitness": 20.0
+          },
+          {
+            "variant": "CDAE",
+            "sequence": "MQYKLILNGKTLKGETTTEAVDAATAEKVFKQYANDNGCDAEWTYDDATKTFTETE",
+            "mutations": "V39C:G41A:V54E",
+            "mutation_count": 3,
+            "rationale": "Synthetic rationale",
+            "hypothesis": "Synthetic hypothesis",
+            "knowledge_rule_ids": [
+              "synthetic"
+            ],
+            "predicted_fitness": 21.8,
+            "rank": 3,
+            "actual_fitness": 17.0
+          },
+          {
+            "variant": "AADE",
+            "sequence": "MQYKLILNGKTLKGETTTEAVDAATAEKVFKQYANDNGAADEWTYDDATKTFTETE",
+            "mutations": "V39A:D40A:G41D:V54E",
+            "mutation_count": 4,
+            "rationale": "Synthetic rationale",
+            "hypothesis": "Synthetic hypothesis",
+            "knowledge_rule_ids": [
+              "synthetic"
+            ],
+            "predicted_fitness": 19.2,
+            "rank": 4,
+            "actual_fitness": 18.0
+          },
+          {
+            "variant": "DAEA",
+            "sequence": "MQYKLILNGKTLKGETTTEAVDAATAEKVFKQYANDNGDAEEWTYDDATKTFTATE",
+            "mutations": "V39D:D40A:G41E:V54A",
+            "mutation_count": 4,
+            "rationale": "Synthetic rationale",
+            "hypothesis": "Synthetic hypothesis",
+            "knowledge_rule_ids": [
+              "synthetic"
+            ],
+            "predicted_fitness": 14.0,
+            "rank": 5,
+            "actual_fitness": 11.0
+          }
+        ]
+      },
+      {
+        "round": 3,
+        "status": "evaluated",
+        "top10": [
+          {
+            "variant": "DCDE",
+            "sequence": "MQYKLILNGKTLKGETTTEAVDAATAEKVFKQYANDNGDCDEWTYDDATKTFTETE",
+            "mutations": "V39D:D40C:G41D:V54E",
+            "mutation_count": 4,
+            "rationale": "Synthetic rationale",
+            "hypothesis": "Synthetic hypothesis",
+            "knowledge_rule_ids": [
+              "synthetic"
+            ],
+            "predicted_fitness": 21.8,
+            "rank": 1,
+            "actual_fitness": 22.0
+          },
+          {
+            "variant": "CDDD",
+            "sequence": "MQYKLILNGKTLKGETTTEAVDAATAEKVFKQYANDNGCDDEWTYDDATKTFTDTE",
+            "mutations": "V39C:G41D:V54D",
+            "mutation_count": 3,
+            "rationale": "Synthetic rationale",
+            "hypothesis": "Synthetic hypothesis",
+            "knowledge_rule_ids": [
+              "synthetic"
+            ],
+            "predicted_fitness": 20.4,
+            "rank": 2,
+            "actual_fitness": 19.0
+          },
+          {
+            "variant": "AACE",
+            "sequence": "MQYKLILNGKTLKGETTTEAVDAATAEKVFKQYANDNGAACEWTYDDATKTFTETE",
+            "mutations": "V39A:D40A:G41C:V54E",
+            "mutation_count": 4,
+            "rationale": "Synthetic rationale",
+            "hypothesis": "Synthetic hypothesis",
+            "knowledge_rule_ids": [
+              "synthetic"
+            ],
+            "predicted_fitness": 18.8,
+            "rank": 3,
+            "actual_fitness": 15.0
+          },
+          {
+            "variant": "AADD",
+            "sequence": "MQYKLILNGKTLKGETTTEAVDAATAEKVFKQYANDNGAADEWTYDDATKTFTDTE",
+            "mutations": "V39A:D40A:G41D:V54D",
+            "mutation_count": 4,
+            "rationale": "Synthetic rationale",
+            "hypothesis": "Synthetic hypothesis",
+            "knowledge_rule_ids": [
+              "synthetic"
+            ],
+            "predicted_fitness": 17.8,
+            "rank": 4,
+            "actual_fitness": 14.0
+          },
+          {
+            "variant": "CADC",
+            "sequence": "MQYKLILNGKTLKGETTTEAVDAATAEKVFKQYANDNGCADEWTYDDATKTFTCTE",
+            "mutations": "V39C:D40A:G41D:V54C",
+            "mutation_count": 4,
+            "rationale": "Synthetic rationale",
+            "hypothesis": "Synthetic hypothesis",
+            "knowledge_rule_ids": [
+              "synthetic"
+            ],
+            "predicted_fitness": 12.2,
+            "rank": 5,
+            "actual_fitness": 11.0
+          }
+        ]
+      },
+      {
+        "round": 4,
+        "status": "evaluated",
+        "top10": [
+          {
+            "variant": "DCED",
+            "sequence": "MQYKLILNGKTLKGETTTEAVDAATAEKVFKQYANDNGDCEEWTYDDATKTFTDTE",
+            "mutations": "V39D:D40C:G41E:V54D",
+            "mutation_count": 4,
+            "rationale": "Synthetic rationale",
+            "hypothesis": "Synthetic hypothesis",
+            "knowledge_rule_ids": [
+              "synthetic"
+            ],
+            "predicted_fitness": 24.2,
+            "rank": 1,
+            "actual_fitness": 21.0
+          },
+          {
+            "variant": "DEDD",
+            "sequence": "MQYKLILNGKTLKGETTTEAVDAATAEKVFKQYANDNGDEDEWTYDDATKTFTDTE",
+            "mutations": "V39D:D40E:G41D:V54D",
+            "mutation_count": 4,
+            "rationale": "Synthetic rationale",
+            "hypothesis": "Synthetic hypothesis",
+            "knowledge_rule_ids": [
+              "synthetic"
+            ],
+            "predicted_fitness": 23.2,
+            "rank": 2,
+            "actual_fitness": 22.0
+          },
+          {
+            "variant": "CACE",
+            "sequence": "MQYKLILNGKTLKGETTTEAVDAATAEKVFKQYANDNGCACEWTYDDATKTFTETE",
+            "mutations": "V39C:D40A:G41C:V54E",
+            "mutation_count": 4,
+            "rationale": "Synthetic rationale",
+            "hypothesis": "Synthetic hypothesis",
+            "knowledge_rule_ids": [
+              "synthetic"
+            ],
+            "predicted_fitness": 20.4,
+            "rank": 3,
+            "actual_fitness": 16.0
+          },
+          {
+            "variant": "AEDE",
+            "sequence": "MQYKLILNGKTLKGETTTEAVDAATAEKVFKQYANDNGAEDEWTYDDATKTFTETE",
+            "mutations": "V39A:D40E:G41D:V54E",
+            "mutation_count": 4,
+            "rationale": "Synthetic rationale",
+            "hypothesis": "Synthetic hypothesis",
+            "knowledge_rule_ids": [
+              "synthetic"
+            ],
+            "predicted_fitness": 18.8,
+            "rank": 4,
+            "actual_fitness": 24.0
+          },
+          {
+            "variant": "DCEC",
+            "sequence": "MQYKLILNGKTLKGETTTEAVDAATAEKVFKQYANDNGDCEEWTYDDATKTFTCTE",
+            "mutations": "V39D:D40C:G41E:V54C",
+            "mutation_count": 4,
+            "rationale": "Synthetic rationale",
+            "hypothesis": "Synthetic hypothesis",
+            "knowledge_rule_ids": [
+              "synthetic"
+            ],
+            "predicted_fitness": 17.8,
+            "rank": 5,
+            "actual_fitness": 17.0
+          }
+        ]
+      },
+      {
+        "round": 5,
+        "status": "evaluated",
+        "top10": [
+          {
+            "variant": "CCDD",
+            "sequence": "MQYKLILNGKTLKGETTTEAVDAATAEKVFKQYANDNGCCDEWTYDDATKTFTDTE",
+            "mutations": "V39C:D40C:G41D:V54D",
+            "mutation_count": 4,
+            "rationale": "Synthetic rationale",
+            "hypothesis": "Synthetic hypothesis",
+            "knowledge_rule_ids": [
+              "synthetic"
+            ],
+            "predicted_fitness": 19.2,
+            "rank": 1,
+            "actual_fitness": 17.0
+          },
+          {
+            "variant": "CCAD",
+            "sequence": "MQYKLILNGKTLKGETTTEAVDAATAEKVFKQYANDNGCCAEWTYDDATKTFTDTE",
+            "mutations": "V39C:D40C:G41A:V54D",
+            "mutation_count": 4,
+            "rationale": "Synthetic rationale",
+            "hypothesis": "Synthetic hypothesis",
+            "knowledge_rule_ids": [
+              "synthetic"
+            ],
+            "predicted_fitness": 15.8,
+            "rank": 2,
+            "actual_fitness": 11.0
+          },
+          {
+            "variant": "EEDC",
+            "sequence": "MQYKLILNGKTLKGETTTEAVDAATAEKVFKQYANDNGEEDEWTYDDATKTFTCTE",
+            "mutations": "V39E:D40E:G41D:V54C",
+            "mutation_count": 4,
+            "rationale": "Synthetic rationale",
+            "hypothesis": "Synthetic hypothesis",
+            "knowledge_rule_ids": [
+              "synthetic"
+            ],
+            "predicted_fitness": 14.0,
+            "rank": 3,
+            "actual_fitness": 19.0
+          },
+          {
+            "variant": "EEEA",
+            "sequence": "MQYKLILNGKTLKGETTTEAVDAATAEKVFKQYANDNGEEEEWTYDDATKTFTATE",
+            "mutations": "V39E:D40E:G41E:V54A",
+            "mutation_count": 4,
+            "rationale": "Synthetic rationale",
+            "hypothesis": "Synthetic hypothesis",
+            "knowledge_rule_ids": [
+              "synthetic"
+            ],
+            "predicted_fitness": 12.2,
+            "rank": 4,
+            "actual_fitness": 18.0
+          },
+          {
+            "variant": "AACC",
+            "sequence": "MQYKLILNGKTLKGETTTEAVDAATAEKVFKQYANDNGAACEWTYDDATKTFTCTE",
+            "mutations": "V39A:D40A:G41C:V54C",
+            "mutation_count": 4,
+            "rationale": "Synthetic rationale",
+            "hypothesis": "Synthetic hypothesis",
+            "knowledge_rule_ids": [
+              "synthetic"
+            ],
+            "predicted_fitness": 11.2,
+            "rank": 5,
+            "actual_fitness": 7.0
+          }
+        ]
+      },
+      {
+        "round": 6,
+        "status": "evaluated",
+        "top10": [
+          {
+            "variant": "DECD",
+            "sequence": "MQYKLILNGKTLKGETTTEAVDAATAEKVFKQYANDNGDECEWTYDDATKTFTDTE",
+            "mutations": "V39D:D40E:G41C:V54D",
+            "mutation_count": 4,
+            "rationale": "Synthetic rationale",
+            "hypothesis": "Synthetic hypothesis",
+            "knowledge_rule_ids": [
+              "synthetic"
+            ],
+            "predicted_fitness": 22.8,
+            "rank": 1,
+            "actual_fitness": 19.0
+          },
+          {
+            "variant": "ADDE",
+            "sequence": "MQYKLILNGKTLKGETTTEAVDAATAEKVFKQYANDNGADDEWTYDDATKTFTETE",
+            "mutations": "V39A:G41D:V54E",
+            "mutation_count": 3,
+            "rationale": "Synthetic rationale",
+            "hypothesis": "Synthetic hypothesis",
+            "knowledge_rule_ids": [
+              "synthetic"
+            ],
+            "predicted_fitness": 20.0,
+            "rank": 2,
+            "actual_fitness": 22.0
+          },
+          {
+            "variant": "ADED",
+            "sequence": "MQYKLILNGKTLKGETTTEAVDAATAEKVFKQYANDNGADEEWTYDDATKTFTDTE",
+            "mutations": "V39A:G41E:V54D",
+            "mutation_count": 3,
+            "rationale": "Synthetic rationale",
+            "hypothesis": "Synthetic hypothesis",
+            "knowledge_rule_ids": [
+              "synthetic"
+            ],
+            "predicted_fitness": 19.4,
+            "rank": 3,
+            "actual_fitness": 21.0
+          },
+          {
+            "variant": "EEEC",
+            "sequence": "MQYKLILNGKTLKGETTTEAVDAATAEKVFKQYANDNGEEEEWTYDDATKTFTCTE",
+            "mutations": "V39E:D40E:G41E:V54C",
+            "mutation_count": 4,
+            "rationale": "Synthetic rationale",
+            "hypothesis": "Synthetic hypothesis",
+            "knowledge_rule_ids": [
+              "synthetic"
+            ],
+            "predicted_fitness": 17.8,
+            "rank": 4,
+            "actual_fitness": 22.0
+          },
+          {
+            "variant": "CCEE",
+            "sequence": "MQYKLILNGKTLKGETTTEAVDAATAEKVFKQYANDNGCCEEWTYDDATKTFTETE",
+            "mutations": "V39C:D40C:G41E:V54E",
+            "mutation_count": 4,
+            "rationale": "Synthetic rationale",
+            "hypothesis": "Synthetic hypothesis",
+            "knowledge_rule_ids": [
+              "synthetic"
+            ],
+            "predicted_fitness": 17.4,
+            "rank": 5,
+            "actual_fitness": 24.0
+          }
+        ]
+      }
+    ],
+    "completed_rounds": 6,
+    "calls": 6
+  }
+}

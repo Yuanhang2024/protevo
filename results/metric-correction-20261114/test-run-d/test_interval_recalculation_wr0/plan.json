@@ -1,0 +1,1 @@
+{"phase3": {"dataSeeds": [1, 2, 3], "bootstrap": {"seed": 20261113, "replicates": 1000, "confidenceLevel": 0.95, "outerUnit": "paired data split", "innerUnit": "independent trajectory within model and split"}}}

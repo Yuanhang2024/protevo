@@ -1,0 +1,87 @@
+[
+  {
+    "dataset": "GFP_AEQVI_Sarkisyan_2016",
+    "mode": "notation",
+    "n_variants": 51714,
+    "n_positions": 233,
+    "variant_format": "mutation_notation",
+    "reference_source": "provided",
+    "fitness_higher_is_better": true,
+    "predictor": "ridge",
+    "val_spearman": 0.8652,
+    "all_candidates": {
+      "random_forest": 0.845,
+      "ridge": 0.8652
+    },
+    "seconds": 78.0
+  },
+  {
+    "dataset": "RL40A_YEAST_Roscoe_2014",
+    "mode": "notation",
+    "n_variants": 1380,
+    "n_positions": 75,
+    "variant_format": "mutation_notation",
+    "reference_source": "provided",
+    "fitness_higher_is_better": true,
+    "predictor": "random_forest",
+    "val_spearman": 0.7849,
+    "all_candidates": {
+      "random_forest": 0.7849,
+      "ridge": 0.771
+    },
+    "seconds": 0.4
+  },
+  {
+    "dataset": "BLAT_ECOLX_Gonzalez_2019_indels",
+    "mode": "indel",
+    "n_variants": 4751,
+    "n_positions": 284,
+    "variant_format": "indel_notation",
+    "reference_source": "provided",
+    "fitness_higher_is_better": true,
+    "predictor": "esm2_mlp",
+    "val_spearman": 0.7552,
+    "all_candidates": {
+      "composition_ridge": 0.0323,
+      "esm2_ridge": 0.6568,
+      "esm2_mlp": 0.7552
+    },
+    "seconds": 166.3
+  },
+  {
+    "dataset": "GFP_AEQVI_Sarkisyan_2016",
+    "mode": "full",
+    "n_variants": 51714,
+    "n_positions": 233,
+    "variant_format": "full",
+    "reference_source": "provided",
+    "fitness_higher_is_better": true,
+    "predictor": "ridge",
+    "val_spearman": 0.8652,
+    "all_candidates": {
+      "random_forest": 0.8447,
+      "ridge": 0.8652,
+      "esm2_ridge": 0.6275,
+      "esm2_mlp": 0.7765
+    },
+    "seconds": 3322.7
+  },
+  {
+    "dataset": "RL40A_YEAST_Roscoe_2014",
+    "mode": "full",
+    "n_variants": 1380,
+    "n_positions": 75,
+    "variant_format": "full",
+    "reference_source": "provided",
+    "fitness_higher_is_better": true,
+    "predictor": "random_forest",
+    "val_spearman": 0.7849,
+    "all_candidates": {
+      "random_forest": 0.7849,
+      "ridge": 0.771,
+      "esm2_ridge": 0.4826,
+      "esm2_mlp": 0.6357
+    },
+    "seconds": 25.8
+  }
+]

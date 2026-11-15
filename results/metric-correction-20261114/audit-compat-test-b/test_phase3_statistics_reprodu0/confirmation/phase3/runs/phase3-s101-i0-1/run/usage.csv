@@ -1,0 +1,7 @@
+seed,method,round,attempt,status,usage,model_requested,model_returned,api_mode,request_id
+101,knowledge,1,1,succeeded,"{""input_tokens"": 10, ""output_tokens"": 20, ""total_tokens"": 30}",synthetic-b,,dsh,
+101,knowledge,2,1,succeeded,"{""input_tokens"": 10, ""output_tokens"": 20, ""total_tokens"": 30}",synthetic-b,,dsh,
+101,knowledge,3,1,succeeded,"{""input_tokens"": 10, ""output_tokens"": 20, ""total_tokens"": 30}",synthetic-b,,dsh,
+101,knowledge,4,1,succeeded,"{""input_tokens"": 10, ""output_tokens"": 20, ""total_tokens"": 30}",synthetic-b,,dsh,
+101,knowledge,5,1,succeeded,"{""input_tokens"": 10, ""output_tokens"": 20, ""total_tokens"": 30}",synthetic-b,,dsh,
+101,knowledge,6,1,succeeded,"{""input_tokens"": 10, ""output_tokens"": 20, ""total_tokens"": 30}",synthetic-b,,dsh,

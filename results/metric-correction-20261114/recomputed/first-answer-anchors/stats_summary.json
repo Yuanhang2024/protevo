@@ -1,0 +1,317 @@
+{
+  "definition_version": "gb1-statistical-definitions/2",
+  "model_requests": 0,
+  "s1_quantiles": {
+    "top1pct_fitness": 2.152372151259997,
+    "top5pct_fitness": 0.305672600518,
+    "top1pct_population": {
+      "quantile": 0.99,
+      "threshold": 2.152372151259997,
+      "qualifying_count": 1494,
+      "population_size": 149361,
+      "uniform_ge_threshold_probability": 0.010002611123385623,
+      "comparison": ">=",
+      "quantile_method": "linear"
+    },
+    "top5pct_population": {
+      "quantile": 0.95,
+      "threshold": 0.305672600518,
+      "qualifying_count": 7469,
+      "population_size": 149361,
+      "uniform_ge_threshold_probability": 0.050006360428759854,
+      "comparison": ">=",
+      "quantile_method": "linear"
+    },
+    "global_top10": [
+      {
+        "variant": "FWAA",
+        "fitness": 8.76196565571
+      },
+      {
+        "variant": "FYAA",
+        "fitness": 8.04515200416
+      },
+      {
+        "variant": "ANCA",
+        "fitness": 7.55686908836
+      },
+      {
+        "variant": "FWCA",
+        "fitness": 7.55466318627
+      },
+      {
+        "variant": "FWLG",
+        "fitness": 7.31265639682
+      },
+      {
+        "variant": "WWCA",
+        "fitness": 7.28233277004
+      },
+      {
+        "variant": "LWCA",
+        "fitness": 7.22866005298
+      },
+      {
+        "variant": "YYAA",
+        "fitness": 6.98133337097
+      },
+      {
+        "variant": "FFAA",
+        "fitness": 6.92825718021
+      },
+      {
+        "variant": "WWLG",
+        "fitness": 6.87794904259
+      }
+    ],
+    "true_top_ties": "variant ID ascending"
+  },
+  "first_answer_overlap": {
+    "llm": {
+      "method_round_records": 18,
+      "raw_candidate_entries": 717,
+      "first_answer_candidates": 717,
+      "top1pct_rate": 0.5341701534170153,
+      "uniform_expectation_top1pct": 0.010002611123385623,
+      "top5pct_rate": 0.7071129707112971,
+      "uniform_expectation_top5pct": 0.050006360428759854
+    },
+    "knowledge": {
+      "method_round_records": 18,
+      "raw_candidate_entries": 691,
+      "first_answer_candidates": 691,
+      "top1pct_rate": 0.4211287988422576,
+      "uniform_expectation_top1pct": 0.010002611123385623,
+      "top5pct_rate": 0.6295224312590448,
+      "uniform_expectation_top5pct": 0.050006360428759854
+    }
+  },
+  "first_answer_records": {
+    "method_round_records": 36,
+    "candidate_entries": 1408,
+    "raw_candidate_entries": 1408,
+    "scope": "first response in every method-round, before repair"
+  },
+  "anchor_transfer": {
+    "v3-seed11:knowledge": {
+      "eligibility_scope": "measurement_history_eligible",
+      "candidate_anchor_pairs": 44,
+      "candidate_records": 30,
+      "candidate_group": [
+        "source",
+        "method",
+        "round",
+        "variant"
+      ],
+      "pair_weighted_success": 0.36363636363636365,
+      "candidate_weighted_mean_success": 0.3,
+      "pair_weighted_uniform_ge_anchor": 0.0015406540955379005,
+      "candidate_weighted_mean_uniform_ge_anchor": 0.0012595880673893006
+    },
+    "v3-seed11:llm": {
+      "eligibility_scope": "measurement_history_eligible",
+      "candidate_anchor_pairs": 36,
+      "candidate_records": 23,
+      "candidate_group": [
+        "source",
+        "method",
+        "round",
+        "variant"
+      ],
+      "pair_weighted_success": 0.7222222222222222,
+      "candidate_weighted_mean_success": 0.7391304347826086,
+      "pair_weighted_uniform_ge_anchor": 0.002243259991266499,
+      "candidate_weighted_mean_uniform_ge_anchor": 0.0022121774993355756
+    },
+    "v3-seed22:knowledge": {
+      "eligibility_scope": "measurement_history_eligible",
+      "candidate_anchor_pairs": 37,
+      "candidate_records": 30,
+      "candidate_group": [
+        "source",
+        "method",
+        "round",
+        "variant"
+      ],
+      "pair_weighted_success": 0.24324324324324326,
+      "candidate_weighted_mean_success": 0.2,
+      "pair_weighted_uniform_ge_anchor": 0.0013745040358413326,
+      "candidate_weighted_mean_uniform_ge_anchor": 0.0012438543751938816
+    },
+    "v3-seed22:llm": {
+      "eligibility_scope": "measurement_history_eligible",
+      "candidate_anchor_pairs": 39,
+      "candidate_records": 29,
+      "candidate_group": [
+        "source",
+        "method",
+        "round",
+        "variant"
+      ],
+      "pair_weighted_success": 0.1794871794871795,
+      "candidate_weighted_mean_success": 0.1896551724137931,
+      "pair_weighted_uniform_ge_anchor": 0.0018961116235505133,
+      "candidate_weighted_mean_uniform_ge_anchor": 0.0019848924233325923
+    },
+    "v3-seed33:knowledge": {
+      "eligibility_scope": "measurement_history_eligible",
+      "candidate_anchor_pairs": 53,
+      "candidate_records": 30,
+      "candidate_group": [
+        "source",
+        "method",
+        "round",
+        "variant"
+      ],
+      "pair_weighted_success": 0.22641509433962265,
+      "candidate_weighted_mean_success": 0.21666666666666667,
+      "pair_weighted_uniform_ge_anchor": 0.0015126072288072978,
+      "candidate_weighted_mean_uniform_ge_anchor": 0.001455199148372065
+    },
+    "v3-seed33:llm": {
+      "eligibility_scope": "measurement_history_eligible",
+      "candidate_anchor_pairs": 46,
+      "candidate_records": 30,
+      "candidate_group": [
+        "source",
+        "method",
+        "round",
+        "variant"
+      ],
+      "pair_weighted_success": 0.3695652173913043,
+      "candidate_weighted_mean_success": 0.31666666666666665,
+      "pair_weighted_uniform_ge_anchor": 0.001265099468664045,
+      "candidate_weighted_mean_uniform_ge_anchor": 0.001116459822547757
+    },
+    "ALL": {
+      "eligibility_scope": "measurement_history_eligible",
+      "candidate_anchor_pairs": 255,
+      "candidate_records": 172,
+      "candidate_group": [
+        "source",
+        "method",
+        "round",
+        "variant"
+      ],
+      "pair_weighted_success": 0.3411764705882353,
+      "candidate_weighted_mean_success": 0.311046511627907,
+      "pair_weighted_uniform_ge_anchor": 0.0016145643185066423,
+      "candidate_weighted_mean_uniform_ge_anchor": 0.0015156686346886833
+    }
+  },
+  "anchor_transfer_prompt_visible": {
+    "v3-seed11:knowledge": {
+      "eligibility_scope": "prompt_visible_in_first_request_with_measurement",
+      "candidate_anchor_pairs": 44,
+      "candidate_records": 30,
+      "candidate_group": [
+        "source",
+        "method",
+        "round",
+        "variant"
+      ],
+      "pair_weighted_success": 0.36363636363636365,
+      "candidate_weighted_mean_success": 0.3,
+      "pair_weighted_uniform_ge_anchor": 0.0015406540955379005,
+      "candidate_weighted_mean_uniform_ge_anchor": 0.0012595880673893006
+    },
+    "v3-seed11:llm": {
+      "eligibility_scope": "prompt_visible_in_first_request_with_measurement",
+      "candidate_anchor_pairs": 36,
+      "candidate_records": 23,
+      "candidate_group": [
+        "source",
+        "method",
+        "round",
+        "variant"
+      ],
+      "pair_weighted_success": 0.7222222222222222,
+      "candidate_weighted_mean_success": 0.7391304347826086,
+      "pair_weighted_uniform_ge_anchor": 0.002243259991266499,
+      "candidate_weighted_mean_uniform_ge_anchor": 0.0022121774993355756
+    },
+    "v3-seed22:knowledge": {
+      "eligibility_scope": "prompt_visible_in_first_request_with_measurement",
+      "candidate_anchor_pairs": 37,
+      "candidate_records": 30,
+      "candidate_group": [
+        "source",
+        "method",
+        "round",
+        "variant"
+      ],
+      "pair_weighted_success": 0.24324324324324326,
+      "candidate_weighted_mean_success": 0.2,
+      "pair_weighted_uniform_ge_anchor": 0.0013745040358413326,
+      "candidate_weighted_mean_uniform_ge_anchor": 0.0012438543751938816
+    },
+    "v3-seed22:llm": {
+      "eligibility_scope": "prompt_visible_in_first_request_with_measurement",
+      "candidate_anchor_pairs": 39,
+      "candidate_records": 29,
+      "candidate_group": [
+        "source",
+        "method",
+        "round",
+        "variant"
+      ],
+      "pair_weighted_success": 0.1794871794871795,
+      "candidate_weighted_mean_success": 0.1896551724137931,
+      "pair_weighted_uniform_ge_anchor": 0.0018961116235505133,
+      "candidate_weighted_mean_uniform_ge_anchor": 0.0019848924233325923
+    },
+    "v3-seed33:knowledge": {
+      "eligibility_scope": "prompt_visible_in_first_request_with_measurement",
+      "candidate_anchor_pairs": 53,
+      "candidate_records": 30,
+      "candidate_group": [
+        "source",
+        "method",
+        "round",
+        "variant"
+      ],
+      "pair_weighted_success": 0.22641509433962265,
+      "candidate_weighted_mean_success": 0.21666666666666667,
+      "pair_weighted_uniform_ge_anchor": 0.0015126072288072978,
+      "candidate_weighted_mean_uniform_ge_anchor": 0.001455199148372065
+    },
+    "v3-seed33:llm": {
+      "eligibility_scope": "prompt_visible_in_first_request_with_measurement",
+      "candidate_anchor_pairs": 46,
+      "candidate_records": 30,
+      "candidate_group": [
+        "source",
+        "method",
+        "round",
+        "variant"
+      ],
+      "pair_weighted_success": 0.3695652173913043,
+      "candidate_weighted_mean_success": 0.31666666666666665,
+      "pair_weighted_uniform_ge_anchor": 0.001265099468664045,
+      "candidate_weighted_mean_uniform_ge_anchor": 0.001116459822547757
+    },
+    "ALL": {
+      "eligibility_scope": "prompt_visible_in_first_request_with_measurement",
+      "candidate_anchor_pairs": 255,
+      "candidate_records": 172,
+      "candidate_group": [
+        "source",
+        "method",
+        "round",
+        "variant"
+      ],
+      "pair_weighted_success": 0.3411764705882353,
+      "candidate_weighted_mean_success": 0.311046511627907,
+      "pair_weighted_uniform_ge_anchor": 0.0016145643185066423,
+      "candidate_weighted_mean_uniform_ge_anchor": 0.0015156686346886833
+    }
+  },
+  "anchor_visibility": {
+    "measurement_history_eligible": "initial observations and earlier complete rounds only",
+    "prompt_visible": "explicit individual measured values in saved first request",
+    "known_visibility_pairs": 255,
+    "unknown_visibility_pairs": 0,
+    "prompt_visible_pairs": 255
+  },
+  "historical_predictor_top_k_definition": "stable input-order ties; historical values unchanged"
+}

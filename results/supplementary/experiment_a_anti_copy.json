@@ -1,0 +1,32 @@
+[
+  {
+    "seed": 11,
+    "total_candidates": 18,
+    "novel_candidates": 18,
+    "copy_rate": 0.0,
+    "mean_pred": 1.0336,
+    "mean_true_fitness": 1.5875,
+    "max_true_fitness": 3.7478,
+    "hypothesis": "已有高分变体提示39位偏好较大的疏水或芳香侧链，而54位常见较小残基；40位可能容纳多种极性或带电侧链，41位则可能通过疏水 packing、局部柔性及其与54位的上位性共同影响适配度。因此候选采用多"
+  },
+  {
+    "seed": 22,
+    "total_candidates": 12,
+    "novel_candidates": 12,
+    "copy_rate": 0.0,
+    "mean_pred": 0.6781,
+    "mean_true_fitness": 0.315,
+    "max_true_fitness": 1.9186,
+    "hypothesis": "有益组合可能依赖39位芳香族残基提供界面接触、40位疏水残基补充填充，并由41位较小残基减轻位阻；54位的疏水或芳香族残基可能进一步增强结合。各位点间存在上位性，因此候选同时探索了不同侧链尺寸与组合。"
+  },
+  {
+    "seed": 33,
+    "total_candidates": 20,
+    "novel_candidates": 20,
+    "copy_rate": 0.0,
+    "mean_pred": 1.0768,
+    "mean_true_fitness": 1.6002,
+    "max_true_fitness": 8.762,
+    "hypothesis": "优先测试第39、40位引入芳香或疏水侧链以增强结合界面，同时在第41位使用较小或适度疏水的残基以平衡局部构象与位阻；第54位则比较芳香残基和较小疏水残基，检验界面增益与侧链拥挤之间的权衡。"
+  }
+]

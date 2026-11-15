@@ -1,0 +1,4 @@
+seed,greedy_top10_mean,greedy_top10_best,random_top10_mean,random_top10_best
+11,3.5973,6.4958,0.016,0.0724
+22,2.6816,5.1106,0.0034,0.012
+33,4.0546,6.3435,0.0169,0.1264

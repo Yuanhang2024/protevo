@@ -1,0 +1,223 @@
+{
+  "predictor_50k_selection": [
+    {
+      "feature": "pairdot_only",
+      "model": "rf",
+      "mean": 0.31643133333333334,
+      "sd": 0.008481661708258183,
+      "n": 3,
+      "train_size": 50000,
+      "selection_rule": "Within 50000 training examples, select the model with highest mean validation Spearman across seeds 11, 22, 33; ties resolved by model name."
+    },
+    {
+      "feature": "8m_fullseq_320",
+      "model": "mlp",
+      "mean": 0.554202,
+      "sd": 0.025734747774167153,
+      "n": 3,
+      "train_size": 50000,
+      "selection_rule": "Within 50000 training examples, select the model with highest mean validation Spearman across seeds 11, 22, 33; ties resolved by model name."
+    },
+    {
+      "feature": "L33_fullseq",
+      "model": "rf",
+      "mean": 0.5787533333333333,
+      "sd": 0.003411623855780974,
+      "n": 3,
+      "train_size": 50000,
+      "selection_rule": "Within 50000 training examples, select the model with highest mean validation Spearman across seeds 11, 22, 33; ties resolved by model name."
+    },
+    {
+      "feature": "multilayer_5120",
+      "model": "rf",
+      "mean": 0.5894873333333334,
+      "sd": 0.009722549579885659,
+      "n": 3,
+      "train_size": 50000,
+      "selection_rule": "Within 50000 training examples, select the model with highest mean validation Spearman across seeds 11, 22, 33; ties resolved by model name."
+    },
+    {
+      "feature": "8m_mutpos_320",
+      "model": "mlp",
+      "mean": 0.5931576666666667,
+      "sd": 0.045386377177885996,
+      "n": 3,
+      "train_size": 50000,
+      "selection_rule": "Within 50000 training examples, select the model with highest mean validation Spearman across seeds 11, 22, 33; ties resolved by model name."
+    },
+    {
+      "feature": "pairdot_concat",
+      "model": "rf",
+      "mean": 0.6195773333333333,
+      "sd": 0.006565430247389191,
+      "n": 3,
+      "train_size": 50000,
+      "selection_rule": "Within 50000 training examples, select the model with highest mean validation Spearman across seeds 11, 22, 33; ties resolved by model name."
+    },
+    {
+      "feature": "per_residue_flat",
+      "model": "rf",
+      "mean": 0.6216573333333333,
+      "sd": 0.0003395605002548886,
+      "n": 3,
+      "train_size": 50000,
+      "selection_rule": "Within 50000 training examples, select the model with highest mean validation Spearman across seeds 11, 22, 33; ties resolved by model name."
+    },
+    {
+      "feature": "L33_mutpos",
+      "model": "mlp",
+      "mean": 0.6333183333333333,
+      "sd": 0.019886896045721598,
+      "n": 3,
+      "train_size": 50000,
+      "selection_rule": "Within 50000 training examples, select the model with highest mean validation Spearman across seeds 11, 22, 33; ties resolved by model name."
+    },
+    {
+      "feature": "onehot_80d",
+      "model": "rf",
+      "mean": 0.655428,
+      "sd": 0.007974827458948588,
+      "n": 3,
+      "train_size": 50000,
+      "selection_rule": "Within 50000 training examples, select the model with highest mean validation Spearman across seeds 11, 22, 33; ties resolved by model name."
+    }
+  ],
+  "predictor_training_size_summary": [
+    {
+      "feature": "8m_mutpos_320",
+      "model": "mlp",
+      "train_size": 2000,
+      "mean": 0.313066,
+      "sd": 0.0007770296004658075,
+      "n": 3
+    },
+    {
+      "feature": "8m_mutpos_320",
+      "model": "mlp",
+      "train_size": 10000,
+      "mean": 0.3707863333333334,
+      "sd": 0.038065279617169955,
+      "n": 3
+    },
+    {
+      "feature": "8m_mutpos_320",
+      "model": "mlp",
+      "train_size": 50000,
+      "mean": 0.5931576666666667,
+      "sd": 0.045386377177885996,
+      "n": 3
+    },
+    {
+      "feature": "L33_mutpos",
+      "model": "mlp",
+      "train_size": 2000,
+      "mean": 0.286864,
+      "sd": 0.0600772485055699,
+      "n": 3
+    },
+    {
+      "feature": "L33_mutpos",
+      "model": "mlp",
+      "train_size": 10000,
+      "mean": 0.343991,
+      "sd": 0.011927976651553302,
+      "n": 3
+    },
+    {
+      "feature": "L33_mutpos",
+      "model": "mlp",
+      "train_size": 50000,
+      "mean": 0.6333183333333333,
+      "sd": 0.019886896045721598,
+      "n": 3
+    },
+    {
+      "feature": "onehot_80d",
+      "model": "rf",
+      "train_size": 2000,
+      "mean": 0.543129,
+      "sd": 0.012489116902327475,
+      "n": 3
+    },
+    {
+      "feature": "onehot_80d",
+      "model": "rf",
+      "train_size": 10000,
+      "mean": 0.5888833333333333,
+      "sd": 0.015705410543291547,
+      "n": 3
+    },
+    {
+      "feature": "onehot_80d",
+      "model": "rf",
+      "train_size": 50000,
+      "mean": 0.655428,
+      "sd": 0.007974827458948588,
+      "n": 3
+    }
+  ],
+  "factorial_summary": [
+    {
+      "group": "G1",
+      "trajectory_mean": 2.0839732867194773,
+      "trajectory_sd": 1.7949266691344297,
+      "cumulative_best_mean": 5.173190798433334,
+      "cumulative_best_sd": 0.7844693792744758,
+      "n": 3
+    },
+    {
+      "group": "G2",
+      "trajectory_mean": 0.6939037068775225,
+      "trajectory_sd": 0.45719650048160376,
+      "cumulative_best_mean": 4.727395565739999,
+      "cumulative_best_sd": 0.4691683028485486,
+      "n": 3
+    },
+    {
+      "group": "G3",
+      "trajectory_mean": 3.8404908240299354,
+      "trajectory_sd": 0.3090886295342839,
+      "cumulative_best_mean": 6.247456958063334,
+      "cumulative_best_sd": 1.2205572214267175,
+      "n": 3
+    },
+    {
+      "group": "G4",
+      "trajectory_mean": 3.510951169342981,
+      "trajectory_sd": 0.48089236790594186,
+      "cumulative_best_mean": 5.484961185286667,
+      "cumulative_best_sd": 0.24510086261567854,
+      "n": 3
+    }
+  ],
+  "example_match_summary": [
+    {
+      "group": "G1",
+      "population": "Accepted candidates",
+      "matched": 200,
+      "total": 358,
+      "fraction": 0.5586592178770949
+    },
+    {
+      "group": "G1",
+      "population": "Final recommendations",
+      "matched": 48,
+      "total": 90,
+      "fraction": 0.5333333333333333
+    },
+    {
+      "group": "G2",
+      "population": "Accepted candidates",
+      "matched": 325,
+      "total": 334,
+      "fraction": 0.9730538922155688
+    },
+    {
+      "group": "G2",
+      "population": "Final recommendations",
+      "matched": 81,
+      "total": 90,
+      "fraction": 0.9
+    }
+  ]
+}

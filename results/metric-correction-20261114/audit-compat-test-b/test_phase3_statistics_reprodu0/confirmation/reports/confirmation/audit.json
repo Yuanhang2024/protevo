@@ -1,0 +1,647 @@
+{
+  "definition_version": "gb1-statistical-definitions/2",
+  "passed": true,
+  "check_totals": {
+    "passed": 1199,
+    "errors": 0,
+    "warnings": 0,
+    "total": 1199
+  },
+  "check_counts": [
+    {
+      "code": "adapter_output_limit",
+      "passed": 24,
+      "errors": 0,
+      "warnings": 0,
+      "total": 24
+    },
+    {
+      "code": "analysis_completion",
+      "passed": 4,
+      "errors": 0,
+      "warnings": 0,
+      "total": 4
+    },
+    {
+      "code": "analysis_equal_seed_mean",
+      "passed": 2,
+      "errors": 0,
+      "warnings": 0,
+      "total": 2
+    },
+    {
+      "code": "analysis_profile_counts",
+      "passed": 2,
+      "errors": 0,
+      "warnings": 0,
+      "total": 2
+    },
+    {
+      "code": "analysis_profile_missing",
+      "passed": 2,
+      "errors": 0,
+      "warnings": 0,
+      "total": 2
+    },
+    {
+      "code": "analysis_resource_totals",
+      "passed": 4,
+      "errors": 0,
+      "warnings": 0,
+      "total": 4
+    },
+    {
+      "code": "analysis_trajectory_max",
+      "passed": 4,
+      "errors": 0,
+      "warnings": 0,
+      "total": 4
+    },
+    {
+      "code": "analysis_trajectory_mean",
+      "passed": 4,
+      "errors": 0,
+      "warnings": 0,
+      "total": 4
+    },
+    {
+      "code": "analysis_trajectory_missing",
+      "passed": 4,
+      "errors": 0,
+      "warnings": 0,
+      "total": 4
+    },
+    {
+      "code": "attempt_prompt_metadata",
+      "passed": 24,
+      "errors": 0,
+      "warnings": 0,
+      "total": 24
+    },
+    {
+      "code": "complete_public_request_payload",
+      "passed": 24,
+      "errors": 0,
+      "warnings": 0,
+      "total": 24
+    },
+    {
+      "code": "completed_round_count",
+      "passed": 4,
+      "errors": 0,
+      "warnings": 0,
+      "total": 4
+    },
+    {
+      "code": "completion_confirmation_metric_present",
+      "passed": 1,
+      "errors": 0,
+      "warnings": 0,
+      "total": 1
+    },
+    {
+      "code": "completion_contrast_paired_seeds",
+      "passed": 1,
+      "errors": 0,
+      "warnings": 0,
+      "total": 1
+    },
+    {
+      "code": "effective_model_route",
+      "passed": 24,
+      "errors": 0,
+      "warnings": 0,
+      "total": 24
+    },
+    {
+      "code": "execution_condition_coverage",
+      "passed": 1,
+      "errors": 0,
+      "warnings": 0,
+      "total": 1
+    },
+    {
+      "code": "execution_condition_unchanged",
+      "passed": 4,
+      "errors": 0,
+      "warnings": 0,
+      "total": 4
+    },
+    {
+      "code": "frozen_prompt_metadata",
+      "passed": 4,
+      "errors": 0,
+      "warnings": 0,
+      "total": 4
+    },
+    {
+      "code": "generation_settings",
+      "passed": 4,
+      "errors": 0,
+      "warnings": 0,
+      "total": 4
+    },
+    {
+      "code": "historical_completion_difference_estimate",
+      "passed": 1,
+      "errors": 0,
+      "warnings": 0,
+      "total": 1
+    },
+    {
+      "code": "historical_completion_observation_counts",
+      "passed": 2,
+      "errors": 0,
+      "warnings": 0,
+      "total": 2
+    },
+    {
+      "code": "historical_completion_observed_proportion",
+      "passed": 2,
+      "errors": 0,
+      "warnings": 0,
+      "total": 2
+    },
+    {
+      "code": "host_call_numbers",
+      "passed": 4,
+      "errors": 0,
+      "warnings": 0,
+      "total": 4
+    },
+    {
+      "code": "host_calls_have_attempts",
+      "passed": 4,
+      "errors": 0,
+      "warnings": 0,
+      "total": 4
+    },
+    {
+      "code": "host_feedback_round_count",
+      "passed": 4,
+      "errors": 0,
+      "warnings": 0,
+      "total": 4
+    },
+    {
+      "code": "host_round_call_budget",
+      "passed": 4,
+      "errors": 0,
+      "warnings": 0,
+      "total": 4
+    },
+    {
+      "code": "host_usage_snapshot",
+      "passed": 24,
+      "errors": 0,
+      "warnings": 0,
+      "total": 24
+    },
+    {
+      "code": "incomplete_round_is_last",
+      "passed": 24,
+      "errors": 0,
+      "warnings": 0,
+      "total": 24
+    },
+    {
+      "code": "independent_trajectory_operation_ids",
+      "passed": 1,
+      "errors": 0,
+      "warnings": 0,
+      "total": 1
+    },
+    {
+      "code": "model_response_identity",
+      "passed": 24,
+      "errors": 0,
+      "warnings": 0,
+      "total": 24
+    },
+    {
+      "code": "model_visible_context",
+      "passed": 24,
+      "errors": 0,
+      "warnings": 0,
+      "total": 24
+    },
+    {
+      "code": "payload_model_route",
+      "passed": 24,
+      "errors": 0,
+      "warnings": 0,
+      "total": 24
+    },
+    {
+      "code": "phase_actual_request_budget",
+      "passed": 1,
+      "errors": 0,
+      "warnings": 0,
+      "total": 1
+    },
+    {
+      "code": "phase_maximum_request_budget",
+      "passed": 1,
+      "errors": 0,
+      "warnings": 0,
+      "total": 1
+    },
+    {
+      "code": "predictor_disk_saving",
+      "passed": 4,
+      "errors": 0,
+      "warnings": 0,
+      "total": 4
+    },
+    {
+      "code": "predictor_files_absent",
+      "passed": 4,
+      "errors": 0,
+      "warnings": 0,
+      "total": 4
+    },
+    {
+      "code": "preset_confirmation_interval",
+      "passed": 6,
+      "errors": 0,
+      "warnings": 0,
+      "total": 6
+    },
+    {
+      "code": "project_output_limit_absent",
+      "passed": 24,
+      "errors": 0,
+      "warnings": 0,
+      "total": 24
+    },
+    {
+      "code": "proposals_from_saved_responses",
+      "passed": 24,
+      "errors": 0,
+      "warnings": 0,
+      "total": 24
+    },
+    {
+      "code": "public_round_number",
+      "passed": 24,
+      "errors": 0,
+      "warnings": 0,
+      "total": 24
+    },
+    {
+      "code": "public_selected_fitness",
+      "passed": 24,
+      "errors": 0,
+      "warnings": 0,
+      "total": 24
+    },
+    {
+      "code": "public_selected_variants",
+      "passed": 24,
+      "errors": 0,
+      "warnings": 0,
+      "total": 24
+    },
+    {
+      "code": "public_summary_counts",
+      "passed": 4,
+      "errors": 0,
+      "warnings": 0,
+      "total": 4
+    },
+    {
+      "code": "quality_confirmation_metric_present",
+      "passed": 2,
+      "errors": 0,
+      "warnings": 0,
+      "total": 2
+    },
+    {
+      "code": "rebuilt_predictor_scores",
+      "passed": 24,
+      "errors": 0,
+      "warnings": 0,
+      "total": 24
+    },
+    {
+      "code": "recent_feedback_own_history",
+      "passed": 24,
+      "errors": 0,
+      "warnings": 0,
+      "total": 24
+    },
+    {
+      "code": "reproducible_unlabeled_cohort",
+      "passed": 24,
+      "errors": 0,
+      "warnings": 0,
+      "total": 24
+    },
+    {
+      "code": "request_context_snapshot",
+      "passed": 24,
+      "errors": 0,
+      "warnings": 0,
+      "total": 24
+    },
+    {
+      "code": "request_frame_identity",
+      "passed": 24,
+      "errors": 0,
+      "warnings": 0,
+      "total": 24
+    },
+    {
+      "code": "request_prompt_snapshot",
+      "passed": 24,
+      "errors": 0,
+      "warnings": 0,
+      "total": 24
+    },
+    {
+      "code": "request_snapshot_missing",
+      "passed": 24,
+      "errors": 0,
+      "warnings": 0,
+      "total": 24
+    },
+    {
+      "code": "response_snapshot",
+      "passed": 24,
+      "errors": 0,
+      "warnings": 0,
+      "total": 24
+    },
+    {
+      "code": "round_metric_cumulative_best",
+      "passed": 24,
+      "errors": 0,
+      "warnings": 0,
+      "total": 24
+    },
+    {
+      "code": "round_metric_max_fitness",
+      "passed": 24,
+      "errors": 0,
+      "warnings": 0,
+      "total": 24
+    },
+    {
+      "code": "round_metric_mean_fitness",
+      "passed": 24,
+      "errors": 0,
+      "warnings": 0,
+      "total": 24
+    },
+    {
+      "code": "round_request_budget",
+      "passed": 24,
+      "errors": 0,
+      "warnings": 0,
+      "total": 24
+    },
+    {
+      "code": "round_sequence",
+      "passed": 24,
+      "errors": 0,
+      "warnings": 0,
+      "total": 24
+    },
+    {
+      "code": "saved_scoring_count",
+      "passed": 24,
+      "errors": 0,
+      "warnings": 0,
+      "total": 24
+    },
+    {
+      "code": "saved_valid_proposal_count",
+      "passed": 24,
+      "errors": 0,
+      "warnings": 0,
+      "total": 24
+    },
+    {
+      "code": "scientific_events_missing",
+      "passed": 4,
+      "errors": 0,
+      "warnings": 0,
+      "total": 4
+    },
+    {
+      "code": "scored_candidate_budget_eligibility",
+      "passed": 24,
+      "errors": 0,
+      "warnings": 0,
+      "total": 24
+    },
+    {
+      "code": "scores_saved_before_selection",
+      "passed": 24,
+      "errors": 0,
+      "warnings": 0,
+      "total": 24
+    },
+    {
+      "code": "selected_before_measurement_feedback",
+      "passed": 24,
+      "errors": 0,
+      "warnings": 0,
+      "total": 24
+    },
+    {
+      "code": "selected_measurements_oracle",
+      "passed": 24,
+      "errors": 0,
+      "warnings": 0,
+      "total": 24
+    },
+    {
+      "code": "selected_measurements_original_source",
+      "passed": 24,
+      "errors": 0,
+      "warnings": 0,
+      "total": 24
+    },
+    {
+      "code": "selected_prediction_matches_scores",
+      "passed": 24,
+      "errors": 0,
+      "warnings": 0,
+      "total": 24
+    },
+    {
+      "code": "selected_sequence_description",
+      "passed": 120,
+      "errors": 0,
+      "warnings": 0,
+      "total": 120
+    },
+    {
+      "code": "selection_dataset_manifest",
+      "passed": 2,
+      "errors": 0,
+      "warnings": 0,
+      "total": 2
+    },
+    {
+      "code": "selection_event_has_no_measurements",
+      "passed": 24,
+      "errors": 0,
+      "warnings": 0,
+      "total": 24
+    },
+    {
+      "code": "shared_selection_parameters",
+      "passed": 4,
+      "errors": 0,
+      "warnings": 0,
+      "total": 4
+    },
+    {
+      "code": "top_k_ranking_no_repeats",
+      "passed": 24,
+      "errors": 0,
+      "warnings": 0,
+      "total": 24
+    },
+    {
+      "code": "training_ids_own_feedback",
+      "passed": 24,
+      "errors": 0,
+      "warnings": 0,
+      "total": 24
+    },
+    {
+      "code": "trajectory_call_budget",
+      "passed": 4,
+      "errors": 0,
+      "warnings": 0,
+      "total": 4
+    },
+    {
+      "code": "trajectory_frozen_dataset_selection",
+      "passed": 4,
+      "errors": 0,
+      "warnings": 0,
+      "total": 4
+    },
+    {
+      "code": "trajectory_scientific_parameters",
+      "passed": 4,
+      "errors": 0,
+      "warnings": 0,
+      "total": 4
+    },
+    {
+      "code": "transport_model_route",
+      "passed": 24,
+      "errors": 0,
+      "warnings": 0,
+      "total": 24
+    },
+    {
+      "code": "v2_completion_arm_observation_scope",
+      "passed": 2,
+      "errors": 0,
+      "warnings": 0,
+      "total": 2
+    },
+    {
+      "code": "v2_completion_boundary_bounds",
+      "passed": 2,
+      "errors": 0,
+      "warnings": 0,
+      "total": 2
+    },
+    {
+      "code": "v2_completion_boundary_reason",
+      "passed": 2,
+      "errors": 0,
+      "warnings": 0,
+      "total": 2
+    },
+    {
+      "code": "v2_completion_contrast_definition_version",
+      "passed": 1,
+      "errors": 0,
+      "warnings": 0,
+      "total": 1
+    },
+    {
+      "code": "v2_completion_definition_version",
+      "passed": 2,
+      "errors": 0,
+      "warnings": 0,
+      "total": 2
+    },
+    {
+      "code": "v2_completion_difference_boundary_bounds",
+      "passed": 1,
+      "errors": 0,
+      "warnings": 0,
+      "total": 1
+    },
+    {
+      "code": "v2_completion_difference_boundary_reason",
+      "passed": 1,
+      "errors": 0,
+      "warnings": 0,
+      "total": 1
+    },
+    {
+      "code": "v2_completion_difference_estimate",
+      "passed": 1,
+      "errors": 0,
+      "warnings": 0,
+      "total": 1
+    },
+    {
+      "code": "v2_completion_equal_seed_estimate",
+      "passed": 2,
+      "errors": 0,
+      "warnings": 0,
+      "total": 2
+    },
+    {
+      "code": "v2_completion_observation_counts",
+      "passed": 4,
+      "errors": 0,
+      "warnings": 0,
+      "total": 4
+    },
+    {
+      "code": "v2_completion_observed_proportion",
+      "passed": 4,
+      "errors": 0,
+      "warnings": 0,
+      "total": 4
+    },
+    {
+      "code": "validation_role_disjoint",
+      "passed": 2,
+      "errors": 0,
+      "warnings": 0,
+      "total": 2
+    },
+    {
+      "code": "worker_condition_identity",
+      "passed": 4,
+      "errors": 0,
+      "warnings": 0,
+      "total": 4
+    },
+    {
+      "code": "worker_frozen_config",
+      "passed": 4,
+      "errors": 0,
+      "warnings": 0,
+      "total": 4
+    }
+  ],
+  "checks": [],
+  "predictor_rebuilds": {
+    "initial": 2,
+    "feedback": 20
+  }
+}

@@ -1,0 +1,178 @@
+{
+  "definition_version": "gb1-statistical-definitions/2",
+  "status": "passed",
+  "model_requests": 0,
+  "model": "gpt-6-luna",
+  "batches": [
+    {
+      "batch": 1,
+      "returned": 50,
+      "valid": 50,
+      "n": 50,
+      "permutation_valid": true,
+      "position_base": 0,
+      "higher_score_definition": "-position",
+      "spearman_position_vs_fitness": -0.26647644826718897,
+      "spearman_higher_score_vs_fitness": 0.26647644826718897,
+      "kendall_position_vs_fitness": -0.19311033265481953,
+      "kendall_higher_score_vs_fitness": 0.19311033265481953,
+      "correlation_undefined_reason": null,
+      "top_k": 10,
+      "top_k_overlap": 3,
+      "true_top_variants": [
+        "YVAT",
+        "WFMI",
+        "YHMC",
+        "SFFG",
+        "MRCD",
+        "MQGY",
+        "AWNR",
+        "DFCQ",
+        "YVAP",
+        "MMRA"
+      ],
+      "true_top_ties": "variant ID ascending, independent of model ordering",
+      "definition_version": "gb1-statistical-definitions/2",
+      "spearman_model_rank_vs_actual": -0.2665,
+      "kendall_tau": -0.1931,
+      "legacy_raw_field_direction": "position versus fitness; smaller position is better",
+      "top10_in_batch_hits": 3,
+      "batch_actual_top": [
+        "YVAT",
+        "WFMI",
+        "YHMC"
+      ]
+    },
+    {
+      "batch": 2,
+      "returned": 50,
+      "valid": 50,
+      "n": 50,
+      "permutation_valid": true,
+      "position_base": 0,
+      "higher_score_definition": "-position",
+      "spearman_position_vs_fitness": -0.26877397115406887,
+      "spearman_higher_score_vs_fitness": 0.26877397115406887,
+      "kendall_position_vs_fitness": -0.19961914619642812,
+      "kendall_higher_score_vs_fitness": 0.19961914619642812,
+      "correlation_undefined_reason": null,
+      "top_k": 10,
+      "top_k_overlap": 4,
+      "true_top_variants": [
+        "IRCC",
+        "YFLC",
+        "RCLG",
+        "SHGS",
+        "VNFC",
+        "SHMA",
+        "WIAF",
+        "MHYP",
+        "HYAF",
+        "IRHW"
+      ],
+      "true_top_ties": "variant ID ascending, independent of model ordering",
+      "definition_version": "gb1-statistical-definitions/2",
+      "spearman_model_rank_vs_actual": -0.2688,
+      "kendall_tau": -0.1996,
+      "legacy_raw_field_direction": "position versus fitness; smaller position is better",
+      "top10_in_batch_hits": 4,
+      "batch_actual_top": [
+        "IRCC",
+        "YFLC",
+        "RCLG"
+      ]
+    },
+    {
+      "batch": 3,
+      "returned": 50,
+      "valid": 50,
+      "n": 50,
+      "permutation_valid": true,
+      "position_base": 0,
+      "higher_score_definition": "-position",
+      "spearman_position_vs_fitness": -0.18186631561179306,
+      "spearman_higher_score_vs_fitness": 0.18186631561179306,
+      "kendall_position_vs_fitness": -0.12823987524736574,
+      "kendall_higher_score_vs_fitness": 0.12823987524736574,
+      "correlation_undefined_reason": null,
+      "top_k": 10,
+      "top_k_overlap": 2,
+      "true_top_variants": [
+        "RQCA",
+        "SRNA",
+        "QTGS",
+        "QCFK",
+        "IQVT",
+        "STLT",
+        "DVAC",
+        "CNNT",
+        "KQYI",
+        "PACR"
+      ],
+      "true_top_ties": "variant ID ascending, independent of model ordering",
+      "definition_version": "gb1-statistical-definitions/2",
+      "spearman_model_rank_vs_actual": -0.1819,
+      "kendall_tau": -0.1282,
+      "legacy_raw_field_direction": "position versus fitness; smaller position is better",
+      "top10_in_batch_hits": 2,
+      "batch_actual_top": [
+        "RQCA",
+        "SRNA",
+        "QTGS"
+      ]
+    }
+  ],
+  "free_recall": {
+    "recalled": [
+      "WWLA",
+      "WWLG",
+      "FWLA",
+      "FWLG",
+      "WWFA",
+      "YWLA",
+      "FWFA",
+      "WWFG",
+      "YWLG",
+      "FWFG"
+    ],
+    "in_global_top10": [
+      "WWLG",
+      "FWLG"
+    ],
+    "in_global_top100": [
+      "WWLA",
+      "WWLG",
+      "FWLG",
+      "WWFA",
+      "WWFG",
+      "YWLG",
+      "FWFG"
+    ],
+    "recall_fitness": {
+      "WWLA": 6.29108287389,
+      "WWLG": 6.87794904259,
+      "FWLA": 3.66205789012,
+      "FWLG": 7.31265639682,
+      "WWFA": 5.84158330942,
+      "YWLA": 3.34512184343,
+      "FWFA": 2.45170885468,
+      "WWFG": 6.34349747898,
+      "YWLG": 5.63126819058,
+      "FWFG": 5.17332294456
+    },
+    "true_top_ties": "variant ID ascending"
+  },
+  "ranking_total_entries": 150,
+  "ranking_distinct_variants": 149,
+  "input_reconstruction": "saved original sampling seed 20261113 over variant-ID-sorted measured S1",
+  "source_directory": "C:\\Users\\lijin\\Desktop\\ZJU张强老师申请\\笔试试题\\test-workspace\\gb1-evolution\\results\\critique-followup-20261113\\zero_context",
+  "usage": {
+    "request_count": 4,
+    "reported_tokens_sum": 16069,
+    "missing_usage_calls": 0,
+    "total_tokens": 16069,
+    "mean_tokens": 4017.25,
+    "median_tokens": 4562.0,
+    "complete_usage": true
+  }
+}

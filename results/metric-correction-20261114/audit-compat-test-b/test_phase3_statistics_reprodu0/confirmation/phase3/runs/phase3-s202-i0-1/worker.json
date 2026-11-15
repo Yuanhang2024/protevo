@@ -1,0 +1,81 @@
+{
+  "config": {
+    "seed": 202,
+    "rounds": 6,
+    "k": 5,
+    "train_size": 24,
+    "validation_size": 16,
+    "test_size": 16,
+    "pool_size": 160,
+    "score_budget": 8,
+    "proposal_count": 8,
+    "summary_top": 15,
+    "contrast_examples": 4,
+    "feedback_rounds": 1,
+    "top_k_metric": 10,
+    "high_fitness_quantile": 0.9,
+    "ridge_alphas": [
+      0.1,
+      1.0,
+      10.0
+    ],
+    "tree_estimators": 5,
+    "tree_min_samples_leaf": [
+      1
+    ],
+    "tree_max_depth": null,
+    "n_jobs": 1,
+    "model_families": [
+      "random_forest"
+    ],
+    "model_seed": null,
+    "design_seed": null,
+    "llm_max_calls_per_round": 2,
+    "llm_max_output_tokens": null,
+    "llm_timeout": null,
+    "llm_reasoning_effort": "high",
+    "llm_temperature": null,
+    "llm_format": "json_schema",
+    "knowledge_path": "C:\\Users\\lijin\\Desktop\\ZJU张强老师申请\\笔试试题\\test-workspace\\gb1-evolution\\results\\metric-correction-20261114\\audit-compat-test-b\\test_phase3_statistics_reprodu0\\confirmation\\snapshot\\configs\\knowledge.json",
+    "oversize_policy": "reject",
+    "repair_examples": true,
+    "require_full_batch": false,
+    "analysis_max_chars": 5000,
+    "proposal_text_max_chars": 2000,
+    "allowed_positions": [
+      39,
+      40,
+      41,
+      54
+    ],
+    "allowed_amino_acids": "ACDEFGHIKLMNPQRSTVWY",
+    "min_mutations": 0,
+    "max_mutations": 4,
+    "max_assays": null,
+    "max_model_calls": null,
+    "max_reported_tokens": null,
+    "target_fitness": null,
+    "patience": null,
+    "min_improvement": 0,
+    "early_stop_metric": "best",
+    "save_predictors": false
+  },
+  "condition": {
+    "key": "phase3-s202-i0-1",
+    "operationId": "independent-phase3-s202-i0-1",
+    "profileKey": "synthetic-b-high-c8-k5-r6-reject",
+    "seed": 202,
+    "repeatIndex": 0,
+    "provider": "synthetic",
+    "model": "synthetic-b",
+    "modelKey": "synthetic-b",
+    "effort": "high",
+    "candidatesPerRound": 8,
+    "topK": 5,
+    "rounds": 6,
+    "oversizePolicy": "reject",
+    "maxCalls": 12,
+    "effectiveMaxTokens": 128000,
+    "arm": "reference"
+  }
+}

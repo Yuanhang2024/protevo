@@ -1,0 +1,553 @@
+{
+  "phase": "completed",
+  "conditions": [
+    {
+      "key": "phase3-s101-i0-0",
+      "operationId": "independent-phase3-s101-i0-0",
+      "profileKey": "synthetic-a-high-c8-k5-r6-reject",
+      "seed": 101,
+      "repeatIndex": 0,
+      "provider": "synthetic",
+      "model": "synthetic-a",
+      "modelKey": "synthetic-a",
+      "effort": "high",
+      "candidatesPerRound": 8,
+      "topK": 5,
+      "rounds": 6,
+      "oversizePolicy": "reject",
+      "maxCalls": 12,
+      "effectiveMaxTokens": 128000,
+      "arm": "selected",
+      "status": "completed",
+      "calls": [
+        {
+          "number": 1,
+          "round": 1,
+          "usage": {
+            "input_tokens": 10,
+            "output_tokens": 20,
+            "total_tokens": 30
+          },
+          "elapsedSeconds": 2.0,
+          "generationSeconds": 1.5,
+          "finishReason": "stop",
+          "outcomeUnknown": false,
+          "effectiveConfig": {
+            "provider": "synthetic",
+            "model": "synthetic-a",
+            "reasoningEffort": "high",
+            "maxTokens": 128000
+          }
+        },
+        {
+          "number": 2,
+          "round": 2,
+          "usage": {
+            "input_tokens": 10,
+            "output_tokens": 20,
+            "total_tokens": 30
+          },
+          "elapsedSeconds": 2.0,
+          "generationSeconds": 1.5,
+          "finishReason": "stop",
+          "outcomeUnknown": false,
+          "effectiveConfig": {
+            "provider": "synthetic",
+            "model": "synthetic-a",
+            "reasoningEffort": "high",
+            "maxTokens": 128000
+          }
+        },
+        {
+          "number": 3,
+          "round": 3,
+          "usage": {
+            "input_tokens": 10,
+            "output_tokens": 20,
+            "total_tokens": 30
+          },
+          "elapsedSeconds": 2.0,
+          "generationSeconds": 1.5,
+          "finishReason": "stop",
+          "outcomeUnknown": false,
+          "effectiveConfig": {
+            "provider": "synthetic",
+            "model": "synthetic-a",
+            "reasoningEffort": "high",
+            "maxTokens": 128000
+          }
+        },
+        {
+          "number": 4,
+          "round": 4,
+          "usage": {
+            "input_tokens": 10,
+            "output_tokens": 20,
+            "total_tokens": 30
+          },
+          "elapsedSeconds": 2.0,
+          "generationSeconds": 1.5,
+          "finishReason": "stop",
+          "outcomeUnknown": false,
+          "effectiveConfig": {
+            "provider": "synthetic",
+            "model": "synthetic-a",
+            "reasoningEffort": "high",
+            "maxTokens": 128000
+          }
+        },
+        {
+          "number": 5,
+          "round": 5,
+          "usage": {
+            "input_tokens": 10,
+            "output_tokens": 20,
+            "total_tokens": 30
+          },
+          "elapsedSeconds": 2.0,
+          "generationSeconds": 1.5,
+          "finishReason": "stop",
+          "outcomeUnknown": false,
+          "effectiveConfig": {
+            "provider": "synthetic",
+            "model": "synthetic-a",
+            "reasoningEffort": "high",
+            "maxTokens": 128000
+          }
+        },
+        {
+          "number": 6,
+          "round": 6,
+          "usage": {
+            "input_tokens": 10,
+            "output_tokens": 20,
+            "total_tokens": 30
+          },
+          "elapsedSeconds": 2.0,
+          "generationSeconds": 1.5,
+          "finishReason": "stop",
+          "outcomeUnknown": false,
+          "effectiveConfig": {
+            "provider": "synthetic",
+            "model": "synthetic-a",
+            "reasoningEffort": "high",
+            "maxTokens": 128000
+          }
+        }
+      ],
+      "elapsedSeconds": 15.0,
+      "completedRounds": 6
+    },
+    {
+      "key": "phase3-s101-i0-1",
+      "operationId": "independent-phase3-s101-i0-1",
+      "profileKey": "synthetic-b-high-c8-k5-r6-reject",
+      "seed": 101,
+      "repeatIndex": 0,
+      "provider": "synthetic",
+      "model": "synthetic-b",
+      "modelKey": "synthetic-b",
+      "effort": "high",
+      "candidatesPerRound": 8,
+      "topK": 5,
+      "rounds": 6,
+      "oversizePolicy": "reject",
+      "maxCalls": 12,
+      "effectiveMaxTokens": 128000,
+      "arm": "reference",
+      "status": "completed",
+      "calls": [
+        {
+          "number": 1,
+          "round": 1,
+          "usage": {
+            "input_tokens": 10,
+            "output_tokens": 20,
+            "total_tokens": 30
+          },
+          "elapsedSeconds": 2.0,
+          "generationSeconds": 1.5,
+          "finishReason": "stop",
+          "outcomeUnknown": false,
+          "effectiveConfig": {
+            "provider": "synthetic",
+            "model": "synthetic-b",
+            "reasoningEffort": "high",
+            "maxTokens": 128000
+          }
+        },
+        {
+          "number": 2,
+          "round": 2,
+          "usage": {
+            "input_tokens": 10,
+            "output_tokens": 20,
+            "total_tokens": 30
+          },
+          "elapsedSeconds": 2.0,
+          "generationSeconds": 1.5,
+          "finishReason": "stop",
+          "outcomeUnknown": false,
+          "effectiveConfig": {
+            "provider": "synthetic",
+            "model": "synthetic-b",
+            "reasoningEffort": "high",
+            "maxTokens": 128000
+          }
+        },
+        {
+          "number": 3,
+          "round": 3,
+          "usage": {
+            "input_tokens": 10,
+            "output_tokens": 20,
+            "total_tokens": 30
+          },
+          "elapsedSeconds": 2.0,
+          "generationSeconds": 1.5,
+          "finishReason": "stop",
+          "outcomeUnknown": false,
+          "effectiveConfig": {
+            "provider": "synthetic",
+            "model": "synthetic-b",
+            "reasoningEffort": "high",
+            "maxTokens": 128000
+          }
+        },
+        {
+          "number": 4,
+          "round": 4,
+          "usage": {
+            "input_tokens": 10,
+            "output_tokens": 20,
+            "total_tokens": 30
+          },
+          "elapsedSeconds": 2.0,
+          "generationSeconds": 1.5,
+          "finishReason": "stop",
+          "outcomeUnknown": false,
+          "effectiveConfig": {
+            "provider": "synthetic",
+            "model": "synthetic-b",
+            "reasoningEffort": "high",
+            "maxTokens": 128000
+          }
+        },
+        {
+          "number": 5,
+          "round": 5,
+          "usage": {
+            "input_tokens": 10,
+            "output_tokens": 20,
+            "total_tokens": 30
+          },
+          "elapsedSeconds": 2.0,
+          "generationSeconds": 1.5,
+          "finishReason": "stop",
+          "outcomeUnknown": false,
+          "effectiveConfig": {
+            "provider": "synthetic",
+            "model": "synthetic-b",
+            "reasoningEffort": "high",
+            "maxTokens": 128000
+          }
+        },
+        {
+          "number": 6,
+          "round": 6,
+          "usage": {
+            "input_tokens": 10,
+            "output_tokens": 20,
+            "total_tokens": 30
+          },
+          "elapsedSeconds": 2.0,
+          "generationSeconds": 1.5,
+          "finishReason": "stop",
+          "outcomeUnknown": false,
+          "effectiveConfig": {
+            "provider": "synthetic",
+            "model": "synthetic-b",
+            "reasoningEffort": "high",
+            "maxTokens": 128000
+          }
+        }
+      ],
+      "elapsedSeconds": 15.0,
+      "completedRounds": 6
+    },
+    {
+      "key": "phase3-s202-i0-0",
+      "operationId": "independent-phase3-s202-i0-0",
+      "profileKey": "synthetic-a-high-c8-k5-r6-reject",
+      "seed": 202,
+      "repeatIndex": 0,
+      "provider": "synthetic",
+      "model": "synthetic-a",
+      "modelKey": "synthetic-a",
+      "effort": "high",
+      "candidatesPerRound": 8,
+      "topK": 5,
+      "rounds": 6,
+      "oversizePolicy": "reject",
+      "maxCalls": 12,
+      "effectiveMaxTokens": 128000,
+      "arm": "selected",
+      "status": "completed",
+      "calls": [
+        {
+          "number": 1,
+          "round": 1,
+          "usage": {
+            "input_tokens": 10,
+            "output_tokens": 20,
+            "total_tokens": 30
+          },
+          "elapsedSeconds": 2.0,
+          "generationSeconds": 1.5,
+          "finishReason": "stop",
+          "outcomeUnknown": false,
+          "effectiveConfig": {
+            "provider": "synthetic",
+            "model": "synthetic-a",
+            "reasoningEffort": "high",
+            "maxTokens": 128000
+          }
+        },
+        {
+          "number": 2,
+          "round": 2,
+          "usage": {
+            "input_tokens": 10,
+            "output_tokens": 20,
+            "total_tokens": 30
+          },
+          "elapsedSeconds": 2.0,
+          "generationSeconds": 1.5,
+          "finishReason": "stop",
+          "outcomeUnknown": false,
+          "effectiveConfig": {
+            "provider": "synthetic",
+            "model": "synthetic-a",
+            "reasoningEffort": "high",
+            "maxTokens": 128000
+          }
+        },
+        {
+          "number": 3,
+          "round": 3,
+          "usage": {
+            "input_tokens": 10,
+            "output_tokens": 20,
+            "total_tokens": 30
+          },
+          "elapsedSeconds": 2.0,
+          "generationSeconds": 1.5,
+          "finishReason": "stop",
+          "outcomeUnknown": false,
+          "effectiveConfig": {
+            "provider": "synthetic",
+            "model": "synthetic-a",
+            "reasoningEffort": "high",
+            "maxTokens": 128000
+          }
+        },
+        {
+          "number": 4,
+          "round": 4,
+          "usage": {
+            "input_tokens": 10,
+            "output_tokens": 20,
+            "total_tokens": 30
+          },
+          "elapsedSeconds": 2.0,
+          "generationSeconds": 1.5,
+          "finishReason": "stop",
+          "outcomeUnknown": false,
+          "effectiveConfig": {
+            "provider": "synthetic",
+            "model": "synthetic-a",
+            "reasoningEffort": "high",
+            "maxTokens": 128000
+          }
+        },
+        {
+          "number": 5,
+          "round": 5,
+          "usage": {
+            "input_tokens": 10,
+            "output_tokens": 20,
+            "total_tokens": 30
+          },
+          "elapsedSeconds": 2.0,
+          "generationSeconds": 1.5,
+          "finishReason": "stop",
+          "outcomeUnknown": false,
+          "effectiveConfig": {
+            "provider": "synthetic",
+            "model": "synthetic-a",
+            "reasoningEffort": "high",
+            "maxTokens": 128000
+          }
+        },
+        {
+          "number": 6,
+          "round": 6,
+          "usage": {
+            "input_tokens": 10,
+            "output_tokens": 20,
+            "total_tokens": 30
+          },
+          "elapsedSeconds": 2.0,
+          "generationSeconds": 1.5,
+          "finishReason": "stop",
+          "outcomeUnknown": false,
+          "effectiveConfig": {
+            "provider": "synthetic",
+            "model": "synthetic-a",
+            "reasoningEffort": "high",
+            "maxTokens": 128000
+          }
+        }
+      ],
+      "elapsedSeconds": 15.0,
+      "completedRounds": 6
+    },
+    {
+      "key": "phase3-s202-i0-1",
+      "operationId": "independent-phase3-s202-i0-1",
+      "profileKey": "synthetic-b-high-c8-k5-r6-reject",
+      "seed": 202,
+      "repeatIndex": 0,
+      "provider": "synthetic",
+      "model": "synthetic-b",
+      "modelKey": "synthetic-b",
+      "effort": "high",
+      "candidatesPerRound": 8,
+      "topK": 5,
+      "rounds": 6,
+      "oversizePolicy": "reject",
+      "maxCalls": 12,
+      "effectiveMaxTokens": 128000,
+      "arm": "reference",
+      "status": "completed",
+      "calls": [
+        {
+          "number": 1,
+          "round": 1,
+          "usage": {
+            "input_tokens": 10,
+            "output_tokens": 20,
+            "total_tokens": 30
+          },
+          "elapsedSeconds": 2.0,
+          "generationSeconds": 1.5,
+          "finishReason": "stop",
+          "outcomeUnknown": false,
+          "effectiveConfig": {
+            "provider": "synthetic",
+            "model": "synthetic-b",
+            "reasoningEffort": "high",
+            "maxTokens": 128000
+          }
+        },
+        {
+          "number": 2,
+          "round": 2,
+          "usage": {
+            "input_tokens": 10,
+            "output_tokens": 20,
+            "total_tokens": 30
+          },
+          "elapsedSeconds": 2.0,
+          "generationSeconds": 1.5,
+          "finishReason": "stop",
+          "outcomeUnknown": false,
+          "effectiveConfig": {
+            "provider": "synthetic",
+            "model": "synthetic-b",
+            "reasoningEffort": "high",
+            "maxTokens": 128000
+          }
+        },
+        {
+          "number": 3,
+          "round": 3,
+          "usage": {
+            "input_tokens": 10,
+            "output_tokens": 20,
+            "total_tokens": 30
+          },
+          "elapsedSeconds": 2.0,
+          "generationSeconds": 1.5,
+          "finishReason": "stop",
+          "outcomeUnknown": false,
+          "effectiveConfig": {
+            "provider": "synthetic",
+            "model": "synthetic-b",
+            "reasoningEffort": "high",
+            "maxTokens": 128000
+          }
+        },
+        {
+          "number": 4,
+          "round": 4,
+          "usage": {
+            "input_tokens": 10,
+            "output_tokens": 20,
+            "total_tokens": 30
+          },
+          "elapsedSeconds": 2.0,
+          "generationSeconds": 1.5,
+          "finishReason": "stop",
+          "outcomeUnknown": false,
+          "effectiveConfig": {
+            "provider": "synthetic",
+            "model": "synthetic-b",
+            "reasoningEffort": "high",
+            "maxTokens": 128000
+          }
+        },
+        {
+          "number": 5,
+          "round": 5,
+          "usage": {
+            "input_tokens": 10,
+            "output_tokens": 20,
+            "total_tokens": 30
+          },
+          "elapsedSeconds": 2.0,
+          "generationSeconds": 1.5,
+          "finishReason": "stop",
+          "outcomeUnknown": false,
+          "effectiveConfig": {
+            "provider": "synthetic",
+            "model": "synthetic-b",
+            "reasoningEffort": "high",
+            "maxTokens": 128000
+          }
+        },
+        {
+          "number": 6,
+          "round": 6,
+          "usage": {
+            "input_tokens": 10,
+            "output_tokens": 20,
+            "total_tokens": 30
+          },
+          "elapsedSeconds": 2.0,
+          "generationSeconds": 1.5,
+          "finishReason": "stop",
+          "outcomeUnknown": false,
+          "effectiveConfig": {
+            "provider": "synthetic",
+            "model": "synthetic-b",
+            "reasoningEffort": "high",
+            "maxTokens": 128000
+          }
+        }
+      ],
+      "elapsedSeconds": 15.0,
+      "completedRounds": 6
+    }
+  ]
+}

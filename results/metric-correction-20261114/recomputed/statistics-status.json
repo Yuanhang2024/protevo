@@ -1,0 +1,56 @@
+{
+  "status": "passed",
+  "definition_version": "gb1-statistical-definitions/2",
+  "model_requests": 0,
+  "targeted_tests_passed": 24,
+  "historical_experiment_json_csv_unchanged": true,
+  "historical_regression_metrics_unchanged": true,
+  "ranking": {
+    "batches": 3,
+    "entries": 150,
+    "distinct_variants": 149,
+    "all_input_permutations_valid": true,
+    "legacy_raw_correlation_fields_preserved": true,
+    "spearman_position_vs_fitness": [-0.26647644826718897, -0.26877397115406887, -0.18186631561179306],
+    "spearman_higher_score_vs_fitness": [0.26647644826718897, 0.26877397115406887, 0.18186631561179306],
+    "top_k_overlap": [3, 4, 2]
+  },
+  "first_answers": {
+    "method_round_records": 36,
+    "candidate_entries": 1408,
+    "top1_threshold": 2.152372151259997,
+    "top1_qualifying": 1494,
+    "top5_threshold": 0.305672600518,
+    "top5_qualifying": 7469,
+    "population": 149361
+  },
+  "anchors": {
+    "measurement_history_eligible_pairs": 255,
+    "measurement_history_eligible_candidate_records": 172,
+    "prompt_visible_pairs": 255,
+    "prompt_visible_candidate_records": 172,
+    "unknown_prompt_visibility_pairs": 0,
+    "pair_weighted_success": 0.3411764705882353,
+    "candidate_weighted_mean_success": 0.311046511627907,
+    "round_boundary_eligibility_count_unchanged": true
+  },
+  "confirmation": {
+    "selected_completed": 15,
+    "selected_planned": 15,
+    "reference_completed": 15,
+    "reference_planned": 15,
+    "observed_completion_difference": 0,
+    "boundary_probability_interval_lower": null,
+    "boundary_probability_interval_upper": null,
+    "reason": "all-success empirical binary samples do not support a nondegenerate population-probability bootstrap interval",
+    "continuous_quality_intervals_exactly_unchanged": true
+  },
+  "outputs": {
+    "ranking": "zero-context/summary.json",
+    "ranking_csv": "zero-context/ranking.csv",
+    "first_answers_and_anchors": "first-answer-anchors/stats_summary.json",
+    "anchor_pairs": "first-answer-anchors/anchor_transfer.csv",
+    "prompt_visible_anchor_pairs": "first-answer-anchors/anchor_transfer_prompt_visible.csv",
+    "confirmation": "completion/statistics.json"
+  }
+}

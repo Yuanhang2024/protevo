@@ -1,0 +1,132 @@
+{
+  "request": {
+    "version": 1,
+    "type": "llm_request",
+    "id": "request-5",
+    "round": 5,
+    "payload": {
+      "model": "synthetic-a",
+      "messages": [
+        {
+          "role": "system",
+          "content": "You are the hypothesis-and-design component of a virtual GB1 directed-evolution experiment. Aim to find higher measured selection fitness while proposing informative contrasts from the CURRENT observations. Explain why a design is promising or what specific uncertainty it tests; merely predicting that it is worse than the best known variant is not a sufficient design objective. The application will validate your designs, call the fixed fitness predictor, select its top-k, and reveal only those experimental results for the next round.\n\nSCIENTIFIC MEANING\nFour-letter variants give residues at positions 39,40,41,54 in that order; the reference is VDGV. Only standard amino acids are valid. Known fitness and recent actual_fitness are observations; predicted_fitness is an estimate; chemical rules are priors. Never invent measurements, numerical uncertainty, structural contacts, or references. Use the supplied observations rather than remembered GB1 benchmark winners.\nA residue's marginal mean depends on the sampled backgrounds. It is not the causal effect of changing that position in the reference. Combinations can exhibit epistasis, so favorable single effects need not add. Knowledge rules motivate a hypothesis without guaranteeing benefit.\n\nRESEARCH DECISIONS\nObserve the measured high, low and middle examples and their sample counts. Name plausible useful sites while recognizing that this task fixes only four sites.\nForm concise, falsifiable hypotheses tied to provided measured anchors or supplied rule IDs. State what substitution/comparison you expect to help in that background and what observed outcome would weaken it.\nWhen recent feedback exists, compare actual versus predicted fitness and identify supported, weakened or unresolved local expectations. Explain one concrete change to the next designs. A low score alone does not identify a biochemical or technical failure mechanism. Round 1 has no earlier feedback.\nIn the INITIAL DESIGN stage, invent new combinations by changing the supplied measured anchors and by testing interactions across different backgrounds. No preselected candidate batch is supplied. Consider promising neighborhoods and informative contrasts; avoid making every proposal a restatement of the same idea. The predictor's later ranking may omit some intended experimental contrasts, so do not claim a matched experiment is guaranteed.\nIn the REPAIR stage, only fill remaining slots. The program already retained accepted_variants. Optional replacement_examples are unlabeled eligible alternatives for repairing invalid slots, not new observations or biological support.\n\nOUTPUT\nReturn only the JSON object matching response_schema. Exactly proposal_count NEW unique entries are required now, including in repair. No extra keys or Markdown.\nanalysis: at most 180 words, with Observations, Hypotheses, Feedback and Design sections. Give a brief public decision summary; cite a supplied feedback variant when feedback exists.\nEach proposal contains variant, hypothesis, rationale and knowledge_rule_ids.\nhypothesis: at most 30 words, preferably name a supplied measured anchor and a local change, give a testable direction and an outcome that would weaken it. Do not assert an unknown fitness number.\nrationale: at most 25 words, identify the relevant supplied observation or conditional chemical prior and one uncertainty.\nknowledge_rule_ids: only IDs supplied in this request, otherwise [].\n\nVALIDATION\nAvoid repeated variants within this answer and those listed as observed, accepted or forbidden. The visible observed list may be abbreviated; the application checks the full measured history and pool membership without revealing any hidden labels. Some legal combinations have no eligible measurement; respond to the program's specific rejection reasons when repairing. Return only remaining NEW entries, never the accepted batch. Check the requested count and all fields before sending. The application will not silently complete your batch for you.\n"
+        },
+        {
+          "role": "user",
+          "content": "{\"prompt_version\": \"gb1-proposals-v3\", \"round\": 5, \"reference_sequence\": \"MQYKLILNGKTLKGETTTEAVDAATAEKVFKQYANDNGVDGEWTYDDATKTFTVTE\", \"reference_variant\": \"VDGV\", \"positions\": [39, 40, 41, 54], \"known_data\": {\"n_known\": 44, \"fitness_mean\": 15.477272727272727, \"best_fitness\": 28.0, \"top_variants\": [{\"variant\": \"CEEE\", \"fitness\": 28.0, \"mutations\": \"V39C:D40E:G41E:V54E\"}, {\"variant\": \"DDEE\", \"fitness\": 27.0, \"mutations\": \"V39D:G41E:V54E\"}, {\"variant\": \"AEDE\", \"fitness\": 24.0, \"mutations\": \"V39A:D40E:G41D:V54E\"}, {\"variant\": \"DDDE\", \"fitness\": 24.0, \"mutations\": \"V39D:G41D:V54E\"}, {\"variant\": \"EEDD\", \"fitness\": 23.0, \"mutations\": \"V39E:D40E:G41D:V54D\"}, {\"variant\": \"DCDE\", \"fitness\": 22.0, \"mutations\": \"V39D:D40C:G41D:V54E\"}, {\"variant\": \"DEDD\", \"fitness\": 22.0, \"mutations\": \"V39D:D40E:G41D:V54D\"}, {\"variant\": \"ECED\", \"fitness\": 22.0, \"mutations\": \"V39E:D40C:G41E:V54D\"}, {\"variant\": \"DCED\", \"fitness\": 21.0, \"mutations\": \"V39D:D40C:G41E:V54D\"}, {\"variant\": \"EADE\", \"fitness\": 21.0, \"mutations\": \"V39E:D40A:G41D:V54E\"}, {\"variant\": \"CDCE\", \"fitness\": 20.0, \"mutations\": \"V39C:G41C:V54E\"}, {\"variant\": \"ECCE\", \"fitness\": 20.0, \"mutations\": \"V39E:D40C:G41C:V54E\"}, {\"variant\": \"CDDD\", \"fitness\": 19.0, \"mutations\": \"V39C:G41D:V54D\"}, {\"variant\": \"DDEC\", \"fitness\": 19.0, \"mutations\": \"V39D:G41E:V54C\"}, {\"variant\": \"AADE\", \"fitness\": 18.0, \"mutations\": \"V39A:D40A:G41D:V54E\"}], \"positions\": [{\"position\": 39, \"residue_statistics\": [{\"residue\": \"A\", \"count\": 11, \"mean\": 14.090909090909092, \"max\": 24.0}, {\"residue\": \"C\", \"count\": 11, \"mean\": 13.181818181818182, \"max\": 28.0}, {\"residue\": \"D\", \"count\": 13, \"mean\": 17.615384615384617, \"max\": 27.0}, {\"residue\": \"E\", \"count\": 9, \"mean\": 16.88888888888889, \"max\": 23.0}]}, {\"position\": 40, \"residue_statistics\": [{\"residue\": \"A\", \"count\": 12, \"mean\": 12.75, \"max\": 21.0}, {\"residue\": \"C\", \"count\": 10, \"mean\": 15.3, \"max\": 22.0}, {\"residue\": \"D\", \"count\": 13, \"mean\": 15.76923076923077, \"max\": 27.0}, {\"residue\": \"E\", \"count\": 9, \"mean\": 18.88888888888889, \"max\": 28.0}]}, {\"position\": 41, \"residue_statistics\": [{\"residue\": \"A\", \"count\": 10, \"mean\": 9.8, \"max\": 17.0}, {\"residue\": \"C\", \"count\": 8, \"mean\": 14.375, \"max\": 20.0}, {\"residue\": \"D\", \"count\": 17, \"mean\": 17.0, \"max\": 24.0}, {\"residue\": \"E\", \"count\": 9, \"mean\": 19.88888888888889, \"max\": 28.0}]}, {\"position\": 54, \"residue_statistics\": [{\"residue\": \"A\", \"count\": 10, \"mean\": 8.1, \"max\": 17.0}, {\"residue\": \"C\", \"count\": 11, \"mean\": 13.818181818181818, \"max\": 19.0}, {\"residue\": \"D\", \"count\": 9, \"mean\": 18.333333333333332, \"max\": 23.0}, {\"residue\": \"E\", \"count\": 14, \"mean\": 20.214285714285715, \"max\": 28.0}]}], \"interpretation\": \"Marginal residue statistics are observations in sampled backgrounds, not causal substitution effects.\", \"low_fitness_examples\": [{\"variant\": \"CAAA\", \"fitness\": 1.0, \"mutations\": \"V39C:D40A:G41A:V54A\"}, {\"variant\": \"DCAA\", \"fitness\": 4.0, \"mutations\": \"V39D:D40C:G41A:V54A\"}, {\"variant\": \"CDAA\", \"fitness\": 5.0, \"mutations\": \"V39C:G41A:V54A\"}, {\"variant\": \"ACAC\", \"fitness\": 6.0, \"mutations\": \"V39A:D40C:G41A:V54C\"}], \"near_median_examples\": [{\"variant\": \"ACDD\", \"fitness\": 16.0, \"mutations\": \"V39A:D40C:G41D:V54D\"}, {\"variant\": \"ADAE\", \"fitness\": 16.0, \"mutations\": \"V39A:G41A:V54E\"}, {\"variant\": \"CACE\", \"fitness\": 16.0, \"mutations\": \"V39C:D40A:G41C:V54E\"}, {\"variant\": \"AACE\", \"fitness\": 15.0, \"mutations\": \"V39A:D40A:G41C:V54E\"}], \"fitness_median\": 16.0, \"example_scope\": \"Only current-method known measurements; low and median examples exclude the displayed top examples.\"}, \"candidate_examples\": [], \"proposal_count\": 8, \"design_space\": \"Generate four-site variants using standard amino acids at 39,40,41,54. Membership is checked locally without exposing hidden fitness.\", \"assay_budget\": 5, \"selection\": \"Local predictor scores valid proposals and selects their top k, at most the declared scoring budget.\", \"response_schema\": {\"$defs\": {\"Proposal\": {\"additionalProperties\": false, \"properties\": {\"variant\": {\"pattern\": \"^[ACDEFGHIKLMNPQRSTVWY]{4}$\", \"title\": \"Variant\", \"type\": \"string\"}, \"rationale\": {\"maxLength\": 2000, \"minLength\": 1, \"title\": \"Rationale\", \"type\": \"string\"}, \"hypothesis\": {\"maxLength\": 2000, \"minLength\": 1, \"title\": \"Hypothesis\", \"type\": \"string\"}, \"knowledge_rule_ids\": {\"items\": {\"type\": \"string\"}, \"title\": \"Knowledge Rule Ids\", \"type\": \"array\"}}, \"required\": [\"variant\", \"rationale\", \"hypothesis\", \"knowledge_rule_ids\"], \"title\": \"Proposal\", \"type\": \"object\"}}, \"additionalProperties\": false, \"properties\": {\"analysis\": {\"maxLength\": 5000, \"minLength\": 1, \"title\": \"Analysis\", \"type\": \"string\"}, \"proposals\": {\"items\": {\"$ref\": \"#/$defs/Proposal\"}, \"minItems\": 8, \"title\": \"Proposals\", \"type\": \"array\", \"maxItems\": 8}}, \"required\": [\"analysis\", \"proposals\"], \"title\": \"ProposalBatch\", \"type\": \"object\"}, \"observed_variants\": [\"AACE\", \"AADE\", \"ACAC\", \"ACDD\", \"ADAE\", \"AEDE\", \"CAAA\", \"CACE\", \"CDAA\", \"CDCE\", \"CDDD\", \"CEEE\", \"DCAA\", \"DCDE\", \"DCEC\", \"DCED\", \"DDDE\", \"DDEC\", \"DDEE\", \"DEDD\", \"EADE\", \"ECCE\", \"ECED\", \"EEDD\"], \"forbidden_variants\": [\"AACE\", \"AADE\", \"ACAC\", \"ACDD\", \"ADAE\", \"AEDE\", \"CAAA\", \"CACE\", \"CDAA\", \"CDCE\", \"CDDD\", \"CEEE\", \"DCAA\", \"DCDE\", \"DCEC\", \"DCED\", \"DDDE\", \"DDEC\", \"DDEE\", \"DEDD\", \"EADE\", \"ECCE\", \"ECED\", \"EEDD\"], \"recent_round_feedback\": [{\"variant\": \"DCED\", \"predicted_fitness\": 24.2, \"actual_fitness\": 21.0, \"residual\": -3.1999999999999993, \"hypothesis\": \"Synthetic hypothesis\", \"rationale\": \"Synthetic rationale\"}, {\"variant\": \"DEDD\", \"predicted_fitness\": 23.2, \"actual_fitness\": 22.0, \"residual\": -1.1999999999999993, \"hypothesis\": \"Synthetic hypothesis\", \"rationale\": \"Synthetic rationale\"}, {\"variant\": \"CACE\", \"predicted_fitness\": 20.4, \"actual_fitness\": 16.0, \"residual\": -4.399999999999999, \"hypothesis\": \"Synthetic hypothesis\", \"rationale\": \"Synthetic rationale\"}, {\"variant\": \"AEDE\", \"predicted_fitness\": 18.8, \"actual_fitness\": 24.0, \"residual\": 5.199999999999999, \"hypothesis\": \"Synthetic hypothesis\", \"rationale\": \"Synthetic rationale\"}, {\"variant\": \"DCEC\", \"predicted_fitness\": 17.8, \"actual_fitness\": 17.0, \"residual\": -0.8000000000000007, \"hypothesis\": \"Synthetic hypothesis\", \"rationale\": \"Synthetic rationale\"}], \"feedback_summary\": {\"n_observed_feedback\": 5, \"residual_definition\": \"actual_fitness - predicted_fitness\", \"largest_overestimation\": {\"variant\": \"CACE\", \"predicted_fitness\": 20.4, \"actual_fitness\": 16.0, \"residual\": -4.399999999999999, \"hypothesis\": \"Synthetic hypothesis\"}, \"largest_underestimation\": {\"variant\": \"AEDE\", \"predicted_fitness\": 18.8, \"actual_fitness\": 24.0, \"residual\": 5.199999999999999, \"hypothesis\": \"Synthetic hypothesis\"}, \"interpretation\": \"Residuals describe prediction error on measured recommendations; fitness alone does not identify expression, growth or technical failure causes.\"}, \"stage\": \"initial_design\", \"observed_variants_complete\": false, \"observed_variants_scope\": \"Only IDs in the displayed top, low, median and recent observations; the local validator checks the full known history.\", \"knowledge\": {\"rules\": [{\"id\": \"synthetic\", \"scope\": \"test only\", \"condition\": \"test\", \"action\": \"test\", \"source\": \"synthetic test data\", \"explanation\": \"Synthetic offline rule\"}]}}"
+        }
+      ],
+      "response_format": {
+        "type": "json_schema",
+        "json_schema": {
+          "name": "gb1_proposals",
+          "strict": true,
+          "schema": {
+            "$defs": {
+              "Proposal": {
+                "additionalProperties": false,
+                "properties": {
+                  "variant": {
+                    "pattern": "^[ACDEFGHIKLMNPQRSTVWY]{4}$",
+                    "title": "Variant",
+                    "type": "string"
+                  },
+                  "rationale": {
+                    "maxLength": 2000,
+                    "minLength": 1,
+                    "title": "Rationale",
+                    "type": "string"
+                  },
+                  "hypothesis": {
+                    "maxLength": 2000,
+                    "minLength": 1,
+                    "title": "Hypothesis",
+                    "type": "string"
+                  },
+                  "knowledge_rule_ids": {
+                    "items": {
+                      "type": "string"
+                    },
+                    "title": "Knowledge Rule Ids",
+                    "type": "array"
+                  }
+                },
+                "required": [
+                  "variant",
+                  "rationale",
+                  "hypothesis",
+                  "knowledge_rule_ids"
+                ],
+                "title": "Proposal",
+                "type": "object"
+              }
+            },
+            "additionalProperties": false,
+            "properties": {
+              "analysis": {
+                "maxLength": 5000,
+                "minLength": 1,
+                "title": "Analysis",
+                "type": "string"
+              },
+              "proposals": {
+                "items": {
+                  "$ref": "#/$defs/Proposal"
+                },
+                "minItems": 8,
+                "title": "Proposals",
+                "type": "array",
+                "maxItems": 8
+              }
+            },
+            "required": [
+              "analysis",
+              "proposals"
+            ],
+            "title": "ProposalBatch",
+            "type": "object"
+          }
+        }
+      },
+      "reasoning_effort": "high"
+    },
+    "prompt_metadata": {
+      "profile": "v3",
+      "version": "gb1-proposals-v3",
+      "system_prompt": "You are the hypothesis-and-design component of a virtual GB1 directed-evolution experiment. Aim to find higher measured selection fitness while proposing informative contrasts from the CURRENT observations. Explain why a design is promising or what specific uncertainty it tests; merely predicting that it is worse than the best known variant is not a sufficient design objective. The application will validate your designs, call the fixed fitness predictor, select its top-k, and reveal only those experimental results for the next round.\n\nSCIENTIFIC MEANING\nFour-letter variants give residues at positions 39,40,41,54 in that order; the reference is VDGV. Only standard amino acids are valid. Known fitness and recent actual_fitness are observations; predicted_fitness is an estimate; chemical rules are priors. Never invent measurements, numerical uncertainty, structural contacts, or references. Use the supplied observations rather than remembered GB1 benchmark winners.\nA residue's marginal mean depends on the sampled backgrounds. It is not the causal effect of changing that position in the reference. Combinations can exhibit epistasis, so favorable single effects need not add. Knowledge rules motivate a hypothesis without guaranteeing benefit.\n\nRESEARCH DECISIONS\nObserve the measured high, low and middle examples and their sample counts. Name plausible useful sites while recognizing that this task fixes only four sites.\nForm concise, falsifiable hypotheses tied to provided measured anchors or supplied rule IDs. State what substitution/comparison you expect to help in that background and what observed outcome would weaken it.\nWhen recent feedback exists, compare actual versus predicted fitness and identify supported, weakened or unresolved local expectations. Explain one concrete change to the next designs. A low score alone does not identify a biochemical or technical failure mechanism. Round 1 has no earlier feedback.\nIn the INITIAL DESIGN stage, invent new combinations by changing the supplied measured anchors and by testing interactions across different backgrounds. No preselected candidate batch is supplied. Consider promising neighborhoods and informative contrasts; avoid making every proposal a restatement of the same idea. The predictor's later ranking may omit some intended experimental contrasts, so do not claim a matched experiment is guaranteed.\nIn the REPAIR stage, only fill remaining slots. The program already retained accepted_variants. Optional replacement_examples are unlabeled eligible alternatives for repairing invalid slots, not new observations or biological support.\n\nOUTPUT\nReturn only the JSON object matching response_schema. Exactly proposal_count NEW unique entries are required now, including in repair. No extra keys or Markdown.\nanalysis: at most 180 words, with Observations, Hypotheses, Feedback and Design sections. Give a brief public decision summary; cite a supplied feedback variant when feedback exists.\nEach proposal contains variant, hypothesis, rationale and knowledge_rule_ids.\nhypothesis: at most 30 words, preferably name a supplied measured anchor and a local change, give a testable direction and an outcome that would weaken it. Do not assert an unknown fitness number.\nrationale: at most 25 words, identify the relevant supplied observation or conditional chemical prior and one uncertainty.\nknowledge_rule_ids: only IDs supplied in this request, otherwise [].\n\nVALIDATION\nAvoid repeated variants within this answer and those listed as observed, accepted or forbidden. The visible observed list may be abbreviated; the application checks the full measured history and pool membership without revealing any hidden labels. Some legal combinations have no eligible measurement; respond to the program's specific rejection reasons when repairing. Return only remaining NEW entries, never the accepted batch. Check the requested count and all fields before sending. The application will not silently complete your batch for you.\n"
+    }
+  },
+  "usage": {
+    "input_tokens": 10,
+    "output_tokens": 20,
+    "total_tokens": 30
+  },
+  "transport_request": {
+    "provider": "synthetic",
+    "model": "synthetic-a",
+    "reasoningEffort": "high",
+    "maxTokens": 128000
+  },
+  "reply": {
+    "version": 1,
+    "type": "llm_response",
+    "id": "request-5",
+    "response": {
+      "text": "{\"analysis\": \"Synthetic offline observations\", \"proposals\": [{\"variant\": \"EAAC\", \"hypothesis\": \"Synthetic hypothesis\", \"rationale\": \"Synthetic rationale\", \"knowledge_rule_ids\": [\"synthetic\"]}, {\"variant\": \"CCAD\", \"hypothesis\": \"Synthetic hypothesis\", \"rationale\": \"Synthetic rationale\", \"knowledge_rule_ids\": [\"synthetic\"]}, {\"variant\": \"EEDC\", \"hypothesis\": \"Synthetic hypothesis\", \"rationale\": \"Synthetic rationale\", \"knowledge_rule_ids\": [\"synthetic\"]}, {\"variant\": \"EEEA\", \"hypothesis\": \"Synthetic hypothesis\", \"rationale\": \"Synthetic rationale\", \"knowledge_rule_ids\": [\"synthetic\"]}, {\"variant\": \"CCDD\", \"hypothesis\": \"Synthetic hypothesis\", \"rationale\": \"Synthetic rationale\", \"knowledge_rule_ids\": [\"synthetic\"]}, {\"variant\": \"AACC\", \"hypothesis\": \"Synthetic hypothesis\", \"rationale\": \"Synthetic rationale\", \"knowledge_rule_ids\": [\"synthetic\"]}, {\"variant\": \"EDDA\", \"hypothesis\": \"Synthetic hypothesis\", \"rationale\": \"Synthetic rationale\", \"knowledge_rule_ids\": [\"synthetic\"]}, {\"variant\": \"ADDA\", \"hypothesis\": \"Synthetic hypothesis\", \"rationale\": \"Synthetic rationale\", \"knowledge_rule_ids\": [\"synthetic\"]}]}",
+      "complete": true,
+      "usage": {
+        "input_tokens": 10,
+        "output_tokens": 20,
+        "total_tokens": 30
+      },
+      "model_requested": "synthetic-a",
+      "model_returned": null,
+      "api_mode": "dsh",
+      "prompt_metadata": {
+        "profile": "v3",
+        "version": "gb1-proposals-v3",
+        "system_prompt": "You are the hypothesis-and-design component of a virtual GB1 directed-evolution experiment. Aim to find higher measured selection fitness while proposing informative contrasts from the CURRENT observations. Explain why a design is promising or what specific uncertainty it tests; merely predicting that it is worse than the best known variant is not a sufficient design objective. The application will validate your designs, call the fixed fitness predictor, select its top-k, and reveal only those experimental results for the next round.\n\nSCIENTIFIC MEANING\nFour-letter variants give residues at positions 39,40,41,54 in that order; the reference is VDGV. Only standard amino acids are valid. Known fitness and recent actual_fitness are observations; predicted_fitness is an estimate; chemical rules are priors. Never invent measurements, numerical uncertainty, structural contacts, or references. Use the supplied observations rather than remembered GB1 benchmark winners.\nA residue's marginal mean depends on the sampled backgrounds. It is not the causal effect of changing that position in the reference. Combinations can exhibit epistasis, so favorable single effects need not add. Knowledge rules motivate a hypothesis without guaranteeing benefit.\n\nRESEARCH DECISIONS\nObserve the measured high, low and middle examples and their sample counts. Name plausible useful sites while recognizing that this task fixes only four sites.\nForm concise, falsifiable hypotheses tied to provided measured anchors or supplied rule IDs. State what substitution/comparison you expect to help in that background and what observed outcome would weaken it.\nWhen recent feedback exists, compare actual versus predicted fitness and identify supported, weakened or unresolved local expectations. Explain one concrete change to the next designs. A low score alone does not identify a biochemical or technical failure mechanism. Round 1 has no earlier feedback.\nIn the INITIAL DESIGN stage, invent new combinations by changing the supplied measured anchors and by testing interactions across different backgrounds. No preselected candidate batch is supplied. Consider promising neighborhoods and informative contrasts; avoid making every proposal a restatement of the same idea. The predictor's later ranking may omit some intended experimental contrasts, so do not claim a matched experiment is guaranteed.\nIn the REPAIR stage, only fill remaining slots. The program already retained accepted_variants. Optional replacement_examples are unlabeled eligible alternatives for repairing invalid slots, not new observations or biological support.\n\nOUTPUT\nReturn only the JSON object matching response_schema. Exactly proposal_count NEW unique entries are required now, including in repair. No extra keys or Markdown.\nanalysis: at most 180 words, with Observations, Hypotheses, Feedback and Design sections. Give a brief public decision summary; cite a supplied feedback variant when feedback exists.\nEach proposal contains variant, hypothesis, rationale and knowledge_rule_ids.\nhypothesis: at most 30 words, preferably name a supplied measured anchor and a local change, give a testable direction and an outcome that would weaken it. Do not assert an unknown fitness number.\nrationale: at most 25 words, identify the relevant supplied observation or conditional chemical prior and one uncertainty.\nknowledge_rule_ids: only IDs supplied in this request, otherwise [].\n\nVALIDATION\nAvoid repeated variants within this answer and those listed as observed, accepted or forbidden. The visible observed list may be abbreviated; the application checks the full measured history and pool membership without revealing any hidden labels. Some legal combinations have no eligible measurement; respond to the program's specific rejection reasons when repairing. Return only remaining NEW entries, never the accepted batch. Check the requested count and all fields before sending. The application will not silently complete your batch for you.\n"
+      }
+    }
+  }
+}

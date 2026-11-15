@@ -1,0 +1,13 @@
+{
+  "metric": "final_cumulative_best unless suffixed",
+  "effects": {
+    "esm2_effect_prompt_G2_minus_G1": -0.445795,
+    "esm2_effect_tool_G4_minus_G3": -0.762496,
+    "tool_effect_rf_G3_minus_G1": 1.074266,
+    "tool_effect_esm_G4_minus_G2": 0.757566,
+    "esm2_effect_prompt_mean_round_fitness": -1.39007,
+    "esm2_effect_tool_mean_round_fitness": -0.32954,
+    "tool_effect_rf_mean_round_fitness": 1.756518,
+    "tool_effect_esm_mean_round_fitness": 2.817047
+  }
+}

@@ -1,0 +1,2 @@
+index,family,n,spearman,pearson,mse,top_k,top_k_hit_rate,fit_seconds,predict_seconds,parameters.n_estimators,parameters.min_samples_leaf,parameters.max_depth
+0,random_forest,16,0.8262917811173324,0.8312884604348239,11.969999999999999,10,0.9,0.005765800000517629,0.001436900000044261,5,1,

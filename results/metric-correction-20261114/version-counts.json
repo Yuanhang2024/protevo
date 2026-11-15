@@ -1,0 +1,27 @@
+{
+  "v1": {
+    "recommendations": 360,
+    "method_rounds": 36,
+    "unique_variants": 274,
+    "seeds": [
+      11,
+      22,
+      33
+    ]
+  },
+  "v3": {
+    "recommendations": 180,
+    "method_rounds": 18,
+    "unique_variants": 143,
+    "seeds": [
+      11,
+      22,
+      33
+    ]
+  },
+  "combined": {
+    "recommendations": 540,
+    "method_rounds": 54,
+    "unique_variants": 381
+  }
+}

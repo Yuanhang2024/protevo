@@ -1,0 +1,29 @@
+{
+  "proteingym_assay": "BLAT_ECOLX_Gonzalez_2019_indels",
+  "source": {
+    "benchmark_zip": "https://zenodo.org/records/15293562/files/DMS_ProteinGym_indels.zip?download=1",
+    "assay_file": "https://zenodo.org/records/15293562/files/DMS_ProteinGym_indels.zip?download=1 (entry BLAT_ECOLX_Gonzalez_2019_indels.csv)",
+    "assay_metadata_table": "https://zenodo.org/records/15293562/files/DMS_indels.csv?download=1",
+    "record": "https://zenodo.org/records/15293562",
+    "proteingym_version": "v1.3"
+  },
+  "study": {
+    "first_author": "Gonzalez",
+    "year": 2019,
+    "title": "Fitness Effects of Single Amino Acid Insertions and Deletions in TEM-1 β-Lactamase",
+    "doi": "10.1016/j.jmb.2019.04.030",
+    "selection_assay": "antibiotic resistance, MIC",
+    "selection_type": "Amp resistance"
+  },
+  "n_variants": 4751,
+  "parse_rate": 1.0,
+  "validate_pass_rate": 1.0,
+  "roundtrip_rate": 1.0,
+  "wt_sequence": "MSIQHFRVALIPFFAAFCLPVFAHPETLVKVKDAEDQLGARVGYIELDLNSGKILESFRPEERFPMMSTFKVLLCGAVLSRVDAGQEQLGRRIHYSQNDLVEYSPVTEKHLTDGMTVRELCSAAITMSDNTAANLLLTTIGGPKELTAFLHNMGDHVTRLDRWEPELNEAIPNDERDTTMPAAMATTLRKLLTGELLTLASRQQLIDWMEADKVAGPLLRSALPAGWFIADKSGAGERGSRGIIAALGPDGKPSRIVVIYTTGSQATMDERNRQIAEIGASLIKHW",
+  "wt_sequence_source": "ProteinGym DMS_indels.csv target_seq (official reference)",
+  "higher_is_better": true,
+  "higher_is_better_basis": "raw_DMS_directionality=1 (higher DMS_score is fitter)",
+  "notation": "ProteinGym v1.3 indels assay files carry NO mutant notation column (columns: mutated_sequence,DMS_score,DMS_score_bin). variant column here was DERIVED by diffing mutated_sequence against target_seq under the HGVS 3'-rule (deletions/insertions shifted right; insertion equal to the preceding k residues written as dup): single-residue insertions 4493 (position-2 library, e.g. M1_S2insA; insertions duplicating the anchor residue become dup, e.g. M1dup), single-residue deletions 258 (e.g. S2del). All 4751/4751 variants parse with gb1.variant_notation.parse_variant, pass validate_variant against wt_sequence, and round-trip (apply_mutations(wt, parse_variant(v)) == mutated_sequence). fitness = DMS_score raw string value. Multi-mutation separator (none present here) would be ','.",
+  "license": "MIT (Zenodo record 10.5281/zenodo.15293562, ProteinGym v1.3)",
+  "downloaded_at": "2026-11-15"
+}

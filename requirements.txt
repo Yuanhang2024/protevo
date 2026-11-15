@@ -1,0 +1,18 @@
+# CPU 全功能依赖（Python 3.10+）
+pandas>=2.0
+numpy>=1.24
+scikit-learn>=1.3
+scipy>=1.10
+pytest>=7.0
+openai>=1.0
+python-dotenv>=1.0
+matplotlib>=3.7   # TUI 绘图与报告图表用（缺失时 TUI 自动降级为仅 ASCII 摘要）
+
+# 可选：ESM-2 嵌入路径（use_esm=True）额外需要 torch>=2.1 + transformers>=4.35
+# torch 按平台三选一（详见 README「ESM-2 嵌入路径」）：
+#   CPU  : pip install torch
+#   CUDA : pip install torch --index-url https://download.pytorch.org/whl/cu126
+#          （cu126 仅为示例，请按显卡驱动版本选 cu121/cu124/cu126 等，见 pytorch.org）
+#   ROCm : pip install torch --index-url https://download.pytorch.org/whl/rocm6.2
+#          （ROCm 下 PyTorch 将 hip 设备映射为 cuda，设备名仍为 "cuda"，代码零改动）
+# transformers>=4.35

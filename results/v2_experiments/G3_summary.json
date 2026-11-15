@@ -1,0 +1,168 @@
+{
+  "info": {
+    "predictor": "rf_onehot",
+    "agent": "tool_calling"
+  },
+  "per_seed": {
+    "11": {
+      "rounds": [
+        {
+          "round": 1,
+          "mean_fitness": 3.608218116596899,
+          "max_fitness": 5.467824696,
+          "cumulative_best": 5.467824696,
+          "new_high_fitness_count": 10
+        },
+        {
+          "round": 2,
+          "mean_fitness": 4.324530494716,
+          "max_fitness": 6.0442371447,
+          "cumulative_best": 6.0442371447,
+          "new_high_fitness_count": 10
+        },
+        {
+          "round": 3,
+          "mean_fitness": 3.4870325571829994,
+          "max_fitness": 4.65389178671,
+          "cumulative_best": 6.0442371447,
+          "new_high_fitness_count": 10
+        }
+      ],
+      "final_cumulative_best": 6.0442371447,
+      "mean_round_fitness": 3.806593722831966,
+      "total_new_high_fitness_count": 30,
+      "api_calls": 10,
+      "total_tokens": 51276,
+      "test_metrics": {
+        "n": 5000,
+        "spearman": 0.536284475832448,
+        "pearson": 0.5924771021169,
+        "mse": 0.10363259653760117,
+        "top_k": 10,
+        "top_k_hit_rate": 0.2,
+        "training_count": 2030
+      },
+      "status": "completed"
+    },
+    "22": {
+      "rounds": [
+        {
+          "round": 1,
+          "mean_fitness": 3.0974246191198196,
+          "max_fitness": 5.14126464113,
+          "cumulative_best": 5.14126464113,
+          "new_high_fitness_count": 9
+        },
+        {
+          "round": 2,
+          "mean_fitness": 4.049827433891,
+          "max_fitness": 5.12297723033,
+          "cumulative_best": 5.14126464113,
+          "new_high_fitness_count": 10
+        },
+        {
+          "round": 3,
+          "mean_fitness": 3.501991757916,
+          "max_fitness": 4.57264659082,
+          "cumulative_best": 5.14126464113,
+          "new_high_fitness_count": 10
+        }
+      ],
+      "final_cumulative_best": 5.14126464113,
+      "mean_round_fitness": 3.5497479369756064,
+      "total_new_high_fitness_count": 29,
+      "api_calls": 13,
+      "total_tokens": 84655,
+      "test_metrics": {
+        "n": 5000,
+        "spearman": 0.5194933328073804,
+        "pearson": 0.49951755235645806,
+        "mse": 0.15020898476884872,
+        "top_k": 10,
+        "top_k_hit_rate": 0.1,
+        "training_count": 2030
+      },
+      "status": "completed"
+    },
+    "33": {
+      "rounds": [
+        {
+          "round": 1,
+          "mean_fitness": 3.4921939629335,
+          "max_fitness": 5.43037947261,
+          "cumulative_best": 5.43037947261,
+          "new_high_fitness_count": 10
+        },
+        {
+          "round": 2,
+          "mean_fitness": 4.602914507704,
+          "max_fitness": 6.0442371447,
+          "cumulative_best": 6.0442371447,
+          "new_high_fitness_count": 10
+        },
+        {
+          "round": 3,
+          "mean_fitness": 4.400283966209201,
+          "max_fitness": 7.55686908836,
+          "cumulative_best": 7.55686908836,
+          "new_high_fitness_count": 10
+        }
+      ],
+      "final_cumulative_best": 7.55686908836,
+      "mean_round_fitness": 4.165130812282233,
+      "total_new_high_fitness_count": 30,
+      "api_calls": 12,
+      "total_tokens": 67215,
+      "test_metrics": {
+        "n": 5000,
+        "spearman": 0.5412117552936445,
+        "pearson": 0.551942523847229,
+        "mse": 0.12059593194216409,
+        "top_k": 10,
+        "top_k_hit_rate": 0.2,
+        "training_count": 2030
+      },
+      "status": "completed"
+    }
+  },
+  "aggregate": {
+    "n_seeds": 3,
+    "statuses": {
+      "11": "completed",
+      "22": "completed",
+      "33": "completed"
+    },
+    "final_cumulative_best": {
+      "mean": 6.247456958063334,
+      "std": 1.2205572214267175
+    },
+    "mean_round_fitness": {
+      "mean": 3.840490824029935,
+      "std": 0.3090886295342839
+    },
+    "total_new_high_fitness_count": {
+      "mean": 29.666666666666668,
+      "std": 0.5773502691896258
+    },
+    "api_calls": {
+      "mean": 11.666666666666666,
+      "std": 1.5275252316519468
+    },
+    "total_tokens": {
+      "mean": 67715.33333333333,
+      "std": 16695.12384899655
+    },
+    "test_spearman": {
+      "mean": 0.532329854644491,
+      "std": 0.011386471814313001
+    },
+    "test_mse": {
+      "mean": 0.12481250441620466,
+      "std": 0.023572751170336515
+    },
+    "test_top10_hit_rate": {
+      "mean": 0.16666666666666666,
+      "std": 0.05773502691896258
+    }
+  }
+}

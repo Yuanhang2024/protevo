@@ -1,0 +1,169 @@
+{
+  "group_summary": {
+    "G1": {
+      "mean": 2.0839732867194773,
+      "sd": 1.7949266691344299,
+      "new_max": 5.123271606186667,
+      "cumulative": 5.173190798433333,
+      "cumulative_sd": 0.7844693792744757
+    },
+    "G2": {
+      "mean": 0.6939037068775225,
+      "sd": 0.4571965004816038,
+      "new_max": 3.42977958409,
+      "cumulative": 4.72739556574,
+      "cumulative_sd": 0.46916830284854866
+    },
+    "G3": {
+      "mean": 3.8404908240299354,
+      "sd": 0.3090886295342845,
+      "new_max": 6.247456958063334,
+      "cumulative": 6.247456958063334,
+      "cumulative_sd": 1.2205572214267175
+    },
+    "G4": {
+      "mean": 3.510951169342981,
+      "sd": 0.4808923679059416,
+      "new_max": 5.484961185286667,
+      "cumulative": 5.484961185286667,
+      "cumulative_sd": 0.24510086261567868
+    }
+  },
+  "feedback": {
+    "complete": {
+      "c0": 4.037731547799975,
+      "c1": 3.8317521296582266,
+      "difference": -0.20597941814174825,
+      "c0_generations": 12,
+      "c1_generations": 12
+    },
+    "exclude_c1": {
+      "c0": 4.037731547799975,
+      "c1": 4.213834812896162,
+      "difference": 0.17610326509618734,
+      "c0_generations": 12,
+      "c1_generations": 11
+    },
+    "exclude_pair": {
+      "c0": 3.9829560823529335,
+      "c1": 4.213834812896162,
+      "difference": 0.23087873054322894,
+      "c0_generations": 11,
+      "c1_generations": 11
+    }
+  },
+  "feedback_state_effects": {
+    "complete": {
+      "1201": -0.14955963731683308,
+      "1202": -0.8745165281599103,
+      "1203": 0.15505337381295092,
+      "1204": 0.045105119096799484
+    },
+    "exclude_c1": {
+      "1201": -0.14955963731683308,
+      "1202": 0.653814204791832,
+      "1203": 0.15505337381295092,
+      "1204": 0.045105119096799484
+    },
+    "exclude_pair": {
+      "1201": -0.14955963731683308,
+      "1202": 0.8729160665799984,
+      "1203": 0.15505337381295092,
+      "1204": 0.045105119096799484
+    }
+  },
+  "cross_protein": [
+    {
+      "dataset": "GFP_AEQVI_Sarkisyan_2016",
+      "mode": "notation",
+      "n_variants": 51714,
+      "n_positions": 233,
+      "variant_format": "mutation_notation",
+      "reference_source": "provided",
+      "fitness_higher_is_better": true,
+      "predictor": "ridge",
+      "val_spearman": 0.8652,
+      "all_candidates": {
+        "random_forest": 0.845,
+        "ridge": 0.8652
+      },
+      "seconds": 78.0
+    },
+    {
+      "dataset": "RL40A_YEAST_Roscoe_2014",
+      "mode": "notation",
+      "n_variants": 1380,
+      "n_positions": 75,
+      "variant_format": "mutation_notation",
+      "reference_source": "provided",
+      "fitness_higher_is_better": true,
+      "predictor": "random_forest",
+      "val_spearman": 0.7849,
+      "all_candidates": {
+        "random_forest": 0.7849,
+        "ridge": 0.771
+      },
+      "seconds": 0.4
+    },
+    {
+      "dataset": "BLAT_ECOLX_Gonzalez_2019_indels",
+      "mode": "indel",
+      "n_variants": 4751,
+      "n_positions": 284,
+      "variant_format": "indel_notation",
+      "reference_source": "provided",
+      "fitness_higher_is_better": true,
+      "predictor": "esm2_mlp",
+      "val_spearman": 0.7552,
+      "all_candidates": {
+        "composition_ridge": 0.0323,
+        "esm2_ridge": 0.6568,
+        "esm2_mlp": 0.7552
+      },
+      "seconds": 166.3
+    },
+    {
+      "dataset": "GFP_AEQVI_Sarkisyan_2016",
+      "mode": "full",
+      "n_variants": 51714,
+      "n_positions": 233,
+      "variant_format": "full",
+      "reference_source": "provided",
+      "fitness_higher_is_better": true,
+      "predictor": "ridge",
+      "val_spearman": 0.8652,
+      "all_candidates": {
+        "random_forest": 0.8447,
+        "ridge": 0.8652,
+        "esm2_ridge": 0.6275,
+        "esm2_mlp": 0.7765
+      },
+      "seconds": 3322.7
+    },
+    {
+      "dataset": "RL40A_YEAST_Roscoe_2014",
+      "mode": "full",
+      "n_variants": 1380,
+      "n_positions": 75,
+      "variant_format": "full",
+      "reference_source": "provided",
+      "fitness_higher_is_better": true,
+      "predictor": "random_forest",
+      "val_spearman": 0.7849,
+      "all_candidates": {
+        "random_forest": 0.7849,
+        "ridge": 0.771,
+        "esm2_ridge": 0.4826,
+        "esm2_mlp": 0.6357
+      },
+      "seconds": 25.8
+    }
+  ],
+  "statistical_unit": "trajectory for G1–G4; fixed state for feedback",
+  "sources": {
+    "gb1_recommendations": "gb1-evolution/results/seed-*/run/recommendations.csv and results/v2_experiments",
+    "feedback": "gb1-evolution/results/supplement-20261114/feedback-pilot/episodes/*/P0/recommendations.csv",
+    "predictor": "release/protevo/results/predictor_v2/full_ablation_runs.csv",
+    "cross_protein": "release/protevo/results/cross_protein/summary.json"
+  }
+}

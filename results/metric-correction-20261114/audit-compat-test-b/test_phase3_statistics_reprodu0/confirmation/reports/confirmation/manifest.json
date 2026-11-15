@@ -1,0 +1,20 @@
+{
+  "definition_version": "gb1-statistical-definitions/2",
+  "phase": "phase3",
+  "audit_passed": true,
+  "directory": "C:\\Users\\lijin\\Desktop\\ZJU张强老师申请\\笔试试题\\test-workspace\\gb1-evolution\\results\\metric-correction-20261114\\audit-compat-test-b\\test_phase3_statistics_reprodu0\\confirmation\\reports\\confirmation",
+  "files": [
+    "audit-check-counts.csv",
+    "audit-issues.csv",
+    "calls.csv",
+    "profile-summaries.csv",
+    "query-checkpoints.csv",
+    "query-summaries.csv",
+    "recommendations.csv",
+    "rounds.csv",
+    "seed-summaries.csv",
+    "trajectories.csv",
+    "summary.json",
+    "audit.json"
+  ]
+}

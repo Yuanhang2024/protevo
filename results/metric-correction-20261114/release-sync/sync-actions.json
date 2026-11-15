@@ -1,0 +1,142 @@
+[
+  {
+    "path": "build_report.py",
+    "action": "updated"
+  },
+  {
+    "path": "build_validation_report.py",
+    "action": "updated"
+  },
+  {
+    "path": "results/critique-followup-20261113/zero_context.py",
+    "action": "updated"
+  },
+  {
+    "path": "results/critique-followup-20261113/analyze_stats.py",
+    "action": "updated"
+  },
+  {
+    "path": "results/critique-followup-20261113/no_feedback.py",
+    "action": "updated"
+  },
+  {
+    "path": "results/critique-followup-20261113/对照实验说明.md",
+    "action": "updated"
+  },
+  {
+    "path": "reports/validation-stage/验证结果.md",
+    "action": "updated"
+  },
+  {
+    "path": "reports/实验结果.md",
+    "action": "already_current"
+  },
+  {
+    "path": "reports/GB1首轮实验报告.pdf",
+    "action": "updated"
+  },
+  {
+    "path": "reports/validation-stage/GB1科学Agent验证报告.pdf",
+    "action": "updated"
+  },
+  {
+    "path": "gb1/statistical_definitions.py",
+    "action": "added"
+  },
+  {
+    "path": "configs/statistical-definitions-v2.json",
+    "action": "added"
+  },
+  {
+    "path": "reports/统计定义与版本范围.md",
+    "action": "added"
+  },
+  {
+    "path": "tools/reassessment_20261114/recompute_saved_statistics.py",
+    "action": "added"
+  },
+  {
+    "path": "tools/supplement_20261114/strong_baselines.py",
+    "action": "added"
+  },
+  {
+    "path": "tools/supplement_20261114/feedback_pilot.py",
+    "action": "added"
+  },
+  {
+    "path": "tests/test_statistical_definitions.py",
+    "action": "added"
+  },
+  {
+    "path": "tests/test_saved_ranking_statistics.py",
+    "action": "added"
+  },
+  {
+    "path": "tests/test_strong_baselines_20261114.py",
+    "action": "added"
+  },
+  {
+    "path": "tests/test_feedback_pilot_20261114.py",
+    "action": "added"
+  },
+  {
+    "path": "tools/calibration-report/audit.py",
+    "action": "added"
+  },
+  {
+    "path": "tools/calibration-report/plots.py",
+    "action": "added"
+  },
+  {
+    "path": "tools/calibration-report/report.py",
+    "action": "added"
+  },
+  {
+    "path": "tools/calibration-report/statistics_report.py",
+    "action": "added"
+  },
+  {
+    "path": "tools/calibration-report/test_report.py",
+    "action": "added"
+  },
+  {
+    "path": "results/metric-correction-20261114/recomputed/statistics-status.json",
+    "action": "added"
+  },
+  {
+    "path": "results/metric-correction-20261114/recomputed/zero-context/summary.json",
+    "action": "added"
+  },
+  {
+    "path": "results/metric-correction-20261114/recomputed/zero-context/ranking.csv",
+    "action": "added"
+  },
+  {
+    "path": "results/metric-correction-20261114/recomputed/first-answer-anchors/stats_summary.json",
+    "action": "added"
+  },
+  {
+    "path": "results/metric-correction-20261114/recomputed/first-answer-anchors/first_answer_overlap.csv",
+    "action": "added"
+  },
+  {
+    "path": "results/metric-correction-20261114/recomputed/first-answer-anchors/anchor_transfer.csv",
+    "action": "added"
+  },
+  {
+    "path": "results/metric-correction-20261114/recomputed/first-answer-anchors/anchor_transfer_prompt_visible.csv",
+    "action": "added"
+  },
+  {
+    "path": "results/metric-correction-20261114/recomputed/completion/statistics.json",
+    "action": "added"
+  },
+  {
+    "path": "results/metric-correction-20261114/version-counts.json",
+    "action": "added"
+  },
+  {
+    "path": "README.md",
+    "action": "independent_release_readme_preserved_for_targeted_edit"
+  }
+]

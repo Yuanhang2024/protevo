@@ -1,0 +1,24 @@
+{
+  "studyId": "synthetic-report-only",
+  "phase1": {
+    "dataSeeds": [
+      101,
+      202
+    ],
+    "maximumGenerationCalls": 48
+  },
+  "phase3": {
+    "dataSeeds": [
+      101,
+      202
+    ],
+    "maximumGenerationCalls": 48,
+    "bootstrap": {
+      "seed": 20261113,
+      "replicates": 400,
+      "confidenceLevel": 0.95,
+      "outerUnit": "paired data split",
+      "innerUnit": "independent trajectory within model and split"
+    }
+  }
+}

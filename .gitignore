@@ -1,0 +1,11 @@
+﻿__pycache__/
+.pytest_cache/
+*.pyc
+.env
+_*.txt
+results/cross_protein/embed_cache/
+results/evolve/
+results/tui/
+results/audit_dsh/
+~$*
+results/metric-correction-20261114/originals/README.md

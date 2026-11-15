@@ -1,0 +1,10 @@
+feature,model,mean,sd,n,train_size,selection_rule
+pairdot_only,rf,0.31643133333333334,0.008481661708258183,3,50000,"Within 50000 training examples, select the model with highest mean validation Spearman across seeds 11, 22, 33; ties resolved by model name."
+8m_fullseq_320,mlp,0.554202,0.025734747774167153,3,50000,"Within 50000 training examples, select the model with highest mean validation Spearman across seeds 11, 22, 33; ties resolved by model name."
+L33_fullseq,rf,0.5787533333333333,0.003411623855780974,3,50000,"Within 50000 training examples, select the model with highest mean validation Spearman across seeds 11, 22, 33; ties resolved by model name."
+multilayer_5120,rf,0.5894873333333334,0.009722549579885659,3,50000,"Within 50000 training examples, select the model with highest mean validation Spearman across seeds 11, 22, 33; ties resolved by model name."
+8m_mutpos_320,mlp,0.5931576666666667,0.045386377177885996,3,50000,"Within 50000 training examples, select the model with highest mean validation Spearman across seeds 11, 22, 33; ties resolved by model name."
+pairdot_concat,rf,0.6195773333333333,0.006565430247389191,3,50000,"Within 50000 training examples, select the model with highest mean validation Spearman across seeds 11, 22, 33; ties resolved by model name."
+per_residue_flat,rf,0.6216573333333333,0.0003395605002548886,3,50000,"Within 50000 training examples, select the model with highest mean validation Spearman across seeds 11, 22, 33; ties resolved by model name."
+L33_mutpos,mlp,0.6333183333333333,0.019886896045721598,3,50000,"Within 50000 training examples, select the model with highest mean validation Spearman across seeds 11, 22, 33; ties resolved by model name."
+onehot_80d,rf,0.655428,0.007974827458948588,3,50000,"Within 50000 training examples, select the model with highest mean validation Spearman across seeds 11, 22, 33; ties resolved by model name."
