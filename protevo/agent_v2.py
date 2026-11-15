@@ -222,7 +222,9 @@ def default_task_message(round_number, toolbox, protein_config=None):
                       f"{len(protein_config.wt_full_sequence)}-residue reference sequence")
         else:
             design = f"design variants over the {len(protein_config.mutable_positions)} configured mutable positions"
-        return (f"Directed evolution round {round_number}: {design} to maximize fitness. "
+        # 方向措辞与 system prompt 一致（DSH note-007：task message 不再硬编码 maximize）
+        goal = "maximize fitness" if getattr(protein_config, "fitness_higher_is_better", True) else "minimize fitness"
+        return (f"Directed evolution round {round_number}: {design} to {goal}. "
                 f"Eligible unmeasured candidates: {len(toolbox.eligible)}. "
                 f"Submit exactly {toolbox.required_count()} recommendations this round. Hard budgets: "
                 f"{budget.max_score_calls} candidate scorings, {budget.max_api_calls} LLM calls, "
