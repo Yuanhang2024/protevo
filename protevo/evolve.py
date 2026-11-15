@@ -63,7 +63,9 @@ def _write_per_round_csv(rows, path):
 def run_evolution(csv_path, rounds=3, per_round=10, score_budget=40, initial_train=2000,
                   reference_sequence=None, higher_is_better=True, use_esm=False,
                   esm_model_path=None, seed=42, out_dir=None, client=None, model=None,
-                  retrain_each_round=False, on_round=None) -> dict:
+                  retrain_each_round=False, on_round=None,
+                  predictor_pool=None, extra_candidates=None, model_kwargs=None,
+                  val_fraction=None) -> dict:
     """跑完整多轮虚拟定向进化，返回汇总 dict（与落盘的 summary.json 同构）。
 
     种子化随机划分 initial_train 条为初始已知，其余为虚拟 oracle 池；每轮提交结果查表回填
@@ -84,6 +86,15 @@ def run_evolution(csv_path, rounds=3, per_round=10, score_budget=40, initial_tra
     on_round：可选回调 on_round(轮摘要 dict)，每轮结束（round_summary 组装完成后）同步
     调用一次，供交互前端（TUI 等）做"每轮一行"准实时展示；回调抛出的任何异常一律吞掉，
     不影响进化主流程。默认 None 行为与原先完全一致。
+
+    predictor_pool / extra_candidates / model_kwargs / val_fraction：研究阶段 configure_protein
+    的配置覆写透传（如 TUI open --pool full 的池选择），初始选型与 --retrain 的每轮重配共用；
+    None（默认）不传，保持 configure_protein 自身的默认行为。summary 的 config.predictor
+    记录实际采用的池（pool mode 与候选清单）。
+
+    中断保护：任一轮内抛异常（如外部 LLM 服务 429）时不丢已完成轮次——落盘当前
+    per_round.csv 与 summary.json（status="interrupted"，含 error 摘要与已完成轮数）后
+    返回该部分结果汇总（不再向上抛），调用方可据 status 区分完整/中断运行。
     """
     csv_path = Path(csv_path)
     # 预算硬校验 k <= proposal_count == score_budget 在 schema；运行期每轮评分上限由
@@ -120,99 +131,139 @@ def run_evolution(csv_path, rounds=3, per_round=10, score_budget=40, initial_tra
     train_csv = out_dir / "initial_train.csv"
     known[["variant", "fitness"]].to_csv(train_csv, index=False)
     esm_kwargs = {} if esm_model_path is None else {"esm_model_path": esm_model_path}
+    # 研究阶段配置覆写（open 会话的池选择等）：None 不传，保持 configure_protein 默认行为
+    config_overrides = {}
+    if predictor_pool is not None:
+        config_overrides["predictor_pool"] = predictor_pool
+    if extra_candidates is not None:
+        config_overrides["extra_candidates"] = extra_candidates
+    if model_kwargs is not None:
+        config_overrides["model_kwargs"] = model_kwargs
+    if val_fraction is not None:
+        config_overrides["val_fraction"] = val_fraction
 
     def _fit_predictor(train_csv_path):
-        """初始训练与轮间重训共用同一套 configure_protein 配置（random_state=seed，链路可复现）。"""
+        """初始训练与轮间重训共用同一套 configure_protein 配置（random_state=seed，链路可复现；
+        池/超参等覆写一并透传，保证 open 的选择延续到每轮重配）。"""
         return configure_protein(str(train_csv_path), reference_sequence=reference_sequence,
                                  auto_select_predictor=True, random_state=seed,
-                                 higher_is_better=higher_is_better, use_esm=use_esm, **esm_kwargs)
+                                 higher_is_better=higher_is_better, use_esm=use_esm,
+                                 **esm_kwargs, **config_overrides)
 
     config = _fit_predictor(train_csv)
     initial_config = config  # 顶层 config 快照始终取初始选型；轮间重训版本只记入各轮 rounds 明细
 
     rows, round_summaries = [], []
     best = _best_record(known, higher_is_better)
+
+    def _summary_payload(status, error=None):
+        """汇总 dict（与落盘 summary.json 同构）。status 枚举 completed / interrupted；
+        interrupted 时 rounds 只含已完成轮次，error 记失败摘要（类型/消息/失败轮次/已完成轮数）。"""
+        payload = {
+            "csv_path": str(csv_path), "out_dir": str(out_dir),
+            "predictor_protocol": "refit_per_round" if retrain_each_round else "fixed",
+            "status": status,
+            "config": {"rounds": rounds, "per_round": per_round, "score_budget": score_budget,
+                       "initial_train": initial_train, "seed": seed, "higher_is_better": higher_is_better,
+                       "use_esm": use_esm, "reference_sequence": reference_sequence,
+                       "rows_total": int(len(variants)), "initial_known": int(n_initial),
+                       "oracle_pool": len(oracle), "variant_format": initial_config.variant_format,
+                       "mutable_positions": list(initial_config.mutable_positions),
+                       "predictor": dict(initial_config.predictor_info)},
+            "rounds": round_summaries, "cumulative_best": best, "total_measured": len(known),
+            "note": ("虚拟进化：实测分由 CSV fitness 查表回填；预测器每轮开始前以累计 known"
+                     "（初始训练 + 此前各轮回填）重新选型训练（refit_per_round，各轮只用初始训练"
+                     "和本方法此前获得的反馈拟合预测器）" if retrain_each_round else
+                     "虚拟进化：实测分由 CSV fitness 查表回填；预测器为初始训练子集版本，轮间不重训"
+                     "（与 GB1 v2 协议一致的简化）")}
+        if error is not None:
+            payload["error"] = error
+            payload["note"] += (f"；第 {error['failed_round']} 轮中断（{error['type']}），"
+                                "仅含已完成轮次的部分结果")
+        return payload
+
+    def _write_summary(payload):
+        (out_dir / "summary.json").write_text(
+            json.dumps(payload, ensure_ascii=False, indent=2, allow_nan=False, default=str),
+            encoding="utf-8")
+
     for r in range(1, rounds + 1):
-        known_before, eligible_before = len(known), len(eligible)
-        if retrain_each_round and r > 1:
-            # 轮间重训（refit_per_round）：以累计 known（初始训练 + 此前各轮回填）重新选型训练，
-            # 训练集落盘留档；此后各轮均以新 config 的 predict_fitness 进入该轮
-            retrain_csv = out_dir / f"known_before_round{r}.csv"
-            known[["variant", "fitness"]].to_csv(retrain_csv, index=False)
-            config = _fit_predictor(retrain_csv)
-            print(f"   第 {r} 轮预测器重训（refit_per_round）：known={known_before} → "
-                  f"{config.predictor_info.get('selected')} "
-                  f"(val ρ={config.predictor_info.get('validation_spearman')})")
-        print(f"——— 虚拟进化第 {r}/{rounds} 轮：known={known_before}，eligible={eligible_before} ———")
-        record, toolbox = run_agent_round(
-            r, known, eligible, config.predict_fitness, ecfg, client=client, model=model,
-            log_path=out_dir / f"agent_round{r}.jsonl",
-            budget=AgentBudget(max_score_calls=score_budget), protein_config=config)
+        try:
+            known_before, eligible_before = len(known), len(eligible)
+            if retrain_each_round and r > 1:
+                # 轮间重训（refit_per_round）：以累计 known（初始训练 + 此前各轮回填）重新选型训练，
+                # 训练集落盘留档；此后各轮均以新 config 的 predict_fitness 进入该轮
+                retrain_csv = out_dir / f"known_before_round{r}.csv"
+                known[["variant", "fitness"]].to_csv(retrain_csv, index=False)
+                config = _fit_predictor(retrain_csv)
+                print(f"   第 {r} 轮预测器重训（refit_per_round）：known={known_before} → "
+                      f"{config.predictor_info.get('selected')} "
+                      f"(val ρ={config.predictor_info.get('validation_spearman')})")
+            print(f"——— 虚拟进化第 {r}/{rounds} 轮：known={known_before}，eligible={eligible_before} ———")
+            record, toolbox = run_agent_round(
+                r, known, eligible, config.predict_fitness, ecfg, client=client, model=model,
+                log_path=out_dir / f"agent_round{r}.jsonl",
+                budget=AgentBudget(max_score_calls=score_budget), protein_config=config)
 
-        submission = toolbox.submission
-        sequences = submission["sequences"]
-        measured = _oracle_fitness(oracle, sequences)
-        unresolved = [s for s, value in zip(sequences, measured) if value is None]
-        if unresolved:
-            print(f"⚠️  第 {r} 轮提交的 {len(unresolved)} 条变体不在 oracle 池中，实测分记 None：{unresolved}")
-        for sequence, reason, predicted, value in zip(sequences, submission["reasons"],
-                                                      submission["predicted_fitness"], measured):
-            rows.append({"round": r, "variant": sequence, "reason": reason,
-                         "predicted_fitness": predicted, "measured_fitness": value})
+            submission = toolbox.submission
+            sequences = submission["sequences"]
+            measured = _oracle_fitness(oracle, sequences)
+            unresolved = [s for s, value in zip(sequences, measured) if value is None]
+            if unresolved:
+                print(f"⚠️  第 {r} 轮提交的 {len(unresolved)} 条变体不在 oracle 池中，实测分记 None：{unresolved}")
+            for sequence, reason, predicted, value in zip(sequences, submission["reasons"],
+                                                          submission["predicted_fitness"], measured):
+                rows.append({"round": r, "variant": sequence, "reason": reason,
+                             "predicted_fitness": predicted, "measured_fitness": value})
 
-        # 回填：命中项并入 known（未命中无实测值，不伪造测量）；全部从 eligible 移除避免重复推荐
-        hits = [(s, value) for s, value in zip(sequences, measured) if value is not None]
-        if hits:
-            known = pd.concat([known, pd.DataFrame(
-                [{"variant": s, "fitness": value, "mutations": f"round_{r}"} for s, value in hits])],
-                ignore_index=True)
-        eligible -= set(sequences)
-        best = _best_record(known, higher_is_better)
-        measured_values = [value for value in measured if value is not None]
-        round_summary = {
-            "round": r, "status": record["status"], "stop_reason": record["stop_reason"],
-            "known_before": known_before, "eligible_before": eligible_before,
-            "submitted": len(sequences), "unresolved": unresolved,
-            "measured_mean": float(np.mean(measured_values)) if measured_values else None,
-            "measured_best": (max(measured_values) if higher_is_better else min(measured_values))
-                             if measured_values else None,
-            "cumulative_best": dict(best),
-            "score_calls_used": record["score_calls_used"], "max_score_budget": score_budget,
-            "api_calls_used": record["api_calls_used"], "total_tokens_used": record["total_tokens_used"],
-            "log_path": record["log_path"]}
-        if retrain_each_round:
-            # refit_per_round：记该轮实际使用的预测器选型与 val Spearman（fixed 模式见顶层 config.predictor）
-            round_summary["predictor_info"] = dict(config.predictor_info)
-        round_summaries.append(round_summary)
-        if on_round is not None:
-            # 准实时回调：异常吞掉（展示层故障不应中断进化主流程）
-            try:
-                on_round(dict(round_summary))
-            except Exception:
-                pass
-        _write_per_round_csv(rows, out_dir / "per_round.csv")
-        mean_text = "n/a" if not measured_values else f"{np.mean(measured_values):.4g}"
-        print(f"第 {r} 轮完成：status={record['status']}，提交 {len(sequences)} 条，"
-              f"实测均值={mean_text}，累计最优={best['variant']}({best['fitness']:.4g})")
+            # 回填：命中项并入 known（未命中无实测值，不伪造测量）；全部从 eligible 移除避免重复推荐
+            hits = [(s, value) for s, value in zip(sequences, measured) if value is not None]
+            if hits:
+                known = pd.concat([known, pd.DataFrame(
+                    [{"variant": s, "fitness": value, "mutations": f"round_{r}"} for s, value in hits])],
+                    ignore_index=True)
+            eligible -= set(sequences)
+            best = _best_record(known, higher_is_better)
+            measured_values = [value for value in measured if value is not None]
+            round_summary = {
+                "round": r, "status": record["status"], "stop_reason": record["stop_reason"],
+                "known_before": known_before, "eligible_before": eligible_before,
+                "submitted": len(sequences), "unresolved": unresolved,
+                "measured_mean": float(np.mean(measured_values)) if measured_values else None,
+                "measured_best": (max(measured_values) if higher_is_better else min(measured_values))
+                                 if measured_values else None,
+                "cumulative_best": dict(best),
+                "score_calls_used": record["score_calls_used"], "max_score_budget": score_budget,
+                "api_calls_used": record["api_calls_used"], "total_tokens_used": record["total_tokens_used"],
+                "log_path": record["log_path"]}
+            if retrain_each_round:
+                # refit_per_round：记该轮实际使用的预测器选型与 val Spearman（fixed 模式见顶层 config.predictor）
+                round_summary["predictor_info"] = dict(config.predictor_info)
+            round_summaries.append(round_summary)
+            if on_round is not None:
+                # 准实时回调：异常吞掉（展示层故障不应中断进化主流程）
+                try:
+                    on_round(dict(round_summary))
+                except Exception:
+                    pass
+            _write_per_round_csv(rows, out_dir / "per_round.csv")
+            mean_text = "n/a" if not measured_values else f"{np.mean(measured_values):.4g}"
+            print(f"第 {r} 轮完成：status={record['status']}，提交 {len(sequences)} 条，"
+                  f"实测均值={mean_text}，累计最优={best['variant']}({best['fitness']:.4g})")
+        except Exception as exc:
+            # 中断保护（如外部 LLM 服务 429）：落盘已完成轮次的部分结果再返回 interrupted 汇总，
+            # 不向上抛——调用方（TUI/CLI）据 status 区分完整/中断运行并保留可导出目录
+            error = {"type": type(exc).__name__, "message": str(exc), "failed_round": r,
+                     "completed_rounds": len(round_summaries)}
+            _write_per_round_csv(rows, out_dir / "per_round.csv")
+            partial = _summary_payload("interrupted", error)
+            _write_summary(partial)
+            print(f"⚠️  第 {r} 轮中断（{error['type']}: {exc}）："
+                  f"已完成 {len(round_summaries)} 轮的部分结果已落盘 {out_dir}")
+            return partial
 
-    summary = {
-        "csv_path": str(csv_path), "out_dir": str(out_dir),
-        "predictor_protocol": "refit_per_round" if retrain_each_round else "fixed",
-        "config": {"rounds": rounds, "per_round": per_round, "score_budget": score_budget,
-                   "initial_train": initial_train, "seed": seed, "higher_is_better": higher_is_better,
-                   "use_esm": use_esm, "reference_sequence": reference_sequence,
-                   "rows_total": int(len(variants)), "initial_known": int(n_initial),
-                   "oracle_pool": len(oracle), "variant_format": initial_config.variant_format,
-                   "mutable_positions": list(initial_config.mutable_positions),
-                   "predictor": dict(initial_config.predictor_info)},
-        "rounds": round_summaries, "cumulative_best": best, "total_measured": len(known),
-        "note": ("虚拟进化：实测分由 CSV fitness 查表回填；预测器每轮开始前以累计 known"
-                 "（初始训练 + 此前各轮回填）重新选型训练（refit_per_round，各轮只用初始训练"
-                 "和本方法此前获得的反馈拟合预测器）" if retrain_each_round else
-                 "虚拟进化：实测分由 CSV fitness 查表回填；预测器为初始训练子集版本，轮间不重训"
-                 "（与 GB1 v2 协议一致的简化）")}
-    (out_dir / "summary.json").write_text(
-        json.dumps(summary, ensure_ascii=False, indent=2, allow_nan=False, default=str), encoding="utf-8")
+    summary = _summary_payload("completed")
+    _write_summary(summary)
     return summary
 
 
@@ -236,6 +287,12 @@ def main(argv=None):
               "或先运行 python -m protevo.setup_assistant --doctor 查看其中的 llm_credentials 检查。",
               file=sys.stderr)
         return 2
+    if summary.get("status") == "interrupted":
+        error = summary.get("error") or {}
+        print(f"中断：第 {error.get('failed_round')} 轮失败（{error.get('type')}: {error.get('message')}）；"
+              f"已完成 {len(summary['rounds'])} 轮的部分结果已写入 {summary['out_dir']}"
+              "（per_round.csv / summary.json / agent_round*.jsonl）", file=sys.stderr)
+        return 1
     print(f"完成：结果已写入 {summary['out_dir']}（per_round.csv / summary.json / agent_round*.jsonl）")
     return 0
 

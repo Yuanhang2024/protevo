@@ -222,10 +222,13 @@ def _config_variant_error(sequence, protein_config):
 # protein_config 路径的已知数据摘要：位点列表与各位点残基分布完全由配置驱动，不含任何 GB1 字面量。
 # 残基按 config.variant_format 解析（与编码器同源）：mutation_notation 用记谱解析（未突变位点记
 # 野生型残基），mutation_string 按位取字符，full 取 mutable 位置字符；indel 无固定位点残基，不输出分布。
+# 已知数据为原始测量标度：top 变体与 best_fitness 按 config.fitness_higher_is_better 取方向
+# （higher 降序取 max / lower 升序取 min）。
 def _config_known_summary(known, top_n, config):
-    top = known.sort_values(["fitness", "variant"], ascending=[False, True]).head(top_n)
+    higher = config.fitness_higher_is_better
+    top = known.sort_values(["fitness", "variant"], ascending=[not higher, True]).head(top_n)
     summary = {"n_known": len(known), "fitness_mean": float(known.fitness.mean()),
-               "best_fitness": float(known.fitness.max()),
+               "best_fitness": float(known.fitness.max() if higher else known.fitness.min()),
                "top_variants": top[["variant", "fitness", "mutations"]].to_dict(orient="records"),
                "interpretation": "Marginal residue statistics are observations in sampled backgrounds, not causal substitution effects."}
     if config.variant_format == "indel_notation":
@@ -267,8 +270,17 @@ class ToolBox:
     def required_count(self):
         return min(self.config.k, len(self.eligible))
 
+    def _score_sort_key(self):
+        """预测分排序键：protein_config 路径感知 fitness 方向（higher 降序 / lower 升序，
+        预测分均为 predict_fitness 返回的原始标度）；GB1 旧路径（protein_config=None，
+        恒 higher）保持降序不变。"""
+        descending = not (self.protein_config is not None
+                          and not self.protein_config.fitness_higher_is_better)
+        sign = -1.0 if descending else 1.0
+        return lambda variant: (sign * self.score_cache[variant], variant)
+
     def ranked_scored(self):
-        ranked = sorted(self.score_cache, key=lambda v: (-self.score_cache[v], v))
+        ranked = sorted(self.score_cache, key=self._score_sort_key())
         return [{"rank": index, "variant": variant, "predicted_fitness": self.score_cache[variant]}
                 for index, variant in enumerate(ranked, 1)]
 
@@ -324,7 +336,7 @@ class ToolBox:
             if error:
                 return {"error": error}
         ranked = sorted((sequence for sequence in requested if sequence in self.score_cache),
-                        key=lambda v: (-self.score_cache[v], v))
+                        key=self._score_sort_key())
         result = {"scored": [{"rank": index, "variant": variant, "predicted_fitness": self.score_cache[variant]}
                              for index, variant in enumerate(ranked, 1)],
                   "remaining_score_budget": self.budget.remaining_score_calls(),

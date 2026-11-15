@@ -247,6 +247,7 @@ class ProtevoShell(_cmd.Cmd):
         self.use_esm = False
         self.ref_used = None       # open 时采用的参考序列（None = 交给 configure_protein 推断）
         self.hib = True            # open 时采用的方向（higher_is_better）
+        self.pool_used = None      # open 时采用的候选池模式（None = configure_protein 默认 recommended）
         self.last_summary = None    # 最近一次 run_evolution 汇总
         self.last_out_dir = None
         self.model_override = None  # model 命令设置的会话级模型名
@@ -372,6 +373,7 @@ class ProtevoShell(_cmd.Cmd):
             return
         self.config, self.dataset_label, self.data_path = config, label, path
         self.use_esm, self.ref_used, self.hib = "--esm" in flags, ref, hib
+        self.pool_used = pool  # 会话记住 open 的池选择：run 重配预测器时透传（不再回落 recommended）
         self.last_summary, self.last_out_dir = None, None  # 换数据集后旧 run 不再关联
         self._refresh_prompt()  # onecmd 不走 postcmd，open 自行刷新提示符
         self._print_config_card()
@@ -455,6 +457,7 @@ class ProtevoShell(_cmd.Cmd):
                 initial_train=min(2000, max(1, self.n_rows // 2)),
                 reference_sequence=self.ref_used, higher_is_better=self.hib,
                 use_esm=self.use_esm, retrain_each_round="--retrain" in flags,
+                predictor_pool=self.pool_used,  # open 的池选择透传研究阶段（None = 默认 recommended）
                 client=client, model=model, on_round=on_round)
         except Exception as exc:  # MissingCredentials / ValueError 等：给出可操作的提示
             print(red(f"运行失败：{type(exc).__name__}: {exc}"))
@@ -464,9 +467,16 @@ class ProtevoShell(_cmd.Cmd):
             return
         self.last_summary, self.last_out_dir = summary, Path(summary["out_dir"])
         self._print_trajectory(summary)
-        research = self._research_predictor_text()
-        if research:
-            print(green(f"  本次研究预测器: {research}"))
+        if summary.get("status") == "interrupted":
+            # 中断不吞：打印中断信息，部分结果目录纳入会话（log / export / plot 照常可用）
+            error = summary.get("error") or {}
+            print(red(f"运行中断：第 {error.get('failed_round')} 轮 {error.get('type')}: {error.get('message')}"))
+            print(yellow(f"已完成 {len(summary['rounds'])} 轮的部分结果保留在 {self.last_out_dir}"
+                         "（log / export / plot 照常可用）"))
+        else:
+            research = self._research_predictor_text()
+            if research:
+                print(green(f"  本次研究预测器: {research}"))
         print(dim(f"输出目录：{self.last_out_dir}（per_round.csv / summary.json / agent_round*.jsonl）"))
 
     @staticmethod
@@ -884,8 +894,12 @@ class ProtevoShell(_cmd.Cmd):
         except (ValueError, KeyError, IndexError) as exc:
             print(red(f"预测失败：{exc}（变体格式需为 {self.config.variant_format}）"))
             return
+        # 展示标记按 fitness 方向取最优：higher 标最大值（▲），lower 标最小值（▼）
+        higher = self.config.fitness_higher_is_better
+        best = max(scores) if higher else min(scores)
+        marker_best = "▲" if higher else "▼"
         for variant, score in zip(variants, scores):
-            marker = green("▲") if score == max(scores) else " "
+            marker = green(marker_best) if score == best else " "
             print(f" {marker} {variant:<32} {score:.4g}")
 
     # ---------------- 引导与退出 ----------------

@@ -193,6 +193,29 @@ def _mlp_candidate(model_kwargs=None, name="mlp"):
 _ESM2_MLP_SPEC = ("MLPRegressor(hidden_layer_sizes=(256,64), alpha=1e-4, early_stopping=True, "
                   "random_state=42, max_iter=500)——与 243 组消融同规格，与 esm2_ridge 共享同一嵌入矩阵")
 
+
+def _esm2_mlp_spec_text(model_kwargs=None):
+    """esm2_mlp 的实际构造规格说明：合并 model_kwargs['esm2_mlp'] 覆盖后的真实超参。
+
+    无覆盖时逐字返回默认规格常量（回归不变）；有覆盖时按合并结果渲染，
+    保证 spec 与 model_kwargs_applied 描述的是同一组构造参数。"""
+    override = (model_kwargs or {}).get("esm2_mlp")
+    if not override:
+        return _ESM2_MLP_SPEC
+    merged = dict(hidden_layer_sizes=(256, 64), alpha=1e-4, early_stopping=True,
+                  random_state=42, max_iter=500)
+    merged.update(override)
+
+    def _render(value):
+        if isinstance(value, (tuple, list)):  # 层结构按 sklearn repr 风格渲染：(256,64) / (8,)
+            inner = ",".join(repr(v) for v in value)
+            return f"({inner},)" if len(value) == 1 else f"({inner})"
+        return repr(value)
+
+    body = ", ".join(f"{key}={_render(value)}" for key, value in merged.items())
+    return (f"MLPRegressor({body})——超参经 model_kwargs['esm2_mlp'] 覆盖，"
+            "与 esm2_ridge 共享同一嵌入矩阵")
+
 # 候选池先验说明：先验只作推荐不作拦截，写入 predictor_info["pool_notes"]
 _POOL_NOTES_RECOMMENDED = (
     "recommended 推荐集 = 内证与文献校准的支持面：one-hot 系 {RF, Ridge}——243 组消融中 "
@@ -519,7 +542,8 @@ def _configure_indel_library(
             "model_kwargs_applied": _applied_model_kwargs(model_kwargs, candidates),
         }
         if "esm2_mlp" in scores:
-            config.predictor_info["esm2_mlp_spec"] = _ESM2_MLP_SPEC
+            # spec 反映实际构造参数（合并 model_kwargs['esm2_mlp'] 覆盖后的真实超参）
+            config.predictor_info["esm2_mlp_spec"] = _esm2_mlp_spec_text(model_kwargs)
         config.predictor_info["pool"] = {
             "mode": predictor_pool,
             "included": list(config.predictor_info["all_candidates"].keys()),
@@ -837,7 +861,8 @@ def configure_protein(
             {n: round(s, 4) for n, s in esm_scores.items()}
         )
         if "esm2_mlp" in esm_scores:
-            config.predictor_info["esm2_mlp_spec"] = _ESM2_MLP_SPEC
+            # spec 反映实际构造参数（合并 model_kwargs['esm2_mlp'] 覆盖后的真实超参）
+            config.predictor_info["esm2_mlp_spec"] = _esm2_mlp_spec_text(model_kwargs)
         config.predictor_info["pool"] = {
             "mode": predictor_pool,
             "included": list(config.predictor_info["all_candidates"].keys()),
