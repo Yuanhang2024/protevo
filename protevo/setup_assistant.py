@@ -793,10 +793,15 @@ def _write_state(env_probe=None, plan_summary=None, essentials=None):
         STATE_PATH.parent.mkdir(parents=True, exist_ok=True)
         STATE_PATH.write_text(json.dumps(state, ensure_ascii=False, indent=2), encoding="utf-8")
     except (FileExistsError, NotADirectoryError) as exc:
-        # .cache 路径被普通文件占用（DSH 组合压力测试的场景）：给可操作消息而非裸异常
+        # .cache 路径被普通文件占用（DSH note-014：识别真正阻塞的祖先文件而非假定目标路径）
+        _blocker = STATE_PATH.parent
+        for _anc in STATE_PATH.parent.parents:
+            if _anc.exists() and not _anc.is_dir():
+                _blocker = _anc
+                break
         raise RuntimeError(
-            f"无法写入配置状态：{STATE_PATH.parent} 已被普通文件占用（此处需要目录）。"
-            f"请删除或移动该文件后重新运行：{STATE_PATH.parent}"
+            f"无法写入配置状态：{_blocker} 已被普通文件占用（此处需要目录链）。"
+            f"请删除或移动该文件后重新运行"
         ) from exc
     return state
 
