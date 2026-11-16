@@ -293,7 +293,8 @@ def test_auto_execute_stubbed_pip(tmp_path, monkeypatch):
 
     monkeypatch.setattr(sa.subprocess, "run", fake_run)
     result = sa.configure_with_llm(data_csv=_full_csv(tmp_path), environ={}, auto_execute=True)
-    assert calls == ["pip install torch"]           # 只发 cpu 安装命令（backend unknown）
+    # 只发 cpu 安装命令（backend unknown），且绑定当前解释器（DSH note012：裸 pip 不可定位）
+    assert calls == [sa._pip_bound("pip install torch")]
     assert result["executed"][0]["returncode"] == 0
 
 
@@ -422,7 +423,7 @@ def test_doctor_platform_mismatch_warn(tmp_path, monkeypatch):
     report = sa.run_doctor(full=False)
     match = next(c for c in report["checks"] if c["name"] == "platform_match")
     assert match["status"] == "warn"
-    assert match["fix"] == sa.TORCH_COMMANDS["cuda"]
+    assert match["fix"] == sa._pip_bound(sa.TORCH_COMMANDS["cuda"])  # fix 命令绑定解释器
     assert "NVIDIA" in match["detail"]
 
 
@@ -529,12 +530,12 @@ def test_plan_bootstrap_block(tmp_path):
     plan = sa.build_plan(probe, _env(core_deps_ok=False, os_name="Windows-11-stub"))
     assert plan["install_core"] == "requirements"
     assert plan["bootstrap_commands"] == ["python -m venv .venv", r".venv\Scripts\activate",
-                                          "pip install -r requirements.txt"]
+                                          sa._pip_bound("pip install -r requirements.txt")]
     assert "requirements.txt 在包根" in plan["requirements_note"]
 
     plan_posix = sa.build_plan(probe, _env(core_deps_ok=False, os_name="Linux-5.15"))
     assert plan_posix["bootstrap_commands"] == ["python -m venv .venv", "source .venv/bin/activate",
-                                                "pip install -r requirements.txt"]
+                                                sa._pip_bound("pip install -r requirements.txt")]
     # 已装全 → 无 bootstrap
     assert sa.build_plan(probe, _env())["install_core"] == "skip"
     assert sa.build_plan(probe, _env())["bootstrap_commands"] == []
@@ -630,7 +631,7 @@ def test_doctor_autofix_core_deps(tmp_path, monkeypatch):
     assert report["summary"] == "FAIL"
 
     fixed = sa._doctor_autofix(report)
-    assert calls and calls[0][0] == "pip install -r requirements.txt"
+    assert calls and calls[0][0] == sa._pip_bound("pip install -r requirements.txt")
     assert calls[0][1] == str(PROJECT)                  # 在包根执行（requirements.txt 所在）
     by_name = {c["name"]: c for c in fixed["checks"]}
     assert by_name["core_deps"]["status"] == "ok"       # 复检通过

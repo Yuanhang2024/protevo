@@ -98,6 +98,8 @@ def run_evolution(csv_path, rounds=3, per_round=10, score_budget=40, initial_tra
     中断保护：任一轮内抛异常（如外部 LLM 服务 429）时不丢已完成轮次——落盘当前
     per_round.csv 与 summary.json（status="interrupted"，含 error 摘要与已完成轮数）后
     返回该部分结果汇总（不再向上抛），调用方可据 status 区分完整/中断运行。
+    当前不支持自动续跑；中断后部分结果已保存（status=interrupted），建议从新 out_dir
+    重新运行或手动使用已完成轮次的数据。
     """
     csv_path = Path(csv_path)
     # 预算硬校验 k <= proposal_count == score_budget 在 schema；运行期每轮评分上限由

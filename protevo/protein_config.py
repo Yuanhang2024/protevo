@@ -679,6 +679,9 @@ def configure_protein(
     predictor_info["model_kwargs_applied"]，默认空字典。
     """
     df = pd.read_csv(data_path)
+    if df.empty:
+        # 空数据显式拒绝：0 行此前会在深层报不可读的 KeyError 'pop from an empty set'
+        raise ValueError(f"CSV 无有效数据：{data_path} 含 0 行数据（只有表头或完全为空）")
 
     # 池模式非法值显式报错（不静默回退）
     if predictor_pool not in ("recommended", "full"):
@@ -711,6 +714,15 @@ def configure_protein(
 
     variants = df[variant_col].astype(str).values
     fitness = df[fitness_col].values
+    # 空/NaN fitness 显式拒绝（DSH 组合压力测试发现）：NaN 进入训练会静默产出垃圾
+    # 验证分数（val ρ=-999），此前报错形态为不可读的深层 IndexError/类型错误
+    if len(fitness) == 0:
+        raise ValueError(f"CSV 无有效数据：{data_path} 的 {fitness_col} 列为空（0 行）")
+    nan_mask = pd.isna(fitness)
+    if nan_mask.any():
+        raise ValueError(
+            f"CSV 无有效数据：fitness 列 '{fitness_col}' 含 {int(nan_mask.sum())} 个缺失/NaN 值"
+            f"（共 {len(fitness)} 行，{data_path}）——请清洗缺失行后重试")
 
     # --- 2. 格式检测与位点扫描（variant_format 显式指定时跳过检测直接采用）---
     format_source = "override" if variant_format is not None else "auto"

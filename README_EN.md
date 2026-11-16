@@ -63,6 +63,10 @@ predictor is re-selected and re-trained on the accumulated known set (initial tr
 back-filled feedback; each round fits only on the initial training set and this method's own prior
 feedback), and each round's `predictor_info` is recorded in the rounds detail.
 
+Interruption and resume: if an exception occurs mid-run, completed rounds are already on disk
+(`status="interrupted"` in summary.json); automatic resume is currently not supported — rerun from a
+new out_dir, or use the completed rounds' data manually.
+
 ## Command-Line Workbench (TUI)
 
 `python -m protevo.tui` starts the command-driven workbench with one command (stdlib `cmd.Cmd`, zero

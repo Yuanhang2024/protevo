@@ -1,4 +1,5 @@
-# embedding_service.py — 按需 ESM-2 嵌入服务：任意新蛋白序列 → 末层 mean-pooled 1280 维向量
+# embedding_service.py — 按需 ESM-2 嵌入服务：任意新蛋白序列 → 末层 mean-pooled 向量
+# （维度随模型 config.hidden_size：8M=320 / 150M=640 / 650M=1280 / 3B=2560）
 # 提取口径与 embed_gb1.py 完全一致：transformers 本地 checkpoint、EsmTokenizer 前后加
 # BOS(<cls>)/EOS（残基 i → 模型输出行 i+1，即 BOS 偏移 +1）、末层 hidden state 取残基位置平均。
 #
@@ -18,7 +19,9 @@ from pathlib import Path
 
 import numpy as np
 
-EMBED_DIM = 1280            # ESM-2 650M（esm2_t33_650M_UR50D）隐藏维
+EMBED_DIM = 1280            # ESM-2 650M（esm2_t33_650M_UR50D）隐藏维——文档锚点；输出数组
+                            # 维度以加载模型的 config.hidden_size 为准（self.embed_dim），不得
+                            # 用本常量分配数组（8M 实测 320 维曾被 1280 固定缓冲区误拒）
 MAX_SEQUENCE_LENGTH = 1022  # ESM-2 上限：1022 残基 + BOS/EOS = 1024 token
 BATCH_SIZE = 32             # 与 embed_gb1.py 默认批量一致；EmbeddingService(batch_size=...) 的默认值锚点
 
@@ -204,7 +207,8 @@ def ensure_esm_checkpoint(path: str = None,
 
 
 class EmbeddingService:
-    """按需 ESM-2 嵌入服务：encode(序列列表) → (n, 1280) float32 mean-pooled 嵌入（默认末层，esm_layer 可选层）。"""
+    """按需 ESM-2 嵌入服务：encode(序列列表) → (n, embed_dim) float32 mean-pooled 嵌入
+    （默认末层，esm_layer 可选层；embed_dim 随加载模型 config.hidden_size：650M=1280，8M=320）。"""
 
     def __init__(self, model_path: str, device: str = "auto",
                  cache_dir: str = None, lru_capacity: int = 200_000,
@@ -243,6 +247,9 @@ class EmbeddingService:
         self.tokenizer = AutoTokenizer.from_pretrained(model_path)
         self.model = AutoModel.from_pretrained(model_path)
         self.model.eval().to(self.device)
+        # 实际嵌入维度取自模型配置（8M=320 / 150M=640 / 650M=1280）：输出数组/磁盘缓存
+        # 均按此维度分配，杜绝把 320 维模型输出写入固定 1280 维缓冲区的错配
+        self.embed_dim = int(self.model.config.hidden_size)
         self._validate_esm_layer()
 
         # 内存缓存：{序列: 向量}，超出容量按插入序淘汰最旧（简单 OrderedDict，非访问序 LRU）
@@ -258,7 +265,7 @@ class EmbeddingService:
                 meta_path.write_text(json.dumps(
                     {"model_path": str(model_path),
                      "esm_layer": self.esm_layer,
-                     "dim": int(getattr(self.model.config, "hidden_size", 0) or 0)},
+                     "dim": self.embed_dim},
                     ensure_ascii=False), encoding="utf-8")
             self._load_disk_cache()
 
@@ -280,12 +287,13 @@ class EmbeddingService:
                 f"或用默认 'last' 取末层。")
 
     def encode(self, sequences: list) -> np.ndarray:
-        """批量编码：mean-pool 末层 hidden state（BOS 偏移 +1），返回 (n, 1280) float32。
+        """批量编码：mean-pool 末层 hidden state（BOS 偏移 +1），返回 (n, embed_dim) float32。
 
+        维度随加载模型的 config.hidden_size（self.embed_dim：650M=1280，8M=320）。
         缓存未命中的序列去重后批量推理；同批重复序列只推理一次。
         """
         validate_sequence_lengths(sequences)  # 护栏最先执行：非法输入不触发任何推理
-        out = np.empty((len(sequences), EMBED_DIM), dtype=np.float32)
+        out = np.empty((len(sequences), self.embed_dim), dtype=np.float32)
         todo = []  # 缓存未命中、需要推理的 (输入行号, 序列)
         for i, seq in enumerate(sequences):
             vec = self._lookup(seq)
@@ -339,7 +347,7 @@ class EmbeddingService:
                 outputs = self.model(**encoded, output_hidden_states=True)
             layer = (outputs.hidden_states[-1] if self.esm_layer == "last"
                      else outputs.hidden_states[self.esm_layer])
-            hidden = layer.float().cpu().numpy()  # (B, L_max+2, 1280)
+            hidden = layer.float().cpu().numpy()  # (B, L_max+2, embed_dim)
             for j, seq in enumerate(batch):
                 vec = hidden[j, 1:len(seq) + 1, :].mean(axis=0)  # 残基 i → 行 i+1（BOS 偏移）
                 computed[seq] = vec
@@ -349,7 +357,7 @@ class EmbeddingService:
     # ---- 磁盘持久化（实现从简：有新增即全量重写 npz + json 索引）----
 
     def _load_disk_cache(self):
-        """构造时加载磁盘缓存：embeddings.npz（N×1280）+ index.json（{序列: 行号}）。"""
+        """构造时加载磁盘缓存：embeddings.npz（N×embed_dim，按落盘实际维度）+ index.json（{序列: 行号}）。"""
         cache = Path(self.cache_dir)
         npz_path, index_path = cache / "embeddings.npz", cache / "index.json"
         if not (npz_path.exists() and index_path.exists()):
@@ -365,7 +373,7 @@ class EmbeddingService:
         cache.mkdir(parents=True, exist_ok=True)
         seqs = list(self._disk.keys())
         matrix = (np.stack([self._disk[s] for s in seqs]) if seqs
-                  else np.empty((0, EMBED_DIM), dtype=np.float32))
+                  else np.empty((0, self.embed_dim), dtype=np.float32))
         np.savez(cache / "embeddings.npz", embeddings=matrix)
         index = {seq: row for row, seq in enumerate(seqs)}
         (cache / "index.json").write_text(json.dumps(index), encoding="utf-8")

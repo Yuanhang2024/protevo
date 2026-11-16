@@ -58,8 +58,9 @@ CHECKPOINT_CANDIDATES = {
     "esm2_8m": (Path.home() / ".cache/protevo/esm2_t6_8M_UR50D",
                 Path("D:/ChimeraModel_Lite/esm2_t6_8M_UR50D")),
 }
-# checkpoint 权重文件最小体积（抓半下载/损坏：650M >1GB，8M >30MB）
-CHECKPOINT_MIN_WEIGHTS = {"esm2_650m": 1024 ** 3, "esm2_8m": 30 * 1024 ** 2}
+# checkpoint 权重文件最小体积（抓半下载/损坏的零字节/极小文件；留 ~5% 余量：镜像下载的
+# 实际字节数可略小于名义值——8M 实测 31,384,292 bytes 曾被 30MiB=31,457,280 阈值误拒，差 72,988）
+CHECKPOINT_MIN_WEIGHTS = {"esm2_650m": int(1024 ** 3 * 0.95), "esm2_8m": 30_000_000}
 # 已配置状态文件与指纹容差
 STATE_PATH = Path.home() / ".cache/protevo/setup_state.json"
 VRAM_TOLERANCE_GB = 1.0
@@ -88,6 +89,10 @@ def probe_data(csv_path, reference_sequence=None, sample_rows=20000):
     判定与 protein_config._infer_reference_mode 同口径：任一位点 众数/次众数 < 1.5。
     """
     df = pd.read_csv(csv_path)
+    if df.empty:
+        # 空数据显式拒绝：0 行时 lengths.max() 为 NaN，此前在 int() 处报不可读的
+        # "cannot convert float NaN to integer"（DSH 组合压力测试发现）
+        raise ValueError(f"CSV 无有效数据：{csv_path} 含 0 行数据（只有表头或完全为空）")
     variant_col = next((c for c in ("variant", "Variants", "mutations", "seq", "sequence")
                         if c in df.columns), None)
     if variant_col is None:
@@ -96,7 +101,11 @@ def probe_data(csv_path, reference_sequence=None, sample_rows=20000):
             raise ValueError(f"CSV 中找不到变体列: {list(df.columns)}")
         variant_col = object_cols[0]
 
-    sample = df[variant_col].astype(str).head(sample_rows)
+    # 变体列先剔除缺失值再转字符串：空行变体（读入为 NaN）在部分 pandas 版本下
+    # astype(str) 仍保留 float NaN，进入逐字符扫描会抛 TypeError
+    sample = df[variant_col].dropna().astype(str).head(sample_rows)
+    if sample.empty:
+        raise ValueError(f"CSV 无有效数据：变体列 '{variant_col}' 全为空/缺失值（{csv_path}）")
     digits_ratio = float(pd.Series([any(c.isdigit() for c in v) for v in sample]).mean())
     # indel token 抽样窗口 2000（protein_config 用前 1000，同量级）
     indel_suspect = bool(any(has_indel(v) for v in sample.head(2000)))
@@ -205,6 +214,31 @@ def _torch_info():
         return None
 
 
+def _gpu_backend_key(backend):
+    """后端串规范化：'CUDA 12.8'/'cuda' → 'cuda'；'ROCm 6.2'/'rocm' → 'rocm'；其余 → None。
+
+    hardware_probe 返回完整后端串（如 "CUDA 12.8"），而命令/菜单键是短键（cuda/rocm）——
+    此前 platform_match 对 backend 做精确匹配（hw in ("cuda", "rocm")），把 "CUDA 12.8"
+    误判为无 GPU 并建议 CPU torch（DSH 组合压力测试发现）。统一用本函数做前缀匹配。
+    """
+    text = str(backend or "").upper()
+    if text.startswith("CUDA"):
+        return "cuda"
+    if text.startswith("ROCM"):
+        return "rocm"
+    return None
+
+
+def _pip_bound(command):
+    """裸 pip 命令绑定当前解释器：'pip install X' → '"<解释器>" -m pip install X'。
+
+    以独立 venv 解释器启动时 PATH 中常无可定位的裸 pip（DSH 组合压力测试发现），
+    生成与执行的安装命令统一绑定 sys.executable；非 pip 开头的命令原样返回。
+    """
+    command = str(command)
+    return f'"{sys.executable}" -m {command}' if command.startswith("pip ") else command
+
+
 def _llm_credentials():
     """.env 三变量约定（与 agent_v2.build_openai_client 一致）中前两个是否存在。"""
     try:
@@ -282,20 +316,21 @@ def build_plan(data_probe, env_probe):
     if torch_ok:
         install_torch, torch_reason = None, "torch 已安装"
     else:
-        install_torch = TORCH_COMMANDS.get(backend, TORCH_COMMANDS["cpu"])
-        extra = "（ROCm 版 PyTorch 的设备名仍为 cuda）" if backend == "rocm" else ""
+        backend_key = _gpu_backend_key(backend) or backend  # 'CUDA 12.8' → 'cuda'；unknown/cpu 原样
+        install_torch = TORCH_COMMANDS.get(backend_key, TORCH_COMMANDS["cpu"])
+        extra = "（ROCm 版 PyTorch 的设备名仍为 cuda）" if backend_key == "rocm" else ""
         torch_reason = f"torch 未安装，按 backend={backend} 选择安装命令{extra}"
 
-    # --- bootstrap（核心依赖缺失时 commands 首位插入三步块，按 OS 两式）---
+    # --- bootstrap（核心依赖缺失时 commands 首位插入三步块，按 OS 两式；安装步绑定解释器）---
     core_deps_ok = env_probe.get("core_deps_ok") is True
     if core_deps_ok:
         install_core, bootstrap_commands = "skip", []
     else:
         windows = "Windows" in str(env_probe.get("os") or "")
         bootstrap_commands = (["python -m venv .venv", r".venv\Scripts\activate",
-                               "pip install -r requirements.txt"] if windows else
+                               _pip_bound("pip install -r requirements.txt")] if windows else
                               ["python -m venv .venv", "source .venv/bin/activate",
-                               "pip install -r requirements.txt"])
+                               _pip_bound("pip install -r requirements.txt")])
         install_core = "requirements"
 
     # --- 蛋白模型（环境侧资格 → VRAM 分档 → 数据侧否决）---
@@ -333,7 +368,7 @@ def build_plan(data_probe, env_probe):
 
     # --- transformers（ESM 运行的另一依赖）---
     install_transformers = (None if env_probe.get("transformers") or esm_model == "none"
-                            else "pip install transformers")
+                            else _pip_bound("pip install transformers"))
 
     plan = {
         "variant_format": variant_format,
@@ -526,6 +561,13 @@ def _guard_choices(raw, plan, env_probe):
 
     返回 (chosen, disagreements, warnings)。矛盾类型 → 覆写行为见每条规则注释。
     """
+    if not isinstance(raw, dict):
+        # 容错：chosen 非 JSON 对象（如列表/字符串，DSH 组合压力测试的坏结构回复）→
+        # 整体回退规则计划并记 disagreements，不抛 AttributeError
+        return (dict(_menu_defaults(plan)),
+                [{"field": "chosen", "llm": raw, "plan": "规则计划",
+                  "reason": "chosen 不是 JSON 对象（需要 dict），整体回退确定性计划"}],
+                [])
     defaults = _menu_defaults(plan)
     cuda_ok = env_probe.get("cuda") is True
     torch_ok = env_probe.get("torch") is True
@@ -609,8 +651,10 @@ def _finalize(result, plan, auto_execute):
     commands = []
     if chosen.get("install_core") == "requirements":
         commands.extend(plan["bootstrap_commands"])  # bootstrap 三步块固定在 commands 首位
-    if chosen["install_torch"]:
-        commands.append(chosen["install_torch"])
+    if chosen["install_torch"] and plan["install_torch"] is not None:
+        # 计划侧判定 torch 已就绪（install_torch=None）时不生成安装命令，保证 commands
+        # 与"无需安装 torch"的探测事实一致（DSH 组合压力测试发现的说明-命令矛盾）
+        commands.append(_pip_bound(chosen["install_torch"]))
     if plan["install_transformers"] and chosen["use_esm"] and chosen["esm_model"] != "none":
         commands.append(plan["install_transformers"])
     result["commands"] = commands
@@ -718,6 +762,10 @@ def _hardware_fingerprint(env_probe=None):
 
 
 def _fingerprint_matches(stored, current):
+    # 容错：指纹字段被写成非 dict（如列表，DSH 组合压力测试的坏结构状态文件）→
+    # 视为不匹配（未配置），不抛 AttributeError
+    if not isinstance(stored, dict) or not isinstance(current, dict):
+        return False
     for key in ("backend", "cuda", "device_name"):
         if stored.get(key) != current.get(key):
             return False
@@ -741,8 +789,15 @@ def _write_state(env_probe=None, plan_summary=None, essentials=None):
              "configured_at": datetime.now(timezone.utc).isoformat(),
              "essentials_passed": list(essentials or []),
              "plan_summary": dict(plan_summary or {})}
-    STATE_PATH.parent.mkdir(parents=True, exist_ok=True)
-    STATE_PATH.write_text(json.dumps(state, ensure_ascii=False, indent=2), encoding="utf-8")
+    try:
+        STATE_PATH.parent.mkdir(parents=True, exist_ok=True)
+        STATE_PATH.write_text(json.dumps(state, ensure_ascii=False, indent=2), encoding="utf-8")
+    except (FileExistsError, NotADirectoryError) as exc:
+        # .cache 路径被普通文件占用（DSH 组合压力测试的场景）：给可操作消息而非裸异常
+        raise RuntimeError(
+            f"无法写入配置状态：{STATE_PATH.parent} 已被普通文件占用（此处需要目录）。"
+            f"请删除或移动该文件后重新运行：{STATE_PATH.parent}"
+        ) from exc
     return state
 
 
@@ -807,7 +862,8 @@ def _doctor_plan_summary(env_probe, expected_esm, checks):
             "use_esm": esm_verified,
             "esm_model": expected_esm if esm_verified else "none",
             "install_torch": (None if _torch_info() is not None
-                              else TORCH_COMMANDS.get(env_probe.get("backend"), TORCH_COMMANDS["cpu"])),
+                              else TORCH_COMMANDS.get(_gpu_backend_key(env_probe.get("backend"))
+                                                      or env_probe.get("backend"), TORCH_COMMANDS["cpu"])),
             "install_core": "skip" if env_probe.get("core_deps_ok") is True else "requirements",
             "checkpoint_action": "skip"}
 
@@ -838,8 +894,8 @@ def run_doctor(esm_expected=None, full=True):
     missing = [m for m in ("pandas", "sklearn", "scipy") if not _module_available(m)]
     if missing:
         add("core_deps", "fail",
-            f"缺失: {', '.join(missing)}（备选逐包安装: pip install pandas scikit-learn scipy）",
-            "pip install -r requirements.txt（requirements.txt 在包根；--doctor --execute 可自动修复）")
+            f"缺失: {', '.join(missing)}（备选逐包安装: {_pip_bound('pip install pandas scikit-learn scipy')}）",
+            f"{_pip_bound('pip install -r requirements.txt')}（requirements.txt 在包根；--doctor --execute 可自动修复）")
     else:
         add("core_deps", "ok", "pandas / sklearn / scipy 均可导入")
 
@@ -847,36 +903,36 @@ def run_doctor(esm_expected=None, full=True):
     info = _torch_info()
     if info is None:
         add("torch", "warn", "torch 未安装——核心 sklearn 管线不受影响，ESM 候选不可用",
-            TORCH_COMMANDS.get(env_probe.get("backend"), TORCH_COMMANDS["cpu"]))
+            _pip_bound(TORCH_COMMANDS.get(env_probe.get("backend"), TORCH_COMMANDS["cpu"])))
     else:
-        label = {"cuda": "CUDA", "rocm": "ROCm"}.get(info[1], "CPU")
+        build = _gpu_backend_key(info[1]) or str(info[1])  # 容错完整后端串（如 'CUDA 12.8'）
+        label = {"cuda": "CUDA", "rocm": "ROCm"}.get(build, "CPU")
         add("torch", "ok", f"torch {info[0]}（{label} 版）")
 
     # 4. 平台-硬件匹配：torch 构建与 hardware_probe 的 GPU 事实比对
     if info is None:
         add("platform_match", "ok", "跳过：torch 未安装（见 torch 项）")
     else:
-        build = info[1]
-        hw = env_probe.get("backend")
-        hw_gpu = hw if hw in ("cuda", "rocm") else None
+        build = _gpu_backend_key(info[1]) or str(info[1])
+        hw_gpu = _gpu_backend_key(env_probe.get("backend"))  # 'CUDA 12.8'/'cuda' → 'cuda'
         if build == hw_gpu or (build == "cpu" and hw_gpu is None):
             add("platform_match", "ok", f"torch {build} 版与硬件匹配（{env_probe.get('device_name')}）")
         else:
             target = hw_gpu or "cpu"
             gpu_desc = {"cuda": "NVIDIA", "rocm": "AMD"}.get(hw_gpu, "无")
             add("platform_match", "warn",
-                f"检测到{gpu_desc} GPU（backend={hw}）但 torch 为 {build} 版——ESM 无法用该 GPU 加速",
-                TORCH_COMMANDS[target])
+                f"检测到{gpu_desc} GPU（backend={env_probe.get('backend')}）但 torch 为 {build} 版——ESM 无法用该 GPU 加速",
+                _pip_bound(TORCH_COMMANDS[target]))
 
     # 5. transformers / huggingface_hub（ESM 依赖）
     missing = [m for m in ("transformers", "huggingface_hub") if not _module_available(m)]
     if missing:
         add("transformers", "warn", f"缺失: {', '.join(missing)}（只影响 ESM 嵌入）",
-            "pip install transformers huggingface_hub")
+            _pip_bound("pip install transformers huggingface_hub"))
     else:
         add("transformers", "ok", "transformers / huggingface_hub 均可导入")
 
-    # 6. checkpoint：目标目录 config.json + 权重体积（650M >1GB / 8M >30MB）
+    # 6. checkpoint：目标目录 config.json + 权重体积（650M ≈1GB / 8M ≈30MB，各留 5% 余量）
     if expected_esm is None:
         add("checkpoint", "ok", "未要求 ESM（未显式指定且状态不含 esm），跳过")
     else:
@@ -925,7 +981,7 @@ def run_doctor(esm_expected=None, full=True):
             add("predictor_smoke", "ok", "合成 20 行 CSV 经 configure_protein 训练成功（sklearn 层正常）")
         except Exception as exc:
             add("predictor_smoke", "fail", f"{type(exc).__name__}: {exc}",
-                "pip install pandas scikit-learn scipy")
+                _pip_bound("pip install pandas scikit-learn scipy"))
 
     # 9. LLM 凭据（可选项：缺失只影响 Agent/顾问层，不记 fail）
     if _llm_credentials():
@@ -963,7 +1019,7 @@ def _doctor_autofix(report, esm_expected=None):
     """
     repaired = False
     if any(c["name"] == "core_deps" and c["status"] == "fail" for c in report["checks"]):
-        command = "pip install -r requirements.txt"
+        command = _pip_bound("pip install -r requirements.txt")
         print(f"[fix] {command}（requirements.txt 在包根）")
         proc = subprocess.run(command, shell=True, capture_output=True, text=True,
                               cwd=str(Path(__file__).resolve().parents[1]))

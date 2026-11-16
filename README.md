@@ -51,6 +51,8 @@ python -m protevo.evolve data/external/ubiq_roscoe_2014/dms.csv --rounds 2 --ref
 
 预测器协议两模式（summary.json 顶层 `predictor_protocol`）：默认 `fixed`——固定初始训练子集版本、轮间不重训；`run_evolution(..., retrain_each_round=True)` 为 `refit_per_round`——每轮开始前以累计 known（初始训练 + 此前各轮回填）重训选型（各轮只用初始训练和本方法此前获得的反馈拟合预测器），每轮 `predictor_info` 记入 rounds 明细。
 
+中断与续跑：任一轮内异常时已完成轮次会落盘（`status="interrupted"`）；当前不支持自动续跑，建议从新 out_dir 重新运行或手动使用已完成轮次的数据。
+
 ## 命令行交互（TUI）
 
 `python -m protevo.tui` 一条命令启动命令式交互台（stdlib `cmd.Cmd`，零新交互依赖；少量
