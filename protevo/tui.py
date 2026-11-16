@@ -248,6 +248,7 @@ class ProtevoShell(_cmd.Cmd):
         self.ref_used = None       # open 时采用的参考序列（None = 交给 configure_protein 推断）
         self.hib = True            # open 时采用的方向（higher_is_better）
         self.pool_used = None      # open 时采用的候选池模式（None = configure_protein 默认 recommended）
+        self.language = "zh"       # Agent 提示语言（zh|en，open --lang / lang 命令切换；界面文本始终中文）
         self.last_summary = None    # 最近一次 run_evolution 汇总
         self.last_out_dir = None
         self.model_override = None  # model 命令设置的会话级模型名
@@ -321,7 +322,7 @@ class ProtevoShell(_cmd.Cmd):
                 print(f"  {name:5s} {label}\n        （不可用：{exc}）")
 
     def do_open(self, arg):
-        """open <csv|内置名> [--ref WT] [--esm] [--pool recommended|full] [--hrb higher|lower] — 配置当前数据集"""
+        """open <csv|内置名> [--ref WT] [--esm] [--pool recommended|full] [--hrb higher|lower] [--lang zh|en] — 配置当前数据集"""
         try:
             tokens = self._tokenize(arg)
         except ValueError as exc:
@@ -329,12 +330,13 @@ class ProtevoShell(_cmd.Cmd):
             return
         try:
             positional, values, flags = self._parse_flags(
-                tokens, valued=("--ref", "--pool", "--hrb"), boolean=("--esm",))
+                tokens, valued=("--ref", "--pool", "--hrb", "--lang"), boolean=("--esm",))
         except ValueError as exc:
             print(red(str(exc)))
             return
         if len(positional) != 1:
-            print("用法：open <csv|内置名> [--ref WT] [--esm] [--pool recommended|full] [--hrb higher|lower]")
+            print("用法：open <csv|内置名> [--ref WT] [--esm] [--pool recommended|full] [--hrb higher|lower] "
+                  "[--lang zh|en]")
             return
         target = positional[0]
 
@@ -361,6 +363,10 @@ class ProtevoShell(_cmd.Cmd):
         if pool not in ("recommended", "full"):
             print(red("--pool 只接受 recommended | full"))
             return
+        language = values.get("--lang", "zh")
+        if language not in ("zh", "en"):
+            print(red("--lang 只接受 zh | en"))
+            return
 
         print(dim(f"配置中：{path}（{self.n_rows} 行）……"))
         try:
@@ -374,6 +380,7 @@ class ProtevoShell(_cmd.Cmd):
         self.config, self.dataset_label, self.data_path = config, label, path
         self.use_esm, self.ref_used, self.hib = "--esm" in flags, ref, hib
         self.pool_used = pool  # 会话记住 open 的池选择：run 重配预测器时透传（不再回落 recommended）
+        self.language = language  # 会话语言随 open 保存（不传 --lang 默认 zh；lang 命令可独立切换）
         self.last_summary, self.last_out_dir = None, None  # 换数据集后旧 run 不再关联
         self._refresh_prompt()  # onecmd 不走 postcmd，open 自行刷新提示符
         self._print_config_card()
@@ -458,6 +465,7 @@ class ProtevoShell(_cmd.Cmd):
                 reference_sequence=self.ref_used, higher_is_better=self.hib,
                 use_esm=self.use_esm, retrain_each_round="--retrain" in flags,
                 predictor_pool=self.pool_used,  # open 的池选择透传研究阶段（None = 默认 recommended）
+                language=self.language,         # 会话语言透传 Agent 系统提示（zh|en，默认 zh）
                 client=client, model=model, on_round=on_round)
         except Exception as exc:  # MissingCredentials / ValueError 等：给出可操作的提示
             print(red(f"运行失败：{type(exc).__name__}: {exc}"))
@@ -517,6 +525,19 @@ class ProtevoShell(_cmd.Cmd):
         os.environ["OPENAI_MODEL"] = name  # build_openai_client 读取 os.environ，会话内即时生效
         self.model_override = name
         print(green(f"✅ 本会话模型已设为 {name}（仅会话内生效；持久化请用 setup 写入 .env）"))
+
+    def do_lang(self, arg):
+        """lang [zh|en] — 查看/切换 Agent 提示语言（仅影响发往 LLM 的系统提示，界面文本保持中文）"""
+        value = arg.strip()
+        if not value:
+            print(f"当前 Agent 提示语言：{self.language}（lang zh|en 切换；也可 open <csv> --lang en 设定）")
+            return
+        if value not in ("zh", "en"):
+            print(red("lang 只接受 zh | en"))
+            return
+        self.language = value
+        print(green(f"✅ Agent 提示语言已切换为 {'中文' if value == 'zh' else '英文'}"
+                    "（下次 run 生效；界面文本保持中文）"))
 
     def do_status(self, arg):
         """status — 会话总览：数据 / 预测器 / 凭据 / 最近运行"""

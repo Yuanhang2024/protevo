@@ -1,5 +1,7 @@
 # protevo — Universal Protein Directed-Evolution Agent Framework
 
+**English version: [README_EN.md](README_EN.md)**
+
 以 LLM Tool-Calling 智能体为核心、蛋白无关的定向进化框架：换一个 CSV 即换一个蛋白。
 GB1（蛋白 G B1 结构域，IgG-Fc 结合）是本框架的第一个完整实证案例（243 组预测器消融、
 2×2 因子实验、双盲统计）；另在 ProteinGym 的 GFP / 泛素 / TEM-1（indel）三个真实数据集上
@@ -65,10 +67,11 @@ stdin 非 tty（管道/测试）时不阻塞：打印一行凭据说明直接进
 | 命令 | 说明 |
 |---|---|
 | `datasets` | 列出 4 个内置示例数据集（gb1 / ubiq / gfp / blat） |
-| `open <csv\|内置名> [--ref WT] [--esm] [--pool recommended\|full] [--hrb higher\|lower]` | 配置数据集并打印配置卡（格式/位点/参考来源含不可靠警示/方向/选型与 val ρ/全部候选） |
+| `open <csv\|内置名> [--ref WT] [--esm] [--pool recommended\|full] [--hrb higher\|lower] [--lang zh\|en]` | 配置数据集并打印配置卡（格式/位点/参考来源含不可靠警示/方向/选型与 val ρ/全部候选） |
 | `info` / `status` | 当前配置卡 / 会话总览（数据·预测器·凭据·最近运行） |
 | `run [--rounds 3] [--per-round 10] [--budget 40] [--retrain]` | 多轮虚拟进化；每轮一行准实时摘要（轮次/提交/回填均值/累计最佳/预算余量），结束打轨迹小表 |
 | `model [名称]` | 查看/设置本会话 LLM 模型名（持久化用 setup） |
+| `lang [zh\|en]` | 查看/切换 Agent 提示语言（`open <csv> --lang en` 切换 Agent 提示语言；仅影响发往 LLM 的系统提示，界面文本保持中文） |
 | `plot <scatter\|trajectory\|heatmap\|length\|budget>` | matplotlib 出 PNG 至输出目录 + 终端一行 ASCII 摘要（缺 matplotlib 自动降级仅 ASCII）；heatmap 面向替换库、length 面向 indel 库，用错互给指引 |
 | `log [轮次]` | 回放 agent_round*.jsonl：默认逐轮摘要；指定轮逐条 kind/tool/参数（含 submit 变体+理由） |
 | `export [--out DIR]` | 导出 per_round.csv / summary.json / 全部适用图并打印清单 |
@@ -76,6 +79,9 @@ stdin 非 tty（管道/测试）时不阻塞：打印一行凭据说明直接进
 | `ask <问题>` | LLM 顾问（无凭据打印降级说明） |
 | `predict SEQ...` | 当前预测器打分（原格式进、原始标度出） |
 | `setup` / `help` / `quit` | 重跑三步引导 / 命令表 / 退出（EOF 同效） |
+
+Agent 提示语言可选中英文：`open <csv> --lang en` 切换 Agent 提示语言（或 `lang [zh|en]` 随时切换；
+仅影响发往 LLM 的系统提示，TUI 界面文本保持中文）。
 
 示例会话（`open → run → plot → export`）：
 
@@ -116,13 +122,13 @@ protevo (ubiq|RF ρ=0.78)> export         # per_round.csv / summary.json / 全�
 protevo/                通用框架层 + GB1 实验设施层（见 protevo/__init__.py 的双层定位）
   protein_config.py      一行配置入口（四格式/方向归一化/选型/ESM 可选）
   variant_notation.py    indel 记谱核心（解析/校验/重构）
-  prompt_builder.py      配置驱动的系统提示模板
+  prompt_builder.py      配置驱动的系统提示模板（zh/en）
   tools.py               ToolBox + build_tool_schemas(protein_config)
   agent_v2.py            Tool-Calling 循环（protein_config 注入，GB1 旧路径逐字节兼容）
   embedding_service.py   按需 ESM-2 嵌入（LRU+落盘缓存，惰性 torch，device=auto 硬件自适应）
   setup_assistant.py     LLM 辅助环境配置（确定性探测 + 受约束菜单 + 守卫校验）
   tui.py                 命令行交互台（cmd.Cmd，首次启动引导 + 四面板全功能，替代图形插件）
-tests/                   499 项测试（483 过 + 16 跳：GPU 门控与可选数据）；交互界面为内置 TUI，零外部插件依赖
+tests/                   536 项测试（520 过 + 16 跳：GPU 门控与可选数据）；交互界面为内置 TUI，零外部插件依赖
 data/external/           三个 ProteinGym 数据集（MIT，出处见各 meta.json）
 docs/release_audit.md    发布前审查报告（数据集钉死逐条在案）
 results/                 跨蛋白结果 + GB1 消融/因子/统计汇总（大体积原始日志未随包）

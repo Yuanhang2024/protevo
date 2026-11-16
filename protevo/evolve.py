@@ -65,7 +65,7 @@ def run_evolution(csv_path, rounds=3, per_round=10, score_budget=40, initial_tra
                   esm_model_path=None, seed=42, out_dir=None, client=None, model=None,
                   retrain_each_round=False, on_round=None,
                   predictor_pool=None, extra_candidates=None, model_kwargs=None,
-                  val_fraction=None) -> dict:
+                  val_fraction=None, language="zh") -> dict:
     """跑完整多轮虚拟定向进化，返回汇总 dict（与落盘的 summary.json 同构）。
 
     种子化随机划分 initial_train 条为初始已知，其余为虚拟 oracle 池；每轮提交结果查表回填
@@ -91,6 +91,9 @@ def run_evolution(csv_path, rounds=3, per_round=10, score_budget=40, initial_tra
     的配置覆写透传（如 TUI open --pool full 的池选择），初始选型与 --retrain 的每轮重配共用；
     None（默认）不传，保持 configure_protein 自身的默认行为。summary 的 config.predictor
     记录实际采用的池（pool mode 与候选清单）。
+
+    language：Agent 提示语言（"zh" 中文 | "en" 英文，默认 "zh"），透传 run_agent_round →
+    build_system_prompt；只影响发往 LLM 的系统提示语言，不影响预测器与结果落盘。
 
     中断保护：任一轮内抛异常（如外部 LLM 服务 429）时不丢已完成轮次——落盘当前
     per_round.csv 与 summary.json（status="interrupted"，含 error 摘要与已完成轮数）后
@@ -203,7 +206,7 @@ def run_evolution(csv_path, rounds=3, per_round=10, score_budget=40, initial_tra
             record, toolbox = run_agent_round(
                 r, known, eligible, config.predict_fitness, ecfg, client=client, model=model,
                 log_path=out_dir / f"agent_round{r}.jsonl",
-                budget=AgentBudget(max_score_calls=score_budget), protein_config=config)
+                budget=AgentBudget(max_score_calls=score_budget), protein_config=config, language=language)
 
             submission = toolbox.submission
             sequences = submission["sequences"]

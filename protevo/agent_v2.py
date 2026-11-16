@@ -213,8 +213,13 @@ def build_openai_client(config, environ=None):
     return client, model
 
 
-def default_task_message(round_number, toolbox, protein_config=None):
-    """轮次开场白。protein_config=None 时为 GB1 旧文案（逐字节不变）；给定配置时派生蛋白无关开场。"""
+def default_task_message(round_number, toolbox, protein_config=None, language="zh"):
+    """轮次开场白。protein_config=None 时为 GB1 旧文案（逐字节不变）；给定配置时派生蛋白无关开场。
+
+    language 为签名对齐的透传参数：protein_config 路径的开场白本就是英文（方向词 maximize/minimize
+    由 fitness_higher_is_better 驱动，DSH note-007），zh/en 同文；实际的语言差异在 system prompt 层
+    （run_agent_round 将 language 透传给 build_system_prompt）。默认 "zh"，不传则行为不变。
+    """
     budget = toolbox.budget
     if protein_config is not None:
         if protein_config.variant_format == "indel_notation":
@@ -240,19 +245,21 @@ def default_task_message(round_number, toolbox, protein_config=None):
 
 def run_agent_round(round_number, known, eligible, predict_fn, config, knowledge=None, client=None, model=None,
                     system_prompt=None, feedback_history=(), log_path=None, budget=None, task_message=None,
-                    environ=None, protein_config=None):
+                    environ=None, protein_config=None, language="zh"):
     """Assemble toolbox plus agent and run one autonomous round; returns (round record, toolbox).
 
     protein_config 给定时走蛋白无关路径：ToolBox 校验、工具 schema、系统提示与轮次开场白全部由该
     配置派生（system_prompt/task_message 显式传入时优先）；None 时保持 GB1 旧路径逐字节不变。
+    language：Agent 提示语言（"zh" 中文 | "en" 英文，默认 "zh"），透传 build_system_prompt 与
+    default_task_message；不传则现行为零变化。
     """
     toolbox = ToolBox(known=known, eligible=eligible, predict_fn=predict_fn, config=config, knowledge=knowledge,
                       budget=budget, feedback_history=feedback_history, protein_config=protein_config)
     if system_prompt is None and protein_config is not None:
-        system_prompt = build_system_prompt(protein_config)
+        system_prompt = build_system_prompt(protein_config, language=language)
     agent = ToolCallingAgent(toolbox, client=client, model=model, system_prompt=system_prompt,
                              log_path=log_path, environ=environ,
                              tool_schemas=build_tool_schemas(protein_config) if protein_config is not None else None)
-    record = agent.run_round(round_number,
-                             task_message or default_task_message(round_number, toolbox, protein_config))
+    record = agent.run_round(round_number, task_message or default_task_message(round_number, toolbox,
+                                                                                protein_config, language=language))
     return record, toolbox
